@@ -65,11 +65,14 @@ nextjs-app/
 
 ## SEO 最佳实践
 
-- 使用 `metadata` 导出配置页面元数据
-- 使用 `sitemap.ts` 生成站点地图
+- 网站域名: `https://muscletool.pro`
+- 使用 `layout.tsx` 导出 metadata（因为 page.tsx 是 'use client' 组件）
+- 使用 `sitemap.ts` 生成站点地图（包含所有工具页面）
 - 使用 `robots.ts` 配置爬虫规则
-- 使用 JSON-LD 结构化数据增强搜索结果
+- 使用 JSON-LD 结构化数据增强搜索结果（SoftwareApplication + FAQPage）
 - 使用语义化 HTML 标签 (h1, h2, section, article)
+- 每个页面必须有 canonical URL
+- 每个页面必须有 OpenGraph 数据
 
 ## 新增工具页面检查清单
 
@@ -81,6 +84,8 @@ nextjs-app/
 4. **首页图标支持** - 如需新图标，更新 `src/components/home/feature-grid.tsx` 的 iconMap
 5. **移动端导航图标** - 更新 `src/components/layout/mobile-nav.tsx` 的 iconMap
 6. **工具联动配置** - 更新 `src/components/common/tool-link-card.tsx` 的 toolLinks 对象
+7. **SEO layout.tsx** - 在工具目录下创建 `layout.tsx` 导出 metadata（title、description、canonical、openGraph）
+8. **Sitemap** - 更新 `src/app/sitemap.ts` 添加新工具 URL
 
 ## 现有工具列表
 
@@ -92,10 +97,15 @@ nextjs-app/
 | 心率区间计算器 | `/tools/heart-rate-calculator` | Heart |
 | 健美造型评分器 | `/tools/pose-comparator` | Camera |
 | 古典比例计算器 | `/tools/grecian-calculator` | Ratio |
+| 碳循环减脂计算器 | `/tools/carb-cycling-calculator` | RefreshCw |
+| 减脂饮食计算器 | `/tools/fat-loss-diet-calculator` | Salad |
+| 高碳减脂计算器 | `/tools/high-carb-diet-calculator` | Wheat |
+| 代谢受损检测器 | `/tools/metabolic-damage-test` | Activity |
 
 ## 工具页面结构模板
 
 每个工具页面应包含：
+- **layout.tsx** - 导出 metadata（title、description、canonical、openGraph）
 - JSON-LD 结构化数据（SoftwareApplication + FAQPage）
 - Hero Section（标题 + 描述）
 - 双栏布局（表单/结果 + 参考信息）
@@ -103,6 +113,31 @@ nextjs-app/
 - SEO 内容区域
 - 隐藏的 SEO 关键词
 - **工具联动入口**（在结果组件中添加相关工具链接）
+
+### layout.tsx 模板
+
+```tsx
+import type { Metadata } from 'next';
+import { siteConfig } from '@/lib/config/site';
+
+export const metadata: Metadata = {
+  title: '工具名称 - 副标题',
+  description: '工具描述，包含关键词...',
+  alternates: {
+    canonical: `${siteConfig.url}/tools/tool-name`,
+  },
+  openGraph: {
+    title: '工具名称 - 副标题',
+    description: '简短描述',
+    url: `${siteConfig.url}/tools/tool-name`,
+    type: 'website',
+  },
+};
+
+export default function ToolLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}
+```
 
 ## 工具联动规范
 
