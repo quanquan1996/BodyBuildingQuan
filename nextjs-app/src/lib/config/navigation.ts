@@ -19,4 +19,9 @@ export const mainNav: NavItem[] = [
     href: '/tools/ffmi-calculator',
     description: '无脂肪体重指数计算器',
   },
+  {
+    title: '体脂夹计算器',
+    href: '/tools/skinfold-calculator',
+    description: '皮褶厚度法体脂率计算',
+  },
 ];
