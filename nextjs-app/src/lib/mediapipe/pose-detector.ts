@@ -12,6 +12,7 @@ async function loadMediaPipe(): Promise<void> {
   // @ts-ignore - CDN dynamic import
   const vision = await import(
     /* webpackIgnore: true */
+    // @ts-ignore
     'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/vision_bundle.mjs'
   );
   
