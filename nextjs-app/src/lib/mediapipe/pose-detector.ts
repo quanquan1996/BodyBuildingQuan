@@ -8,7 +8,8 @@ let PoseLandmarkerClass: any = null;
 async function loadMediaPipe(): Promise<void> {
   if (FilesetResolver && PoseLandmarkerClass) return;
   
-  // Dynamically import MediaPipe
+  // Dynamically import MediaPipe from CDN
+  // @ts-ignore - CDN dynamic import
   const vision = await import(
     /* webpackIgnore: true */
     'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/vision_bundle.mjs'
