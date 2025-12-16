@@ -1,9 +1,18 @@
+import type { Metadata } from 'next';
 import { HeroSection } from '@/components/home/hero-section';
 import { FeatureGrid } from '@/components/home/feature-grid';
 import { WhyChooseUs } from '@/components/home/why-choose-us';
 import { UseCases } from '@/components/home/use-cases';
 import { zh } from '@/lib/i18n/zh';
 import { siteConfig } from '@/lib/config/site';
+
+export const metadata: Metadata = {
+  title: '健身AI工具站 - 免费在线健身计算器',
+  description: '免费在线健身工具：FFMI计算器、体脂率计算、基础代谢计算、心率区间计算、AI健美造型评分。帮助健身爱好者科学评估训练效果。',
+  alternates: {
+    canonical: siteConfig.url,
+  },
+};
 
 const features = [
   {
