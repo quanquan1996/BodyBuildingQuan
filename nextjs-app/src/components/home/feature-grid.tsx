@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Camera, Calculator, Ruler } from 'lucide-react';
+import { Camera, Calculator, Ruler, Flame, Heart, Ratio, RefreshCw, Salad, Wheat } from 'lucide-react';
 
 interface FeatureItem {
   id: string;
   title: string;
   description: string;
   href: string;
-  icon: 'camera' | 'calculator' | 'ruler';
+  icon: 'camera' | 'calculator' | 'ruler' | 'flame' | 'heart' | 'ratio' | 'refresh' | 'salad' | 'wheat';
 }
 
 interface FeatureGridProps {
@@ -19,6 +19,12 @@ const iconMap = {
   camera: Camera,
   calculator: Calculator,
   ruler: Ruler,
+  flame: Flame,
+  heart: Heart,
+  ratio: Ratio,
+  refresh: RefreshCw,
+  salad: Salad,
+  wheat: Wheat,
 };
 
 export function FeatureGrid({ features, title }: FeatureGridProps) {

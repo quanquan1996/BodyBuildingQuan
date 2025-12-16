@@ -21,11 +21,53 @@ const features = [
     icon: 'ruler' as const,
   },
   {
+    id: 'bmr-calculator',
+    title: zh.bmrCalculator.title,
+    description: zh.bmrCalculator.description,
+    href: '/tools/bmr-calculator',
+    icon: 'flame' as const,
+  },
+  {
+    id: 'heart-rate-calculator',
+    title: zh.heartRateCalculator.title,
+    description: zh.heartRateCalculator.description,
+    href: '/tools/heart-rate-calculator',
+    icon: 'heart' as const,
+  },
+  {
     id: 'pose-scorer',
     title: zh.poseComparator.title,
     description: zh.poseComparator.description,
     href: '/tools/pose-comparator',
     icon: 'camera' as const,
+  },
+  {
+    id: 'grecian-calculator',
+    title: zh.grecianCalculator.title,
+    description: zh.grecianCalculator.description,
+    href: '/tools/grecian-calculator',
+    icon: 'ratio' as const,
+  },
+  {
+    id: 'carb-cycling-calculator',
+    title: zh.carbCyclingCalculator.title,
+    description: zh.carbCyclingCalculator.description,
+    href: '/tools/carb-cycling-calculator',
+    icon: 'refresh' as const,
+  },
+  {
+    id: 'fat-loss-diet-calculator',
+    title: zh.fatLossDietCalculator.title,
+    description: zh.fatLossDietCalculator.description,
+    href: '/tools/fat-loss-diet-calculator',
+    icon: 'salad' as const,
+  },
+  {
+    id: 'high-carb-diet-calculator',
+    title: zh.highCarbDietCalculator.title,
+    description: zh.highCarbDietCalculator.description,
+    href: '/tools/high-carb-diet-calculator',
+    icon: 'wheat' as const,
   },
 ];
 

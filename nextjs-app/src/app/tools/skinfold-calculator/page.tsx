@@ -65,9 +65,12 @@ const faqJsonLd = {
 export default function SkinfoldCalculatorPage() {
   const [result, setResult] = useState<SkinfoldOutput | null>(null);
   const [inputWeight, setInputWeight] = useState<number>(70);
+  const [inputHeight, setInputHeight] = useState<number>(170);
 
-  const handleCalculate = (output: SkinfoldOutput) => {
+  const handleCalculate = (output: SkinfoldOutput, weight: number, height: number) => {
     setResult(output);
+    setInputWeight(weight);
+    setInputHeight(height);
   };
 
   return (
@@ -93,6 +96,30 @@ export default function SkinfoldCalculatorPage() {
           </p>
         </div>
 
+        {/* 测量指南提示 - 全宽显示 */}
+        <div className="mb-8 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            <div className="flex-1">
+              <h3 className="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-2 mb-2">
+                <span className="text-xl">📏</span> 没有体脂夹？
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                体脂夹（皮褶卡尺）是测量皮下脂肪厚度的专业工具，价格约 20-100 元。
+                建议购买带刻度的专业体脂夹，测量更准确。
+              </p>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-2 mb-2">
+                <span className="text-xl">🎯</span> 测量小技巧
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                捏起皮肤时确保只捏到皮肤和脂肪，不要捏到肌肉。
+                如果不确定，可以让被测部位的肌肉收缩，感受肌肉和脂肪的边界。
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Main Content - Two Column Layout */}
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
@@ -100,7 +127,7 @@ export default function SkinfoldCalculatorPage() {
             <SkinfoldForm onCalculate={handleCalculate} />
             
             {result && (
-              <SkinfoldResult result={result} weight={inputWeight} />
+              <SkinfoldResult result={result} weight={inputWeight} height={inputHeight} />
             )}
           </div>
 

@@ -31,6 +31,30 @@ export const zh = {
     title: '体脂夹计算器',
     description: '皮褶厚度法测量体脂率，支持3点和7点测量模式',
   },
+  bmrCalculator: {
+    title: '代谢计算器',
+    description: '计算每日基础代谢率(BMR)和总能量消耗(TDEE)',
+  },
+  heartRateCalculator: {
+    title: '心率区间计算器',
+    description: '计算有氧心率训练区间，科学指导运动强度',
+  },
+  grecianCalculator: {
+    title: '古典比例计算器',
+    description: '基于黄金分割率评估身材比例，找出你的弱项部位',
+  },
+  carbCyclingCalculator: {
+    title: '碳循环计算器',
+    description: '基于Katch-McArdle公式规划碳水循环减脂饮食',
+  },
+  fatLossDietCalculator: {
+    title: '减脂饮食计算器',
+    description: '碳水递减策略，适合普通人的减脂饮食计划',
+  },
+  highCarbDietCalculator: {
+    title: '高碳减脂计算器',
+    description: '高碳水低脂肪策略，适合训练量大的健身人群',
+  },
   ffmiCalculator: {
     title: 'FFMI计算器',
     description: '计算你的无脂肪体重指数，评估肌肉发达程度',

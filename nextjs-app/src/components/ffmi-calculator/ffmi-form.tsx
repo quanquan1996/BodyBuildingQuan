@@ -1,23 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { zh } from '@/lib/i18n/zh';
+import { Ruler } from 'lucide-react';
 import { validateFFMIInput, type FFMIInput } from '@/lib/utils/ffmi';
 
 interface FFMIFormProps {
   onCalculate: (data: FFMIInput) => void;
 }
 
-export function FFMIForm({ onCalculate }: FFMIFormProps) {
+// 内部表单组件，使用 useSearchParams
+function FFMIFormInner({ onCalculate }: FFMIFormProps) {
+  const searchParams = useSearchParams();
   const [height, setHeight] = useState('175');
   const [weight, setWeight] = useState('75');
   const [bodyFat, setBodyFat] = useState('15');
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // 从 URL 参数读取预填数据
+  useEffect(() => {
+    const urlHeight = searchParams.get('height');
+    const urlWeight = searchParams.get('weight');
+    const urlBodyFat = searchParams.get('bodyFat');
+    if (urlHeight) setHeight(urlHeight);
+    if (urlWeight) setWeight(urlWeight);
+    if (urlBodyFat) setBodyFat(urlBodyFat);
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +131,13 @@ export function FFMIForm({ onCalculate }: FFMIFormProps) {
                 {errors.bodyFat && (
                   <p className="text-xs text-destructive">{errors.bodyFat}</p>
                 )}
+                <Link
+                  href="/tools/skinfold-calculator"
+                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                >
+                  <Ruler className="w-3 h-3" />
+                  不知道体脂率？用体脂夹测量
+                </Link>
               </div>
 
               <div className="space-y-2">
@@ -165,6 +186,36 @@ export function FFMIForm({ onCalculate }: FFMIFormProps) {
             🔢 计算 FFMI 指数
           </Button>
         </form>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+// 导出的组件，用 Suspense 包裹
+export function FFMIForm({ onCalculate }: FFMIFormProps) {
+  return (
+    <Suspense fallback={<FormSkeleton />}>
+      <FFMIFormInner onCalculate={onCalculate} />
+    </Suspense>
+  );
+}
+
+function FormSkeleton() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <span className="text-2xl">📊</span>
+          身体参数设置
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6 animate-pulse">
+          <div className="h-10 bg-muted rounded" />
+          <div className="h-10 bg-muted rounded" />
+          <div className="h-12 bg-muted rounded" />
+        </div>
       </CardContent>
     </Card>
   );

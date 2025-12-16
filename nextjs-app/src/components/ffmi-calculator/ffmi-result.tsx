@@ -40,15 +40,14 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
         <CardContent className="pt-6">
           {/* Visual Body Composition */}
           <div className="flex justify-center mb-6">
-            <div className="relative">
+            <div className="relative pb-8">
               <div className="w-24 h-32 bg-gradient-to-b from-orange-300 to-orange-400 rounded-t-full rounded-b-lg flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="text-xs">体重</div>
                   <div className="text-lg font-bold">{weight}kg</div>
+                  <div className="text-xs mt-1 opacity-90">瘦体重</div>
+                  <div className="text-sm font-semibold">{result.ffm}kg</div>
                 </div>
-              </div>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                瘦体重: {result.ffm}kg
               </div>
             </div>
           </div>

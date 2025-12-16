@@ -19,7 +19,7 @@ import {
 } from '@/lib/utils/skinfold';
 
 interface SkinfoldFormProps {
-  onCalculate: (result: SkinfoldOutput) => void;
+  onCalculate: (result: SkinfoldOutput, weight: number, height: number) => void;
 }
 
 export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
@@ -27,6 +27,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
   const [gender, setGender] = useState<Gender>('male');
   const [age, setAge] = useState('30');
   const [weight, setWeight] = useState('70');
+  const [height, setHeight] = useState('170');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // 简易模式数据
@@ -96,7 +97,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
       };
 
       setErrors({});
-      onCalculate(calculateSimpleSkinfold(input, weightKg));
+      onCalculate(calculateSimpleSkinfold(input, weightKg), weightKg, parseFloat(height));
     } else {
       const values = {
         age: ageNum,
@@ -132,7 +133,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
       };
 
       setErrors({});
-      onCalculate(calculatePreciseSkinfold(input, weightKg));
+      onCalculate(calculatePreciseSkinfold(input, weightKg), weightKg, parseFloat(height));
     }
   };
 
@@ -146,6 +147,19 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* 快速测量指南 */}
+          <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
+            <h4 className="font-medium text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
+              <span>📋</span> 测量前必读
+            </h4>
+            <ol className="text-sm text-muted-foreground space-y-1.5 list-decimal list-inside">
+              <li>用<strong className="text-foreground">拇指和食指</strong>捏起皮肤和皮下脂肪</li>
+              <li>在捏起部位<strong className="text-foreground">旁边 1cm 处</strong>夹住体脂夹</li>
+              <li>等待 <strong className="text-foreground">2-3 秒</strong>后读取数值</li>
+              <li>每个部位测量 <strong className="text-foreground">2-3 次取平均值</strong></li>
+            </ol>
+          </div>
+
           {/* 性别选择 */}
           <div className="space-y-3">
             <Label className="text-sm text-muted-foreground">性别选择</Label>
@@ -178,7 +192,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
           </div>
 
           {/* 基本信息 */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="age">年龄</Label>
               <div className="relative">
@@ -195,6 +209,24 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
                 </span>
               </div>
               {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="height">身高</Label>
+              <div className="relative">
+                <Input
+                  id="height"
+                  type="number"
+                  step="0.1"
+                  placeholder="170"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  className="min-h-[44px] pr-12"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                  cm
+                </span>
+              </div>
+              {errors.height && <p className="text-xs text-destructive">{errors.height}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="weight">体重</Label>
@@ -277,36 +309,27 @@ interface SiteInputProps {
 }
 
 function SiteInput({ site, error }: SiteInputProps) {
-  const [showTips, setShowTips] = useState(false);
-
   return (
     <div className="space-y-2 p-3 rounded-lg border bg-muted/30">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
         <Label className="flex items-center gap-2">
           <span>{site.emoji}</span>
-          <span>{site.name}</span>
+          <span className="font-medium">{site.name}</span>
         </Label>
-        <button
-          type="button"
-          onClick={() => setShowTips(!showTips)}
-          className="text-xs text-primary hover:underline"
-        >
-          {showTips ? '收起' : '测量方法'}
-        </button>
       </div>
       
-      {showTips && (
-        <div className="text-xs text-muted-foreground bg-background p-2 rounded">
-          <p>{site.description}</p>
-          <p className="mt-1 text-primary/80">💡 {site.tips}</p>
-        </div>
-      )}
+      {/* 测量方法始终显示 */}
+      <div className="text-xs text-muted-foreground bg-background/80 p-2 rounded border-l-2 border-primary/50">
+        <p className="font-medium text-foreground/80 mb-1">📍 测量位置</p>
+        <p>{site.description}</p>
+        <p className="mt-1.5 text-primary">💡 {site.tips}</p>
+      </div>
       
       <div className="relative">
         <Input
           type="number"
           step="0.1"
-          placeholder="0"
+          placeholder="输入测量值"
           value={site.value}
           onChange={(e) => site.setter(e.target.value)}
           className="min-h-[44px] pr-12"

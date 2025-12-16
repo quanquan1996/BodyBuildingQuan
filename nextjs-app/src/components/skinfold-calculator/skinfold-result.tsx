@@ -1,11 +1,13 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ToolLinkCard, toolLinks } from '@/components/common/tool-link-card';
 import { type SkinfoldOutput, type BodyFatCategory } from '@/lib/utils/skinfold';
 
 interface SkinfoldResultProps {
   result: SkinfoldOutput;
   weight: number;
+  height?: number;
 }
 
 const categoryColors: Record<BodyFatCategory, string> = {
@@ -24,7 +26,7 @@ const categoryBgColors: Record<BodyFatCategory, string> = {
   obese: 'bg-red-100 border-red-300',
 };
 
-export function SkinfoldResult({ result, weight }: SkinfoldResultProps) {
+export function SkinfoldResult({ result, weight, height = 175 }: SkinfoldResultProps) {
   return (
     <Card>
       <CardHeader>
@@ -92,6 +94,16 @@ export function SkinfoldResult({ result, weight }: SkinfoldResultProps) {
               <span className="w-3 h-3 rounded bg-blue-500"></span>
               瘦体重
             </span>
+          </div>
+        </div>
+
+        {/* 工具联动 */}
+        <div className="space-y-3 pt-4 border-t">
+          <h4 className="font-medium text-sm text-muted-foreground">🔗 继续探索</h4>
+          <div className="space-y-2">
+            <ToolLinkCard {...toolLinks.skinfoldToFfmi(result.bodyFatPercent, weight, height)} />
+            <ToolLinkCard {...toolLinks.skinfoldToBmr(result.bodyFatPercent, weight)} />
+            <ToolLinkCard {...toolLinks.skinfoldToCarbCycling(result.bodyFatPercent, weight)} />
           </div>
         </div>
       </CardContent>

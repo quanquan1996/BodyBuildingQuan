@@ -19,6 +19,7 @@ import {
   AngleResult,
 } from '@/lib/utils/angle-calculator';
 import { PoseResult } from '@/types/pose';
+import { ToolLinkCard, toolLinks } from '@/components/common/tool-link-card';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -265,6 +266,16 @@ export default function PoseComparatorPage() {
 
               {/* Limitations Warning */}
               <Limitations />
+
+              {/* 工具联动 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔗 继续探索</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ToolLinkCard {...toolLinks.poseToGrecian()} />
+                </CardContent>
+              </Card>
             </div>
           )}
 

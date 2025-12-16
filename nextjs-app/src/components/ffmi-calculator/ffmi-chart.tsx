@@ -55,7 +55,7 @@ export function FFMIChart({ currentFFMI }: FFMIChartProps) {
         {/* Simple Bar Chart */}
         <div className="relative" style={{ height: chartHeight }}>
           {/* Y-axis labels */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-xs text-muted-foreground">
+          <div className="absolute left-0 top-0 w-8 flex flex-col justify-between text-xs text-muted-foreground" style={{ height: chartHeight - 24 }}>
             <span>26</span>
             <span>22</span>
             <span>18</span>
@@ -63,38 +63,42 @@ export function FFMIChart({ currentFFMI }: FFMIChartProps) {
           </div>
 
           {/* Chart area */}
-          <div className="ml-10 h-full flex items-end justify-around gap-1 border-l border-b border-muted">
-            {ageData.map((data, index) => (
-              <div key={data.age} className="flex flex-col items-center gap-1 flex-1">
-                <div className="w-full flex justify-center gap-0.5" style={{ height: chartHeight - 20 }}>
+          <div className="ml-10 flex flex-col">
+            <div className="flex items-end justify-around gap-2 border-l border-b border-muted" style={{ height: chartHeight - 24 }}>
+              {ageData.map((data) => (
+                <div key={data.age} className="flex items-end justify-center gap-0.5 flex-1 h-full">
                   {/* Average bar */}
                   <div
-                    className="w-2 bg-blue-500 rounded-t"
-                    style={{ height: `${(data.avg / maxValue) * 100}%` }}
+                    className="w-3 bg-blue-500 rounded-t min-h-[4px]"
+                    style={{ height: `${((data.avg - 14) / (maxValue - 14)) * 100}%` }}
                   />
                   {/* High bar */}
                   <div
-                    className="w-2 bg-green-500 rounded-t"
-                    style={{ height: `${(data.high / maxValue) * 100}%` }}
+                    className="w-3 bg-green-500 rounded-t min-h-[4px]"
+                    style={{ height: `${((data.high - 14) / (maxValue - 14)) * 100}%` }}
                   />
                   {/* Elite bar */}
                   <div
-                    className="w-2 bg-purple-500 rounded-t"
-                    style={{ height: `${(data.elite / maxValue) * 100}%` }}
+                    className="w-3 bg-purple-500 rounded-t min-h-[4px]"
+                    style={{ height: `${((data.elite - 14) / (maxValue - 14)) * 100}%` }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground">{data.age}</span>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="flex justify-around ml-0 mt-1">
+              {ageData.map((data) => (
+                <span key={data.age} className="text-xs text-muted-foreground flex-1 text-center">{data.age}</span>
+              ))}
+            </div>
           </div>
 
           {/* Current FFMI line */}
-          {currentFFMI && (
+          {currentFFMI && currentFFMI >= 14 && (
             <div
-              className="absolute left-10 right-0 border-t-2 border-dashed border-orange-500"
-              style={{ bottom: `${(currentFFMI / maxValue) * (chartHeight - 20)}px` }}
+              className="absolute left-10 right-0 border-t-2 border-dashed border-orange-500 pointer-events-none"
+              style={{ bottom: `${24 + ((currentFFMI - 14) / (maxValue - 14)) * (chartHeight - 24)}px` }}
             >
-              <span className="absolute right-0 -top-4 text-xs text-orange-500 font-medium">
+              <span className="absolute right-0 -top-4 text-xs text-orange-500 font-medium bg-background px-1">
                 你: {currentFFMI}
               </span>
             </div>
