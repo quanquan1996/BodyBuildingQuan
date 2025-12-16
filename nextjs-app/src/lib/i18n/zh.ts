@@ -55,6 +55,10 @@ export const zh = {
     title: '高碳减脂计算器',
     description: '高碳水低脂肪策略，适合训练量大的健身人群',
   },
+  metabolicDamageTest: {
+    title: '代谢受损检测',
+    description: '评估代谢适应程度，获取反向节食恢复方案',
+  },
   ffmiCalculator: {
     title: 'FFMI计算器',
     description: '计算你的无脂肪体重指数，评估肌肉发达程度',

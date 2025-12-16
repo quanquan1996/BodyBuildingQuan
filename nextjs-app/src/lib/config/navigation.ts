@@ -54,4 +54,9 @@ export const mainNav: NavItem[] = [
     href: '/tools/high-carb-diet-calculator',
     description: '高碳水低脂肪减脂饮食规划',
   },
+  {
+    title: '代谢受损检测',
+    href: '/tools/metabolic-damage-test',
+    description: '评估代谢适应程度，获取恢复方案',
+  },
 ];

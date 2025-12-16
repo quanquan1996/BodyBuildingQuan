@@ -95,11 +95,11 @@ export default function FatLossDietCalculatorPage() {
 
       <div className="container py-8 md:py-12 px-4 md:px-6">
         {/* Hero Section */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
+        <div className="text-center mb-8 md:mb-10">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter mb-2 md:mb-3">
             减脂饮食计算器
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             碳水递减减脂策略 · 自动生成每周饮食计划 ·
             <span className="text-primary">科学减脂不反弹</span>
           </p>

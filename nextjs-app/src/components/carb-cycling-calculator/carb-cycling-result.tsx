@@ -158,6 +158,9 @@ export function CarbCyclingResult({ result, inputData }: CarbCyclingResultProps)
               <ToolLinkCard
                 {...toolLinks.carbCyclingToFatLossDiet(inputData.bodyFat, inputData.weight)}
               />
+              <ToolLinkCard
+                {...toolLinks.toMetabolicDamageTest(inputData.weight, undefined, undefined, inputData.bodyFat)}
+              />
             </div>
           </div>
         )}

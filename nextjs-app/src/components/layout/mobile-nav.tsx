@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, Home, Calculator, Ruler, Flame, Heart, Camera, Ratio, RefreshCw, Salad, Wheat } from 'lucide-react';
+import { Menu, Home, Calculator, Ruler, Flame, Heart, Camera, Ratio, RefreshCw, Salad, Wheat, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -28,6 +28,7 @@ const iconMap: Record<string, React.ElementType> = {
   '/tools/carb-cycling-calculator': RefreshCw,
   '/tools/fat-loss-diet-calculator': Salad,
   '/tools/high-carb-diet-calculator': Wheat,
+  '/tools/metabolic-damage-test': Activity,
 };
 
 export function MobileNav() {
@@ -47,9 +48,11 @@ export function MobileNav() {
           <span>菜单</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[280px] p-0">
-        <SheetHeader className="p-4 border-b text-left">
-          <SheetTitle className="text-lg">{siteConfig.name}</SheetTitle>
+      <SheetContent side="right" className="w-[280px] p-0 overflow-hidden">
+        <SheetHeader className="p-5 pb-4 bg-gradient-to-br from-primary/10 to-primary/5 text-left">
+          <SheetTitle className="text-lg font-black font-[family-name:var(--font-noto-sans-sc)]">
+            健身<span className="text-primary">AI</span>工具站
+          </SheetTitle>
           <p className="text-xs text-muted-foreground">免费在线健身工具</p>
         </SheetHeader>
 

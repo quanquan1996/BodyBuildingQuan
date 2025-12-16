@@ -117,6 +117,14 @@ export function BMRResult({ result, inputData }: BMRResultProps) {
                   )}
                 />
               )}
+              <ToolLinkCard
+                {...toolLinks.toMetabolicDamageTest(
+                  inputData.weight,
+                  undefined,
+                  inputData.age,
+                  inputData.bodyFat
+                )}
+              />
               {inputData.age && (
                 <ToolLinkCard {...toolLinks.bmrToHeartRate(inputData.age)} />
               )}

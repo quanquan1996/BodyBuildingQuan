@@ -148,6 +148,53 @@ nextjs-app/
 4. 如新工具需要体脂输入，在表单中添加引导链接
 5. 表单组件支持 URL 参数预填（使用 Suspense 包裹 useSearchParams）
 
+## UI 设计规范
+
+### 布局间距
+
+- **顶部导航栏高度**: `h-16`
+- **页面容器**: `container py-8 md:py-12 px-4 md:px-6`
+- **Hero 区域底部间距**: `mb-8 md:mb-10`
+- **标题字号**: 移动端 `text-2xl`，桌面端 `md:text-4xl`
+
+### 顶部导航栏样式
+
+```tsx
+// 淡灰色背景 + 毛玻璃效果 + 渐变分隔线
+<header className="sticky top-0 z-50 w-full bg-muted/50 backdrop-blur supports-[backdrop-filter]:bg-muted/30">
+  <div className="container flex h-16 items-center px-4 md:px-6">
+    <div className="absolute inset-x-4 md:inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+    {/* ... */}
+  </div>
+</header>
+```
+
+### Logo 样式
+
+- 图标容器: `w-7 h-7 md:w-8 md:h-8 rounded-lg bg-primary text-primary-foreground`
+- 文字: `font-black text-base md:text-lg tracking-tight font-[family-name:var(--font-noto-sans-sc)]`
+- "AI" 高亮: `<span className="text-primary">AI</span>`
+
+### 移动端侧边栏 (Sheet)
+
+- 圆角浮动样式: `rounded-2xl`
+- 四周间距: `inset-y-4 right-4`
+- 头部渐变背景: `bg-gradient-to-br from-primary/10 to-primary/5`
+- 关闭按钮: 圆形 `rounded-full`
+
+### 首页工具网格
+
+- 移动端: 3 列紧凑布局 `grid-cols-3 gap-2`
+- 桌面端: 2 列布局 `sm:grid-cols-2 gap-6`
+- 移动端卡片: 垂直居中，只显示图标和标题
+- 桌面端卡片: 水平布局，显示图标、标题和描述
+
+### 字体配置
+
+- 主字体: Geist Sans
+- 等宽字体: Geist Mono
+- 中文字体: Noto Sans SC (用于 Logo 和标题)
+
 ## 联系方式
 
 - 合作/广告: quanquanyiyi520@gmail.com

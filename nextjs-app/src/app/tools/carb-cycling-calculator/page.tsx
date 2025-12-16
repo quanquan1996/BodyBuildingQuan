@@ -95,7 +95,7 @@ export default function CarbCyclingCalculatorPage() {
       
       <div className="container py-8 md:py-12 px-4 md:px-6">
         {/* Hero Section */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8 md:mb-10">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
             碳循环减脂计算器
           </h1>

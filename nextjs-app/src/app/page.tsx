@@ -69,6 +69,13 @@ const features = [
     href: '/tools/high-carb-diet-calculator',
     icon: 'wheat' as const,
   },
+  {
+    id: 'metabolic-damage-test',
+    title: zh.metabolicDamageTest.title,
+    description: zh.metabolicDamageTest.description,
+    href: '/tools/metabolic-damage-test',
+    icon: 'activity' as const,
+  },
 ];
 
 // JSON-LD structured data

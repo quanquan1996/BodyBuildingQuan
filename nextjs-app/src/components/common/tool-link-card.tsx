@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Calculator, Ruler, Flame, Heart, Camera, Ratio, HelpCircle, Salad } from 'lucide-react';
+import { ArrowRight, Calculator, Ruler, Flame, Heart, Camera, Ratio, HelpCircle, Salad, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface ToolLinkProps {
   targetTool: string;
   title: string;
   description: string;
-  icon: 'calculator' | 'ruler' | 'flame' | 'heart' | 'camera' | 'ratio' | 'help' | 'salad';
+  icon: 'calculator' | 'ruler' | 'flame' | 'heart' | 'camera' | 'ratio' | 'help' | 'salad' | 'activity';
   params?: Record<string, string | number>;
   type: 'next-step' | 'prerequisite';
   className?: string;
@@ -23,6 +23,7 @@ const iconMap = {
   ratio: Ratio,
   help: HelpCircle,
   salad: Salad,
+  activity: Activity,
 };
 
 export function ToolLinkCard({
@@ -218,6 +219,29 @@ export const toolLinks = {
     description: '高低碳日交替，更灵活的减脂策略',
     icon: 'flame',
     params: { bodyFat, weight, activityLevel },
+    type: 'next-step',
+  }),
+
+  // 代谢受损检测相关联动
+  toMetabolicDamageTest: (weight: number, height?: number, age?: number, bodyFat?: number): ToolLinkProps => ({
+    targetTool: '/tools/metabolic-damage-test',
+    title: '检测代谢受损程度',
+    description: '评估是否存在代谢适应，获取恢复方案',
+    icon: 'activity',
+    params: { 
+      weight, 
+      ...(height ? { height } : {}),
+      ...(age ? { age } : {}),
+      ...(bodyFat ? { bodyFat } : {}),
+    },
+    type: 'next-step',
+  }),
+  metabolicDamageToReverseDiet: (weight: number, bodyFat?: number): ToolLinkProps => ({
+    targetTool: '/tools/high-carb-diet-calculator',
+    title: '制定恢复饮食计划',
+    description: '高碳水策略帮助恢复代谢',
+    icon: 'flame',
+    params: { weight, ...(bodyFat ? { bodyFat } : {}) },
     type: 'next-step',
   }),
 };

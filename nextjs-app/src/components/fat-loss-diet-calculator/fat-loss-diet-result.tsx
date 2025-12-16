@@ -154,6 +154,9 @@ export function FatLossDietResult({ result, inputData }: FatLossDietResultProps)
                   )}
                 />
               )}
+              <ToolLinkCard
+                {...toolLinks.toMetabolicDamageTest(inputData.weight, undefined, undefined, inputData.bodyFat)}
+              />
               {!inputData.bodyFat && <ToolLinkCard {...toolLinks.needBodyFat()} />}
             </div>
           </div>

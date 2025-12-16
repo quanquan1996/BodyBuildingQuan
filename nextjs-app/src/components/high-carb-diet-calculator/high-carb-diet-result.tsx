@@ -212,6 +212,9 @@ export function HighCarbDietResult({ result, inputData }: HighCarbDietResultProp
                   {...toolLinks.fatLossDietToCarbCycling(inputData.bodyFat, inputData.weight, inputData.activityLevel)}
                 />
               )}
+              <ToolLinkCard
+                {...toolLinks.toMetabolicDamageTest(inputData.weight, undefined, inputData.age, inputData.bodyFat)}
+              />
               <ToolLinkCard {...toolLinks.bmrToHeartRate(inputData.age)} />
             </div>
           </div>
