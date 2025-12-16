@@ -5,7 +5,7 @@
 - Docker 20.10+
 - Docker Compose v2+
 
-## Docker 部署（推荐）
+## Docker 部署
 
 ### 快速部署
 
@@ -50,37 +50,6 @@ docker run -d -p 3000:3000 --name bodybuildingquan bodybuildingquan
 
 # 停止并删除
 docker stop bodybuildingquan && docker rm bodybuildingquan
-```
-
-## Nginx 反向代理配置
-
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-## HTTPS 配置（Let's Encrypt）
-
-```bash
-# 安装 certbot
-apt install certbot python3-certbot-nginx
-
-# 获取证书
-certbot --nginx -d yourdomain.com
 ```
 
 ## 环境变量
