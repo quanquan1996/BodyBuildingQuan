@@ -1,0 +1,60 @@
+export const zh = {
+  common: {
+    siteName: '健身AI工具站',
+    home: '首页',
+    tools: '工具',
+    loading: '加载中...',
+    error: '出错了',
+    retry: '重试',
+  },
+  home: {
+    heroTitle: '健身AI工具站',
+    heroDescription: '免费在线健身工具，科学评估你的训练效果',
+    heroSubtitle: 'FFMI计算 · 体脂率分析 · 健美造型评分 · 肌肉量评估',
+    ctaButton: '开始使用',
+    featuresTitle: '热门健身工具',
+    whyTitle: '为什么选择我们？',
+    keywordsTitle: '适用场景',
+  },
+  poseComparator: {
+    title: '健美造型评分器',
+    description: 'AI驱动的健美造型分析，评估你的健美姿势得分',
+    metaDescription: '免费AI健美造型评分工具，上传你的健美造型照片，自动检测身体姿态并评分，帮助健美爱好者改进造型展示。',
+    uploadReference: '上传参考造型',
+    uploadUser: '上传你的造型',
+    compare: '开始评分',
+    result: '评分结果',
+    noPoseDetected: '未能检测到人体姿态，请上传包含完整人体的图片',
+    uploadHint: '点击或拖拽图片到此处',
+  },
+  ffmiCalculator: {
+    title: 'FFMI计算器',
+    description: '计算你的无脂肪体重指数，评估肌肉发达程度',
+    metaDescription: '免费FFMI计算器，输入身高、体重、体脂率，快速计算无脂肪体重指数，评估肌肉发达程度。',
+    heightLabel: '身高 (cm)',
+    weightLabel: '体重 (kg)',
+    bodyFatLabel: '体脂率 (%)',
+    calculate: '计算',
+    result: '计算结果',
+    ffmiValue: 'FFMI值',
+    adjustedFfmi: '校正FFMI',
+    interpretation: '解读',
+    categories: {
+      below_average: '低于平均',
+      average: '平均水平',
+      above_average: '高于平均',
+      excellent: '优秀',
+      elite: '精英/可疑',
+    },
+    validation: {
+      heightRange: '请输入有效身高 (100-250 cm)',
+      weightRange: '请输入有效体重 (30-300 kg)',
+      bodyFatRange: '请输入有效体脂率 (3-60%)',
+    },
+  },
+  footer: {
+    copyright: '© 2024 健美AI工具站. 保留所有权利。',
+  },
+} as const;
+
+export type TextStrings = typeof zh;
