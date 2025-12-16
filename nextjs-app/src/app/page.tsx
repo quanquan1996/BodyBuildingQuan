@@ -14,6 +14,13 @@ const features = [
     icon: 'calculator' as const,
   },
   {
+    id: 'skinfold-calculator',
+    title: zh.skinfoldCalculator.title,
+    description: zh.skinfoldCalculator.description,
+    href: '/tools/skinfold-calculator',
+    icon: 'ruler' as const,
+  },
+  {
     id: 'pose-scorer',
     title: zh.poseComparator.title,
     description: zh.poseComparator.description,

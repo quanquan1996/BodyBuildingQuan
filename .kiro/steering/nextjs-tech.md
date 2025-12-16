@@ -71,6 +71,15 @@ nextjs-app/
 - 使用 JSON-LD 结构化数据增强搜索结果
 - 使用语义化 HTML 标签 (h1, h2, section, article)
 
+## 新增工具页面检查清单
+
+新增工具页面时，必须更新以下文件：
+
+1. **导航栏配置** - `src/lib/config/navigation.ts` 添加新工具链接
+2. **首页工具列表** - `src/app/page.tsx` 的 features 数组添加新工具
+3. **国际化文本** - `src/lib/i18n/zh.ts` 添加新工具的标题和描述
+4. **图标支持** - 如需新图标，更新 `src/components/home/feature-grid.tsx` 的 iconMap
+
 ## 联系方式
 
 - 合作/广告: quanquanyiyi520@gmail.com

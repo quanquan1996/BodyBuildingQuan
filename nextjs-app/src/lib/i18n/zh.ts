@@ -27,6 +27,10 @@ export const zh = {
     noPoseDetected: '未能检测到人体姿态，请上传包含完整人体的图片',
     uploadHint: '点击或拖拽图片到此处',
   },
+  skinfoldCalculator: {
+    title: '体脂夹计算器',
+    description: '皮褶厚度法测量体脂率，支持3点和7点测量模式',
+  },
   ffmiCalculator: {
     title: 'FFMI计算器',
     description: '计算你的无脂肪体重指数，评估肌肉发达程度',
