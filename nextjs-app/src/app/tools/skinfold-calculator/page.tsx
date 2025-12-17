@@ -6,6 +6,8 @@ import { SkinfoldResult } from '@/components/skinfold-calculator/skinfold-result
 import { SkinfoldReference } from '@/components/skinfold-calculator/skinfold-reference';
 import { SkinfoldGuide } from '@/components/skinfold-calculator/skinfold-guide';
 import { SkinfoldExplanation } from '@/components/skinfold-calculator/skinfold-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { type SkinfoldOutput } from '@/lib/utils/skinfold';
 
@@ -22,11 +24,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.7',
-    ratingCount: '890',
   },
 };
 
@@ -84,46 +81,42 @@ export default function SkinfoldCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            体脂夹计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            皮褶厚度法测量体脂率，支持简易和精确模式 · 
-            <span className="text-primary">在线计算器平台</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="skinfold-calculator"
+          title="体脂夹计算器"
+          description="皮褶厚度法测量体脂率，支持简易和精确模式"
+        />
 
-        {/* 测量指南提示 - 全宽显示 */}
-        <div className="mb-8 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            <div className="flex-1">
-              <h3 className="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-2 mb-2">
-                <span className="text-xl">📏</span> 没有体脂夹？
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                体脂夹（皮褶卡尺）是测量皮下脂肪厚度的专业工具，价格约 20-100 元。
-                建议购买带刻度的专业体脂夹，测量更准确。
-              </p>
+        {/* 测量指南提示 */}
+        <div className="mb-6 bg-card rounded-2xl p-5" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="flex gap-3">
+              <span className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-lg flex-shrink-0">📏</span>
+              <div>
+                <h3 className="font-medium text-sm mb-1">没有体脂夹？</h3>
+                <p className="text-xs text-muted-foreground">
+                  体脂夹价格约 20-100 元，建议购买带刻度的专业体脂夹。
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-2 mb-2">
-                <span className="text-xl">🎯</span> 测量小技巧
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                捏起皮肤时确保只捏到皮肤和脂肪，不要捏到肌肉。
-                如果不确定，可以让被测部位的肌肉收缩，感受肌肉和脂肪的边界。
-              </p>
+            <div className="flex gap-3">
+              <span className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-lg flex-shrink-0">🎯</span>
+              <div>
+                <h3 className="font-medium text-sm mb-1">测量小技巧</h3>
+                <p className="text-xs text-muted-foreground">
+                  捏起皮肤时确保只捏到皮肤和脂肪，不要捏到肌肉。
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <SkinfoldForm onCalculate={handleCalculate} />
             
             {result && (
@@ -132,7 +125,7 @@ export default function SkinfoldCalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Guide */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <SkinfoldReference />
             <SkinfoldGuide />
           </div>
@@ -143,25 +136,28 @@ export default function SkinfoldCalculatorPage() {
           <SkinfoldExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="skinfold-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于体脂夹计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么使用皮褶厚度法？</h3>
-              <p>
-                皮褶厚度法是一种经济实惠且便携的体脂测量方法。只需一把体脂夹，
-                就能在家中或健身房随时测量体脂率。相比昂贵的 DEXA 扫描或水下称重，
-                皮褶厚度法提供了良好的性价比，特别适合追踪体脂变化趋势。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何提高测量准确性？</h3>
-              <p>
-                为获得最准确的结果，建议在相同时间、相同条件下测量（如早晨空腹）。
-                每个部位测量 2-3 次取平均值，确保捏起的是皮肤和皮下脂肪而非肌肉。
-                使用质量好的体脂夹，并按照标准位置进行测量。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于体脂夹计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么使用皮褶厚度法？</h3>
+                <p>
+                  皮褶厚度法是一种经济实惠且便携的体脂测量方法。只需一把体脂夹，
+                  就能在家中或健身房随时测量体脂率。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何提高测量准确性？</h3>
+                <p>
+                  建议在相同时间、相同条件下测量（如早晨空腹）。
+                  每个部位测量 2-3 次取平均值。
+                </p>
+              </div>
             </div>
           </div>
         </section>

@@ -2,33 +2,51 @@ export function UseCases() {
   const useCases = [
     {
       category: '健身新手',
-      keywords: ['健身入门', '新手健身计划', '健身基础知识', '如何开始健身'],
+      emoji: '🌱',
+      keywords: ['健身入门', '新手计划', '基础知识'],
       description: '了解自己的身体数据，制定科学的入门计划',
+      color: {
+        bg: 'bg-emerald-50',
+        border: 'border-emerald-100',
+        tag: 'bg-emerald-100 text-emerald-700',
+        emoji: 'bg-emerald-100',
+      },
     },
     {
       category: '增肌人群',
-      keywords: ['增肌计划', '肌肉增长', '蛋白质摄入', 'FFMI评估', '瘦体重'],
+      emoji: '💪',
+      keywords: ['增肌计划', 'FFMI评估', '蛋白质摄入'],
       description: '追踪肌肉量变化，评估增肌效果',
+      color: {
+        bg: 'bg-blue-50',
+        border: 'border-blue-100',
+        tag: 'bg-blue-100 text-blue-700',
+        emoji: 'bg-blue-100',
+      },
     },
     {
       category: '减脂人群',
-      keywords: ['减脂计划', '体脂率计算', '减肥方法', '热量消耗', '有氧运动'],
+      emoji: '🔥',
+      keywords: ['体脂率计算', '热量消耗', '有氧运动'],
       description: '监控体脂变化，科学减脂不反弹',
+      color: {
+        bg: 'bg-orange-50',
+        border: 'border-orange-100',
+        tag: 'bg-orange-100 text-orange-700',
+        emoji: 'bg-orange-100',
+      },
     },
     {
       category: '健美爱好者',
-      keywords: ['健美造型', '古典健美', '传统健美', '健体比赛', '造型练习'],
+      emoji: '🏆',
+      keywords: ['健美造型', 'AI评分', '比赛准备'],
       description: 'AI评分系统帮助优化比赛造型',
-    },
-    {
-      category: '私人教练',
-      keywords: ['私教工具', '会员管理', '训练评估', '身体成分分析'],
-      description: '为学员提供专业的数据分析报告',
-    },
-    {
-      category: '运动员',
-      keywords: ['运动表现', '体能评估', '竞技状态', '训练监控'],
-      description: '量化训练效果，优化竞技状态',
+      color: {
+        bg: 'bg-purple-50',
+        border: 'border-purple-100',
+        tag: 'bg-purple-100 text-purple-700',
+        emoji: 'bg-purple-100',
+      },
     },
   ];
 
@@ -42,21 +60,38 @@ export function UseCases() {
           无论你是健身新手还是专业运动员，我们的工具都能帮助你更好地了解自己的身体
         </p>
         
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 max-w-4xl mx-auto">
           {useCases.map((useCase) => (
             <div
               key={useCase.category}
-              className="bg-background rounded-lg p-5 shadow-sm"
+              className={`${useCase.color.bg} ${useCase.color.border} border rounded-2xl p-5 transition-all hover:shadow-md hover:-translate-y-0.5`}
             >
-              <h3 className="font-semibold text-lg mb-2">{useCase.category}</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                {useCase.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
+              {/* 左图右文布局 */}
+              <div className="flex gap-4">
+                {/* 左侧 Emoji */}
+                <div 
+                  className={`${useCase.color.emoji} w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0`}
+                >
+                  <span className="text-3xl">{useCase.emoji}</span>
+                </div>
+                
+                {/* 右侧内容 */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-base mb-1" style={{ color: '#333' }}>
+                    {useCase.category}
+                  </h3>
+                  <p className="text-sm mb-3" style={{ color: '#666' }}>
+                    {useCase.description}
+                  </p>
+                </div>
+              </div>
+              
+              {/* 底部标签 */}
+              <div className="flex flex-wrap gap-1.5 mt-3 pl-[72px]">
                 {useCase.keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full"
+                    className={`${useCase.color.tag} inline-block px-2.5 py-0.5 text-xs rounded-full font-medium`}
                   >
                     {keyword}
                   </span>
@@ -66,33 +101,7 @@ export function UseCases() {
           ))}
         </div>
 
-        {/* Additional Keywords for SEO */}
-        <div className="mt-10 text-center">
-          <p className="text-sm text-muted-foreground mb-4">热门搜索</p>
-          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
-            {[
-              'FFMI计算器',
-              '体脂率计算',
-              '肌肉量评估',
-              '健美造型评分',
-              '瘦体重计算',
-              'BMI计算',
-              '基础代谢计算',
-              '每日热量需求',
-              '蛋白质摄入量',
-              '健身计划生成',
-              '增肌食谱',
-              '减脂方案',
-            ].map((keyword) => (
-              <span
-                key={keyword}
-                className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground hover:text-foreground transition-colors cursor-default"
-              >
-                {keyword}
-              </span>
-            ))}
-          </div>
-        </div>
+
       </div>
     </section>
   );

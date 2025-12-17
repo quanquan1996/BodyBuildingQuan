@@ -5,6 +5,8 @@ import { FatLossDietForm } from '@/components/fat-loss-diet-calculator/fat-loss-
 import { FatLossDietResult } from '@/components/fat-loss-diet-calculator/fat-loss-diet-result';
 import { FatLossDietReference } from '@/components/fat-loss-diet-calculator/fat-loss-diet-reference';
 import { FatLossDietExplanation } from '@/components/fat-loss-diet-calculator/fat-loss-diet-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { calculateFatLossDiet, type FatLossDietInput, type FatLossDietOutput } from '@/lib/utils/fat-loss-diet';
 import { type ActivityLevel } from '@/lib/utils/bmr';
@@ -28,11 +30,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1680',
   },
 };
 
@@ -93,22 +90,18 @@ export default function FatLossDietCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter mb-2 md:mb-3">
-            减脂饮食计算器
-          </h1>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            碳水递减减脂策略 · 自动生成每周饮食计划 ·
-            <span className="text-primary">科学减脂不反弹</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="fat-loss-diet-calculator"
+          title="减脂饮食计算器"
+          description="碳水递减减脂策略，自动生成每周饮食计划"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <FatLossDietForm onCalculate={handleCalculate} />
 
             {result && (
@@ -117,7 +110,7 @@ export default function FatLossDietCalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <FatLossDietReference />
           </div>
         </div>
@@ -127,25 +120,28 @@ export default function FatLossDietCalculatorPage() {
           <FatLossDietExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="fat-loss-diet-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于减脂饮食计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么选择碳水递减？</h3>
-              <p>
-                碳水递减是一种温和有效的减脂策略，通过逐周降低碳水摄入，
-                让身体有足够时间适应，避免代谢骤降和平台期。相比极端节食，
-                这种方法更容易坚持，减脂效果也更持久。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何配合训练？</h3>
-              <p>
-                减脂期间建议保持力量训练，每周3-4次，以保护肌肉量。
-                碳水可以集中在训练前后摄入，提供训练能量的同时促进恢复。
-                有氧运动可以作为辅助，但不要过量。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于减脂饮食计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么选择碳水递减？</h3>
+                <p>
+                  碳水递减是一种温和有效的减脂策略，通过逐周降低碳水摄入，
+                  让身体有足够时间适应，避免代谢骤降和平台期。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何配合训练？</h3>
+                <p>
+                  减脂期间建议保持力量训练，每周3-4次，以保护肌肉量。
+                  碳水可以集中在训练前后摄入。
+                </p>
+              </div>
             </div>
           </div>
         </section>

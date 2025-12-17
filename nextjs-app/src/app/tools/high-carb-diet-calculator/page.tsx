@@ -5,6 +5,8 @@ import { HighCarbDietForm } from '@/components/high-carb-diet-calculator/high-ca
 import { HighCarbDietResult } from '@/components/high-carb-diet-calculator/high-carb-diet-result';
 import { HighCarbDietReference } from '@/components/high-carb-diet-calculator/high-carb-diet-reference';
 import { HighCarbDietExplanation } from '@/components/high-carb-diet-calculator/high-carb-diet-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { calculateHighCarbDiet, type HighCarbDietInput, type HighCarbDietOutput } from '@/lib/utils/high-carb-diet';
 
@@ -21,11 +23,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.7',
-    ratingCount: '860',
   },
 };
 
@@ -95,22 +92,18 @@ export default function HighCarbDietCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            高碳减脂计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            高碳水 · 低脂肪 · 
-            <span className="text-primary">训练日/休息日/再喂日 三档规划</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="high-carb-diet-calculator"
+          title="高碳减脂计算器"
+          description="高碳水低脂肪策略，训练日/休息日/再喂日三档规划"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <HighCarbDietForm onCalculate={handleCalculate} />
             
             {result && (
@@ -119,7 +112,7 @@ export default function HighCarbDietCalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <HighCarbDietReference />
           </div>
         </div>
@@ -129,23 +122,28 @@ export default function HighCarbDietCalculatorPage() {
           <HighCarbDietExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="high-carb-diet-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于高碳减脂计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么选择高碳减脂？</h3>
-              <p>
-                传统低碳饮食虽然短期效果明显，但长期执行容易导致代谢适应、训练表现下降和心理疲劳。
-                高碳减脂通过保持充足的碳水摄入，维持瘦素水平和训练强度，是训练量大的健身人群的理想选择。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何执行高碳减脂？</h3>
-              <p>
-                根据计算结果，在训练日摄入高碳水低脂肪，休息日适当减少碳水。
-                定期安排再喂日恢复激素水平。选择天然、未加工的碳水来源，避免高脂碳水组合。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于高碳减脂计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么选择高碳减脂？</h3>
+                <p>
+                  高碳减脂通过保持充足的碳水摄入，维持瘦素水平和训练强度，
+                  是训练量大的健身人群的理想选择。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何执行高碳减脂？</h3>
+                <p>
+                  在训练日摄入高碳水低脂肪，休息日适当减少碳水。
+                  定期安排再喂日恢复激素水平。
+                </p>
+              </div>
             </div>
           </div>
         </section>

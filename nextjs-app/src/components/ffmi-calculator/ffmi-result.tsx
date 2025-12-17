@@ -1,19 +1,16 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SectionCard } from '@/components/ui/section-card';
+import { DataCard } from '@/components/ui/data-card';
+import { GradientProgress, StatusBadge } from '@/components/ui/gradient-progress';
 import { type FFMIOutput, type FFMICategory } from '@/lib/utils/ffmi';
-import { cn } from '@/lib/utils';
+import { toolGradients } from '@/lib/config/theme';
+import { BarChart3 } from 'lucide-react';
 
 interface FFMIResultProps {
   result: FFMIOutput;
   weight: number;
 }
 
-const categoryColors: Record<FFMICategory, string> = {
-  below_average: 'bg-yellow-500',
-  average: 'bg-blue-500',
-  above_average: 'bg-green-500',
-  excellent: 'bg-purple-500',
-  elite: 'bg-red-500',
-};
+const gradient = toolGradients['ffmi-calculator'];
 
 const categoryLabels: Record<FFMICategory, string> = {
   below_average: '低于平均',
@@ -23,130 +20,154 @@ const categoryLabels: Record<FFMICategory, string> = {
   elite: '精英级',
 };
 
+const categoryStatus: Record<FFMICategory, 'poor' | 'average' | 'good' | 'excellent'> = {
+  below_average: 'average',
+  average: 'average',
+  above_average: 'good',
+  excellent: 'excellent',
+  elite: 'excellent',
+};
+
 export function FFMIResult({ result, weight }: FFMIResultProps) {
-  // Calculate progress percentage (0-30 scale for FFMI)
   const progressPercent = Math.min((result.adjustedFfmi / 30) * 100, 100);
+  const fatMass = weight - result.ffm;
+  const muscleMass = result.ffm * 0.85;
   
   return (
     <div className="space-y-4">
-      {/* Main Result Card */}
-      <Card className="overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-orange-400 to-orange-500 text-white">
-          <CardTitle className="flex items-center justify-between">
-            <span>📊 计算结果</span>
-            <span className="text-3xl font-bold">FFMI: {result.adjustedFfmi}</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-6">
-          {/* Visual Body Composition */}
-          <div className="flex justify-center mb-6">
-            <div className="relative pb-8">
-              <div className="w-24 h-32 bg-gradient-to-b from-orange-300 to-orange-400 rounded-t-full rounded-b-lg flex items-center justify-center">
-                <div className="text-center text-white">
-                  <div className="text-xs">体重</div>
-                  <div className="text-lg font-bold">{weight}kg</div>
-                  <div className="text-xs mt-1 opacity-90">瘦体重</div>
-                  <div className="text-sm font-semibold">{result.ffm}kg</div>
-                </div>
-              </div>
-            </div>
+      {/* 主要结果 */}
+      <SectionCard
+        title="计算结果"
+        icon={<BarChart3 className="w-4 h-4" />}
+        iconColor={gradient.from}
+      >
+        {/* FFMI 大数字展示 */}
+        <div className="text-center mb-5">
+          <div className="text-4xl font-bold tracking-tight" style={{ color: gradient.from }}>
+            {result.adjustedFfmi}
           </div>
+          <div className="text-sm text-muted-foreground mt-1">校正后 FFMI</div>
+          <div className="mt-3">
+            <StatusBadge 
+              status={categoryStatus[result.category]} 
+              label={categoryLabels[result.category]} 
+            />
+          </div>
+        </div>
 
-          {/* Progress Bar */}
-          <div className="space-y-2 mb-6">
-            <div className="flex justify-between text-sm">
-              <span>FFMI 指数</span>
-              <span className="font-medium">{result.adjustedFfmi}</span>
+        {/* 进度条 */}
+        <div className="mb-5">
+          <GradientProgress
+            value={progressPercent}
+            gradientFrom={gradient.from}
+            gradientTo={gradient.to}
+            height="md"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
+            <span>0</span>
+            <span>18</span>
+            <span>20</span>
+            <span>22</span>
+            <span>25</span>
+            <span>30</span>
+          </div>
+        </div>
+
+        {/* 数据卡片 */}
+        <DataCard
+          columns={2}
+          items={[
+            {
+              label: 'FFMI 原始值',
+              value: result.ffmi,
+              bgColor: '#FFF5F5',
+              valueColor: gradient.from,
+              helpText: '未经身高校正的原始FFMI值',
+            },
+            {
+              label: '瘦体重',
+              value: result.ffm,
+              unit: 'kg',
+              bgColor: '#F0F9FF',
+              valueColor: '#3B82F6',
+              helpText: '去除脂肪后的体重，包括肌肉、骨骼、器官等',
+            },
+            {
+              label: '脂肪质量',
+              value: fatMass.toFixed(1),
+              unit: 'kg',
+              bgColor: '#FFFBEB',
+              valueColor: '#F59E0B',
+            },
+            {
+              label: '估算肌肉量',
+              value: muscleMass.toFixed(1),
+              unit: 'kg',
+              bgColor: '#F0FDF4',
+              valueColor: '#22C55E',
+              helpText: '瘦体重的约85%为骨骼肌',
+            },
+          ]}
+        />
+      </SectionCard>
+
+      {/* 身体成分分析 */}
+      <SectionCard
+        title="身体成分"
+        icon={<BarChart3 className="w-4 h-4" />}
+        iconColor="#3B82F6"
+        bgColor="#3B82F615"
+      >
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="text-muted-foreground">瘦体重</span>
+              <span className="font-medium">{result.ffm} kg</span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">
-              <div
-                className={cn('h-full rounded-full transition-all', categoryColors[result.category])}
-                style={{ width: `${progressPercent}%` }}
+              <div 
+                className="h-full rounded-full"
+                style={{ 
+                  width: `${(result.ffm / weight) * 100}%`,
+                  background: 'linear-gradient(90deg, #3B82F6, #60A5FA)',
+                }}
               />
             </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>0</span>
-              <span>18</span>
-              <span>20</span>
-              <span>22</span>
-              <span>25</span>
-              <span>30</span>
+          </div>
+          
+          <div>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="text-muted-foreground">肌肉量</span>
+              <span className="font-medium">{muscleMass.toFixed(1)} kg</span>
+            </div>
+            <div className="h-3 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full"
+                style={{ 
+                  width: `${(muscleMass / weight) * 100}%`,
+                  background: 'linear-gradient(90deg, #22C55E, #4ADE80)',
+                }}
+              />
             </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-muted/50 rounded-lg p-4 text-center">
-              <div className="text-sm text-muted-foreground">FFMI 原始值</div>
-              <div className="text-2xl font-bold text-primary">{result.ffmi}</div>
+          <div>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="text-muted-foreground">脂肪</span>
+              <span className="font-medium">{fatMass.toFixed(1)} kg</span>
             </div>
-            <div className="bg-muted/50 rounded-lg p-4 text-center">
-              <div className="text-sm text-muted-foreground">瘦体重</div>
-              <div className="text-2xl font-bold text-primary">{result.ffm} kg</div>
-            </div>
-            <div className="bg-muted/50 rounded-lg p-4 text-center">
-              <div className="text-sm text-muted-foreground">体脂率</div>
-              <div className="text-2xl font-bold text-orange-500">15.0%</div>
-            </div>
-            <div className="bg-muted/50 rounded-lg p-4 text-center">
-              <div className="text-sm text-muted-foreground">脂肪质量</div>
-              <div className="text-2xl font-bold text-orange-500">{(weight - result.ffm).toFixed(1)} kg</div>
+            <div className="h-3 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full"
+                style={{ 
+                  width: `${(fatMass / weight) * 100}%`,
+                  background: 'linear-gradient(90deg, #F59E0B, #FBBF24)',
+                }}
+              />
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Category Badge */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm text-muted-foreground">肌肉质评估</div>
-              <div className="text-lg font-medium">{categoryLabels[result.category]}</div>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">体格威胁</div>
-              <div className="text-lg font-medium text-green-600">健康</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Body Composition Bar */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">身体成分分析</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-20 text-sm text-muted-foreground">瘦体重</div>
-              <div className="flex-1 h-6 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-500 rounded-full flex items-center justify-end pr-2"
-                  style={{ width: `${(result.ffm / weight) * 100}%` }}
-                >
-                  <span className="text-xs text-white font-medium">{result.ffm}kg</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-20 text-sm text-muted-foreground">肌肉量</div>
-              <div className="flex-1 h-6 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-green-500 rounded-full flex items-center justify-end pr-2"
-                  style={{ width: `${((result.ffm * 0.85) / weight) * 100}%` }}
-                >
-                  <span className="text-xs text-white font-medium">{(result.ffm * 0.85).toFixed(1)}kg</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground mt-3">
-            FFMI: {result.adjustedFfmi} · 肌肉发达程度评估
-          </p>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
     </div>
   );
 }

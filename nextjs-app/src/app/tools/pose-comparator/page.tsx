@@ -10,6 +10,8 @@ import { ScoringExplanation } from '@/components/pose-comparator/scoring-explana
 import { Limitations } from '@/components/pose-comparator/limitations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { zh } from '@/lib/i18n/zh';
 import { siteConfig } from '@/lib/config/site';
 import { detectPose, initializePoseDetector } from '@/lib/mediapipe/pose-detector';
@@ -30,11 +32,6 @@ const jsonLd = {
   description: zh.poseComparator.metaDescription,
   url: `${siteConfig.url}/tools/pose-comparator`,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.7',
-    ratingCount: '860',
-  },
 };
 
 // FAQ structured data for SEO
@@ -174,17 +171,14 @@ export default function PoseComparatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <div className="container py-8 md:py-12 px-4 md:px-6">
+      <div className="container py-6 md:py-10 px-4 md:px-6">
         <div className="max-w-5xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-              {zh.poseComparator.title}
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {zh.poseComparator.description} · 支持古典健美、传统健美、健体等多种造型
-            </p>
-          </div>
+          {/* Tool Hero */}
+          <ToolHero
+            toolId="pose-comparator"
+            title={zh.poseComparator.title}
+            description="AI分析健美造型，支持古典健美、传统健美、健体等多种造型"
+          />
 
           <div className="grid gap-6 md:grid-cols-2 mb-6">
             <ImageUpload
@@ -279,8 +273,11 @@ export default function PoseComparatorPage() {
             </div>
           )}
 
+          {/* Related Tools */}
+          <RelatedTools currentToolId="pose-comparator" />
+
           {/* SEO Content Sections */}
-          <div className="mt-12 space-y-8">
+          <div className="mt-8 space-y-8">
             {/* Pose Categories */}
             <PoseCategories />
 

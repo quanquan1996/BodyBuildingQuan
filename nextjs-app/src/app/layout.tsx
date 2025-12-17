@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 const notoSansSC = Noto_Sans_SC({
   variable: '--font-noto-sans-sc',
   subsets: ['latin'],
-  weight: ['400', '500', '700', '900'],
+  weight: ['300', '400', '500', '700'],
 });
 
 export const metadata: Metadata = {
@@ -74,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoSansSC.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSansSC.variable} font-[family-name:var(--font-noto-sans-sc)] antialiased min-h-screen flex flex-col`}
       >
         <SiteHeader />
         <main className="flex-1">{children}</main>

@@ -5,6 +5,8 @@ import { MetabolicDamageForm } from '@/components/metabolic-damage-test/metaboli
 import { MetabolicDamageResult } from '@/components/metabolic-damage-test/metabolic-damage-result';
 import { MetabolicDamageReference } from '@/components/metabolic-damage-test/metabolic-damage-reference';
 import { MetabolicDamageExplanation } from '@/components/metabolic-damage-test/metabolic-damage-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { 
   calculateMetabolicDamage, 
@@ -25,11 +27,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1280',
   },
 };
 
@@ -94,22 +91,18 @@ export default function MetabolicDamageTestPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            代谢受损检测器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            评估你的代谢适应程度 · 
-            <span className="text-primary">获取反向节食恢复方案</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="metabolic-damage-test"
+          title="代谢受损检测器"
+          description="评估你的代谢适应程度，获取反向节食恢复方案"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <MetabolicDamageForm onCalculate={handleCalculate} />
             
             {result && inputData && (
@@ -118,7 +111,7 @@ export default function MetabolicDamageTestPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <MetabolicDamageReference />
           </div>
         </div>
@@ -128,25 +121,28 @@ export default function MetabolicDamageTestPage() {
           <MetabolicDamageExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="metabolic-damage-test" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于代谢受损检测</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么需要检测代谢？</h3>
-              <p>
-                长期节食后体重停滞是很多减脂者的困扰。了解自己是否存在代谢适应，
-                可以帮助你调整策略，避免盲目降低热量或增加运动量，
-                从而更科学地达成减脂目标。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">代谢可以恢复吗？</h3>
-              <p>
-                好消息是，代谢适应是可逆的。通过反向节食、饮食休息、力量训练等方法，
-                大多数人可以在数周到数月内恢复正常代谢水平。
-                关键是要有耐心，循序渐进地增加热量。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于代谢受损检测</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么需要检测代谢？</h3>
+                <p>
+                  长期节食后体重停滞是很多减脂者的困扰。了解自己是否存在代谢适应，
+                  可以帮助你调整策略，更科学地达成减脂目标。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">代谢可以恢复吗？</h3>
+                <p>
+                  代谢适应是可逆的。通过反向节食、饮食休息、力量训练等方法，
+                  大多数人可以在数周到数月内恢复正常代谢水平。
+                </p>
+              </div>
             </div>
           </div>
         </section>

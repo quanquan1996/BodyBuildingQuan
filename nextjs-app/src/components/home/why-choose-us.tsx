@@ -1,58 +1,73 @@
-import { Card, CardContent } from '@/components/ui/card';
-
 const reasons = [
   {
     icon: '🆓',
     title: '完全免费',
-    description: '所有工具永久免费使用，无需注册，无需付费',
-  },
-  {
-    icon: '🌐',
-    title: '在线使用',
-    description: '无需下载APP，打开网页即可使用，支持手机和电脑',
+    description: '永久免费，无需注册付费',
+    gradient: 'linear-gradient(135deg, #4CAF50, #81C784)',
   },
   {
     icon: '🤖',
     title: 'AI驱动',
-    description: '采用先进的AI技术，提供精准的数据分析和评估',
+    description: '先进AI技术，精准分析',
+    gradient: 'linear-gradient(135deg, #667eea, #764ba2)',
   },
   {
     icon: '📊',
     title: '科学专业',
-    description: '基于运动科学研究，提供专业级的健身数据分析',
+    description: '基于运动科学研究',
+    gradient: 'linear-gradient(135deg, #f093fb, #f5576c)',
   },
   {
     icon: '🔒',
     title: '隐私安全',
-    description: '数据本地处理，不上传服务器，保护你的隐私',
-  },
-  {
-    icon: '📱',
-    title: '移动优先',
-    description: '专为手机优化，随时随地记录和分析健身数据',
+    description: '数据本地处理，不上传',
+    gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)',
   },
 ];
 
 export function WhyChooseUs() {
   return (
-    <section className="py-12 md:py-16">
+    <section 
+      className="py-12 md:py-16"
+      style={{ background: 'linear-gradient(180deg, #F0FFF4 0%, #F5F7FA 100%)' }}
+    >
       <div className="container px-4 md:px-6">
-        <h2 className="text-2xl font-bold tracking-tighter text-center mb-8 md:text-3xl">
-          为什么选择健身AI工具站？
+        <h2 className="text-2xl font-bold tracking-tighter text-center mb-2 md:text-3xl">
+          为什么选择我们？
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p className="text-center text-muted-foreground mb-8 text-sm">
+          专业、免费、安全的健身数据分析平台
+        </p>
+        
+        {/* 移动端2x2，PC端1x4 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 max-w-4xl mx-auto">
           {reasons.map((reason) => (
-            <Card key={reason.title} className="border-0 shadow-sm bg-muted/30">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <span className="text-2xl">{reason.icon}</span>
-                  <div>
-                    <h3 className="font-semibold mb-1">{reason.title}</h3>
-                    <p className="text-sm text-muted-foreground">{reason.description}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <div 
+              key={reason.title} 
+              className="bg-white rounded-2xl p-4 transition-all hover:shadow-md"
+              style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)' }}
+            >
+              {/* 彩色底图标 */}
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-3"
+                style={{ 
+                  background: reason.gradient,
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                }}
+              >
+                <span className="text-xl filter drop-shadow-sm">{reason.icon}</span>
+              </div>
+              
+              {/* 标题 */}
+              <h3 className="font-semibold text-sm mb-1" style={{ color: '#333' }}>
+                {reason.title}
+              </h3>
+              
+              {/* 简短描述 */}
+              <p className="text-xs leading-relaxed" style={{ color: '#666' }}>
+                {reason.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>

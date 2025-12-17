@@ -6,7 +6,8 @@ import { FFMIResult } from '@/components/ffmi-calculator/ffmi-result';
 import { FFMIReference } from '@/components/ffmi-calculator/ffmi-reference';
 import { FFMIExplanation } from '@/components/ffmi-calculator/ffmi-explanation';
 import { FFMIChart } from '@/components/ffmi-calculator/ffmi-chart';
-import { zh } from '@/lib/i18n/zh';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { calculateFFMI, type FFMIInput, type FFMIOutput } from '@/lib/utils/ffmi';
 
@@ -23,11 +24,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1250',
   },
 };
 
@@ -84,22 +80,18 @@ export default function FFMICalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            FFMI 计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            评估去脂体重指数，分析身体成分 · 
-            <span className="text-primary">在线计算器平台</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="ffmi-calculator"
+          title="FFMI 计算器"
+          description="评估去脂体重指数，科学分析身体成分"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <FFMIForm onCalculate={handleCalculate} />
             
             {result && (
@@ -108,7 +100,7 @@ export default function FFMICalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <FFMIReference />
             
             {result && (
@@ -122,25 +114,28 @@ export default function FFMICalculatorPage() {
           <FFMIExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="ffmi-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于 FFMI 计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么使用 FFMI？</h3>
-              <p>
-                FFMI（Fat-Free Mass Index，无脂肪体重指数）是评估肌肉发达程度的科学指标。
-                相比传统的 BMI，FFMI 排除了体脂的干扰，能够更准确地反映你的肌肉量水平。
-                无论你是健身新手还是资深运动员，FFMI 都能帮助你了解自己的身体成分状况。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何提高 FFMI？</h3>
-              <p>
-                提高 FFMI 的关键在于增加肌肉量同时控制体脂。建议进行规律的力量训练，
-                保证充足的蛋白质摄入（每公斤体重 1.6-2.2 克），确保充足的睡眠和恢复时间。
-                记住，肌肉增长是一个循序渐进的过程，需要耐心和坚持。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于 FFMI 计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么使用 FFMI？</h3>
+                <p>
+                  FFMI（Fat-Free Mass Index，无脂肪体重指数）是评估肌肉发达程度的科学指标。
+                  相比传统的 BMI，FFMI 排除了体脂的干扰，能够更准确地反映你的肌肉量水平。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何提高 FFMI？</h3>
+                <p>
+                  提高 FFMI 的关键在于增加肌肉量同时控制体脂。建议进行规律的力量训练，
+                  保证充足的蛋白质摄入（每公斤体重 1.6-2.2 克），确保充足的睡眠和恢复时间。
+                </p>
+              </div>
             </div>
           </div>
         </section>

@@ -1,6 +1,6 @@
 export const zh = {
   common: {
-    siteName: '健身AI工具站',
+    siteName: '轻核健身AI工具站',
     home: '首页',
     tools: '工具',
     loading: '加载中...',
@@ -8,7 +8,7 @@ export const zh = {
     retry: '重试',
   },
   home: {
-    heroTitle: '健身AI工具站',
+    heroTitle: '轻核健身AI工具站',
     heroDescription: '免费在线健身工具，科学评估你的训练效果',
     heroSubtitle: 'FFMI计算 · 体脂率分析 · 健美造型评分 · 肌肉量评估',
     ctaButton: '开始使用',
@@ -85,7 +85,7 @@ export const zh = {
     },
   },
   footer: {
-    copyright: '© 2024 健美AI工具站. 保留所有权利。',
+    copyright: '© 2024 轻核健身AI工具站. 保留所有权利。',
   },
 } as const;
 

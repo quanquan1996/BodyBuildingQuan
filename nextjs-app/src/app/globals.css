@@ -1,21 +1,10 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -47,72 +36,31 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.75rem;
+  /* 薄荷健康风格 - 温和柔和配色 */
+  --background: #F7F8FA;
+  --foreground: #3D3D3D;
+  --card: #FFFFFF;
+  --card-foreground: #3D3D3D;
+  --popover: #FFFFFF;
+  --popover-foreground: #3D3D3D;
+  --primary: #5AC57A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F5F5;
+  --secondary-foreground: #3D3D3D;
+  --muted: #F5F5F5;
+  --muted-foreground: #666666;
+  --accent: #E8F5E9;
+  --accent-foreground: #3D3D3D;
+  --destructive: #FF6B6B;
+  --border: #EEEEEE;
+  --input: #F5F5F5;
+  --ring: #5AC57A;
+  --chart-1: #5AC57A;
+  --chart-2: #FFB5A7;
+  --chart-3: #87CEEB;
+  --chart-4: #FFE082;
+  --chart-5: #D4A5FF;
 }
 
 @layer base {
@@ -124,37 +72,47 @@
   }
 }
 
-/* 自定义滚动条样式 - 圆润内敛风格 */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+/* 薄荷健康风格 - 自定义组件样式 */
+
+.section-card {
+  @apply bg-card rounded-2xl p-5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
+.data-value {
+  @apply text-3xl font-bold tracking-tight;
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-  margin: 8px 0;
+.data-unit {
+  @apply text-sm text-muted-foreground ml-1;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.15);
-  border-radius: 100px;
-  transition: background-color 0.2s;
+.data-label {
+  @apply text-xs text-muted-foreground mb-1;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.25);
+.input-fresh {
+  @apply bg-input border-0 rounded-xl h-12 px-4 text-base;
+  @apply focus:ring-2 focus:ring-primary/50 focus:bg-card transition-all;
 }
 
-/* 隐藏滚动条但保持滚动功能 */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.tool-card-hover {
+  @apply transition-all duration-200;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.tool-card-hover:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.glass {
+  @apply bg-card/80 backdrop-blur-md;
+}
+
+.pill {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.help-icon {
+  @apply w-4 h-4 text-muted-foreground cursor-help hover:text-foreground transition-colors;
 }

@@ -5,6 +5,8 @@ import { CarbCyclingForm } from '@/components/carb-cycling-calculator/carb-cycli
 import { CarbCyclingResult } from '@/components/carb-cycling-calculator/carb-cycling-result';
 import { CarbCyclingReference } from '@/components/carb-cycling-calculator/carb-cycling-reference';
 import { CarbCyclingExplanation } from '@/components/carb-cycling-calculator/carb-cycling-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { calculateCarbCycling, type CarbCyclingInput, type CarbCyclingOutput } from '@/lib/utils/carb-cycling';
 
@@ -21,11 +23,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1280',
   },
 };
 
@@ -93,22 +90,18 @@ export default function CarbCyclingCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            碳循环减脂计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            基于 Katch-McArdle 公式 · 
-            <span className="text-primary">科学规划碳水循环饮食</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="carb-cycling-calculator"
+          title="碳循环减脂计算器"
+          description="基于 Katch-McArdle 公式，科学规划碳水循环饮食"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <CarbCyclingForm onCalculate={handleCalculate} />
             
             {result && (
@@ -117,7 +110,7 @@ export default function CarbCyclingCalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <CarbCyclingReference />
           </div>
         </div>
@@ -127,25 +120,28 @@ export default function CarbCyclingCalculatorPage() {
           <CarbCyclingExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="carb-cycling-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于碳循环减脂计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么选择碳循环？</h3>
-              <p>
-                传统的持续低碳饮食容易导致代谢适应、训练表现下降和心理疲劳。
-                碳循环通过周期性调整碳水摄入，既能保持减脂效果，又能在训练日获得足够能量，
-                是健身人群减脂期的理想选择。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何执行碳循环？</h3>
-              <p>
-                根据计算结果，在高强度训练日摄入高碳水，休息日摄入低碳水。
-                蛋白质保持稳定，脂肪根据热量需求调整。建议每周称重1-2次，
-                根据体重变化微调热量摄入。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于碳循环减脂计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么选择碳循环？</h3>
+                <p>
+                  传统的持续低碳饮食容易导致代谢适应、训练表现下降和心理疲劳。
+                  碳循环通过周期性调整碳水摄入，既能保持减脂效果，又能在训练日获得足够能量。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何执行碳循环？</h3>
+                <p>
+                  在高强度训练日摄入高碳水，休息日摄入低碳水。
+                  蛋白质保持稳定，脂肪根据热量需求调整。
+                </p>
+              </div>
             </div>
           </div>
         </section>

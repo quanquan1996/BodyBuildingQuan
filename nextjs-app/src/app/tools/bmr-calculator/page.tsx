@@ -5,6 +5,8 @@ import { BMRForm } from '@/components/bmr-calculator/bmr-form';
 import { BMRResult } from '@/components/bmr-calculator/bmr-result';
 import { BMRReference } from '@/components/bmr-calculator/bmr-reference';
 import { BMRExplanation } from '@/components/bmr-calculator/bmr-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import { calculateBMR, type BMRInput, type BMROutput, type ActivityLevel } from '@/lib/utils/bmr';
 
@@ -28,11 +30,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    ratingCount: '2150',
   },
 };
 
@@ -95,22 +92,18 @@ export default function BMRCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            基础代谢计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            计算每日基础代谢率 (BMR) 和总能量消耗 (TDEE) · 
-            <span className="text-primary">科学制定饮食计划</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="bmr-calculator"
+          title="基础代谢计算器"
+          description="计算每日基础代谢率 (BMR) 和总能量消耗 (TDEE)"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form & Results */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <BMRForm onCalculate={handleCalculate} />
             
             {result && (
@@ -119,7 +112,7 @@ export default function BMRCalculatorPage() {
           </div>
 
           {/* Right Column - Reference & Info */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <BMRReference />
           </div>
         </div>
@@ -129,23 +122,26 @@ export default function BMRCalculatorPage() {
           <BMRExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="bmr-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于基础代谢计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么要计算 BMR？</h3>
-              <p>
-                了解自己的基础代谢率是科学管理体重的第一步。无论你的目标是减脂、增肌还是维持体重，
-                知道身体每天需要多少能量，才能制定合理的饮食计划。BMR 帮助你避免盲目节食或过度进食。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何提高基础代谢？</h3>
-              <p>
-                增加肌肉量是提高 BMR 最有效的方法。每增加 1 公斤肌肉，每天可多消耗约 50-100 千卡热量。
-                此外，保持规律作息、充足睡眠、适量蛋白质摄入也有助于维持健康的代谢水平。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于基础代谢计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么要计算 BMR？</h3>
+                <p>
+                  了解自己的基础代谢率是科学管理体重的第一步。知道身体每天需要多少能量，才能制定合理的饮食计划。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何提高基础代谢？</h3>
+                <p>
+                  增加肌肉量是提高 BMR 最有效的方法。每增加 1 公斤肌肉，每天可多消耗约 50-100 千卡热量。
+                </p>
+              </div>
             </div>
           </div>
         </section>

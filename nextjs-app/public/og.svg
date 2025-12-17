@@ -1,0 +1,31 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0FFF4"/>
+      <stop offset="100%" style="stop-color:#E8F5E9"/>
+    </linearGradient>
+    <linearGradient id="logo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7DD3A0"/>
+      <stop offset="100%" style="stop-color:#5AC57A"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Logo Box -->
+  <rect x="500" y="180" width="80" height="80" rx="16" fill="url(#logo)"/>
+  <text x="540" y="235" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">轻</text>
+  
+  <!-- Title -->
+  <text x="600" y="320" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#333333" text-anchor="middle">轻核健身AI工具站</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="380" font-family="Arial, sans-serif" font-size="24" fill="#666666" text-anchor="middle">免费在线健身计算器 · 科学评估训练效果</text>
+  
+  <!-- Tools -->
+  <text x="600" y="450" font-family="Arial, sans-serif" font-size="18" fill="#888888" text-anchor="middle">FFMI计算器 · 体脂率计算 · 基础代谢 · 心率区间 · AI造型评分</text>
+  
+  <!-- URL -->
+  <text x="600" y="550" font-family="Arial, sans-serif" font-size="20" fill="#5AC57A" text-anchor="middle">muscletool.pro</text>
+</svg>

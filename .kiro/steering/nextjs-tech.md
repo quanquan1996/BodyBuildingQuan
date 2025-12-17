@@ -183,52 +183,165 @@ export default function ToolLayout({ children }: { children: React.ReactNode }) 
 4. 如新工具需要体脂输入，在表单中添加引导链接
 5. 表单组件支持 URL 参数预填（使用 Suspense 包裹 useSearchParams）
 
-## UI 设计规范
+## UI 设计规范（薄荷健康风格）
+
+### 设计原则
+
+1. **温和柔和** - 使用低饱和度的柔和色彩，避免刺眼的高对比度
+2. **圆润质感** - 大圆角（16px-24px），渐变背景，光泽效果
+3. **清晰可读** - 文字颜色不低于 `#666666`，确保可读性
+4. **留白呼吸** - 区块之间保持足够间距（20-30px）
+5. **视觉一致性** - 全站图标风格统一（彩色渐变底 + 白色图标）
+
+### 颜色规范
+
+```css
+/* 主色调 */
+--primary: #5AC57A;           /* 薄荷绿 */
+--primary-gradient: linear-gradient(135deg, #7DD3A0 0%, #5AC57A 100%);
+
+/* 文字颜色 */
+--text-primary: #333333;      /* 标题 */
+--text-secondary: #555555;    /* 正文 */
+--text-muted: #666666;        /* 描述文字（最浅不低于此值） */
+--text-hint: #888888;         /* 辅助文字 */
+
+/* AI特征色 */
+--ai-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+/* 人群色彩编码 */
+--beginner: emerald (绿色系 - 生长)
+--muscle: blue (蓝色系 - 力量)
+--fat-loss: orange (橙色系 - 燃烧)
+--bodybuilding: purple (紫色系 - 专业/AI)
+
+/* 深色 Footer */
+--footer-bg: #1A202C;
+--footer-text: #94A3B8;
+--footer-border: #2D3748;
+```
 
 ### 布局间距
 
-- **顶部导航栏高度**: `h-16`
+- **顶部导航栏高度**: `h-14`
 - **页面容器**: `container py-8 md:py-12 px-4 md:px-6`
-- **Hero 区域底部间距**: `mb-8 md:mb-10`
+- **Hero 区域与工具列表间距**: `pt-10 md:pt-16`（增加呼吸感）
 - **标题字号**: 移动端 `text-2xl`，桌面端 `md:text-4xl`
+- **字体**: 全局使用 Noto Sans SC，更柔和圆润
 
-### 顶部导航栏样式
+### 顶部导航栏
+
+- 分类下拉菜单：首页 | 身体评估 | 饮食计算 | AI工具 | 训练辅助
+- 毛玻璃效果：`bg-card/80 backdrop-blur-md`
+- 下拉菜单圆角：`rounded-xl`
+- Logo: 绿色渐变圆角方块 + "轻核"白色文字
+
+### 工具图标样式
 
 ```tsx
-// 淡灰色背景 + 毛玻璃效果 + 渐变分隔线
-<header className="sticky top-0 z-50 w-full bg-muted/50 backdrop-blur supports-[backdrop-filter]:bg-muted/30">
-  <div className="container flex h-16 items-center px-4 md:px-6">
-    <div className="absolute inset-x-4 md:inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-    {/* ... */}
-  </div>
-</header>
+// 渐变背景 + 光泽效果 + 彩色阴影
+<div
+  className="w-14 h-14 rounded-[16px] flex items-center justify-center text-white relative overflow-hidden"
+  style={{
+    background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)`,
+    boxShadow: `0 4px 12px ${from}40`,
+  }}
+>
+  {/* 光泽效果 */}
+  <div 
+    className="absolute inset-0 opacity-30"
+    style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%)' }}
+  />
+  <Icon className="h-7 w-7 relative z-10" strokeWidth={1.5} />
+</div>
 ```
 
-### Logo 样式
+### AI功能角标
 
-- 图标容器: `w-7 h-7 md:w-8 md:h-8 rounded-lg bg-primary text-primary-foreground`
-- 文字: `font-black text-base md:text-lg tracking-tight font-[family-name:var(--font-noto-sans-sc)]`
-- "AI" 高亮: `<span className="text-primary">AI</span>`
+```tsx
+// 紫色渐变 + 白色描边
+<div 
+  className="absolute -top-1.5 -right-0.5 z-10 px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white"
+  style={{ 
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    boxShadow: '0 0 0 2px white, 0 2px 4px rgba(0,0,0,0.1)',
+  }}
+>
+  AI
+</div>
+```
 
-### 移动端侧边栏 (Sheet)
+### 按钮样式
 
-- 圆角浮动样式: `rounded-2xl`
-- 四周间距: `inset-y-4 right-4`
-- 头部渐变背景: `bg-gradient-to-br from-primary/10 to-primary/5`
-- 关闭按钮: 圆形 `rounded-full`
+```tsx
+// 主按钮 - 渐变 + 悬浮效果
+<Button 
+  className="rounded-full transition-all hover:scale-[1.02] hover:shadow-xl"
+  style={{
+    background: 'linear-gradient(90deg, #6FCF97 0%, #4CAF50 50%, #45a049 100%)',
+    boxShadow: '0 6px 20px rgba(76, 175, 80, 0.35)',
+  }}
+>
+
+// 次按钮 - 细边框
+<Button 
+  variant="outline"
+  className="rounded-full"
+  style={{ borderColor: '#E8E8E8', borderWidth: '1px', color: '#666666' }}
+>
+```
+
+### 卡片样式
+
+```tsx
+// 白色卡片 + 柔和阴影
+<div
+  className="bg-card rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+  style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)' }}
+>
+```
 
 ### 首页工具网格
 
-- 移动端: 3 列紧凑布局 `grid-cols-3 gap-2`
-- 桌面端: 2 列布局 `sm:grid-cols-2 gap-6`
-- 移动端卡片: 垂直居中，只显示图标和标题
-- 桌面端卡片: 水平布局，显示图标、标题和描述
+- 移动端: 4 列网格 `grid-cols-4 gap-x-3 gap-y-4`
+- 桌面端: 响应式网格 `sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
 
 ### 字体配置
 
-- 主字体: Geist Sans
-- 等宽字体: Geist Mono
-- 中文字体: Noto Sans SC (用于 Logo 和标题)
+- 全局字体: Noto Sans SC（柔和圆润的中文字体）
+- 字重: 300(light), 400(normal), 500(medium), 700(bold)
+- 标题: `font-medium` 或 `font-semibold`（避免过粗）
+- 正文: `font-normal`
+
+### 适用人群卡片
+
+- 使用 Emoji 极简风（🌱新手、💪增肌、🔥减脂、🏆健美）
+- 左图右文布局：左边 Emoji 圆角方块，右边标题+描述，底部标签
+- 颜色区分：新手绿、增肌蓝、减脂橙、健美紫
+- 卡片带浅色背景 + 同色系边框
+
+### "为什么选择我们"板块
+
+- 移动端 2x2 网格，PC端 1x4 一行
+- 彩色渐变底图标（免费绿、AI紫、科学粉、安全蓝）
+- 淡薄荷绿渐变背景区隔：`linear-gradient(180deg, #F0FFF4 0%, #F5F7FA 100%)`
+
+### Footer 深色设计
+
+- 背景色：`#1A202C`（深灰绿）
+- 文字：白色标题 + `#94A3B8` 浅灰正文
+- 分割线：`#2D3748`
+- 快速链接分两列：身体评估 | 饮食计算
+- 热门工具下沉为 12px 文字链
+- Logo 保持与顶部一致
+
+### 工具页面统一规范
+
+1. **Hero Section** - 渐变背景装饰 + 居中标题描述
+2. **表单卡片** - 白色圆角卡片 + 柔和阴影
+3. **结果展示** - 数据卡片使用渐变进度条
+4. **说明区域** - 淡灰背景区隔 `#F9FAFB`
+5. **图标风格** - 统一使用渐变底色 + 白色图标
 
 ## 联系方式
 

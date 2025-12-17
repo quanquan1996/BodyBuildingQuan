@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { HeartRateForm } from '@/components/heart-rate-calculator/heart-rate-form';
 import { HeartRateResult } from '@/components/heart-rate-calculator/heart-rate-result';
 import { HeartRateExplanation } from '@/components/heart-rate-calculator/heart-rate-explanation';
+import { ToolHero } from '@/components/common/tool-hero';
+import { RelatedTools } from '@/components/common/related-tools';
 import { siteConfig } from '@/lib/config/site';
 import {
   calculateHeartRateZones,
@@ -25,11 +27,6 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'CNY',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1680',
   },
 };
 
@@ -84,27 +81,23 @@ export default function HeartRateCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <div className="container py-8 md:py-12 px-4 md:px-6">
-        {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter mb-3">
-            有氧心率区间计算器
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            计算个人心率训练区间，科学指导有氧运动强度 ·
-            <span className="text-primary">提升燃脂和心肺耐力</span>
-          </p>
-        </div>
+      <div className="container py-6 md:py-10 px-4 md:px-6">
+        {/* Tool Hero */}
+        <ToolHero
+          toolId="heart-rate-calculator"
+          title="有氧心率区间计算器"
+          description="计算个人心率训练区间，科学指导有氧运动强度"
+        />
 
         {/* Main Content - Two Column Layout */}
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column - Form */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <HeartRateForm onCalculate={handleCalculate} />
           </div>
 
           {/* Right Column - Results */}
-          <div className="space-y-6">{result && <HeartRateResult result={result} />}</div>
+          <div className="space-y-5">{result && <HeartRateResult result={result} />}</div>
         </div>
 
         {/* Explanation Section - Full Width */}
@@ -112,23 +105,26 @@ export default function HeartRateCalculatorPage() {
           <HeartRateExplanation />
         </div>
 
+        {/* Related Tools */}
+        <RelatedTools currentToolId="heart-rate-calculator" />
+
         {/* SEO Content Section */}
-        <section className="mt-12 prose prose-sm max-w-none">
-          <h2 className="text-2xl font-bold mb-4">关于心率区间计算器</h2>
-          <div className="grid md:grid-cols-2 gap-8 text-muted-foreground">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">为什么要关注心率？</h3>
-              <p>
-                心率是衡量运动强度最直观的指标。通过监控心率，你可以确保训练在正确的强度区间，
-                避免训练不足或过度训练。无论是减脂还是提升耐力，心率都是你的最佳训练伙伴。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">如何利用心率区间？</h3>
-              <p>
-                减脂训练应主要在 Zone 2（60-70%），这个区间脂肪供能比例最高。
-                提升心肺耐力则需要在 Zone 3-4 训练。建议使用心率手表或胸带实时监控心率。
-              </p>
+        <section className="mt-10">
+          <div className="bg-card rounded-2xl p-6" style={{ boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+            <h2 className="text-xl font-bold mb-4">关于心率区间计算器</h2>
+            <div className="grid md:grid-cols-2 gap-6 text-muted-foreground text-sm">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">为什么要关注心率？</h3>
+                <p>
+                  心率是衡量运动强度最直观的指标。通过监控心率，你可以确保训练在正确的强度区间。
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">如何利用心率区间？</h3>
+                <p>
+                  减脂训练应主要在 Zone 2（60-70%），这个区间脂肪供能比例最高。
+                </p>
+              </div>
             </div>
           </div>
         </section>

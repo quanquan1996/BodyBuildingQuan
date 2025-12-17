@@ -12,6 +12,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
+  openGraph: {
+    title: '轻核健身AI工具站 - 免费在线健身计算器',
+    description: '免费在线健身工具：FFMI计算器、体脂率计算、基础代谢计算、心率区间计算、AI健美造型评分。',
+    url: siteConfig.url,
+    type: 'website',
+    images: [
+      {
+        url: `${siteConfig.url}/og.svg`,
+        width: 1200,
+        height: 630,
+        alt: '轻核健身AI工具站',
+      },
+    ],
+  },
 };
 
 const features = [
@@ -94,11 +108,6 @@ const jsonLd = {
   name: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${siteConfig.url}/search?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
 };
 
 // Organization schema
@@ -108,7 +117,6 @@ const orgJsonLd = {
   name: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
-  sameAs: [],
 };
 
 export default function HomePage() {
@@ -142,28 +150,48 @@ export default function HomePage() {
       <UseCases />
 
       {/* SEO Content Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-12 md:py-16" style={{ background: '#F9FAFB' }}>
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-center mb-8">
-              关于健身AI工具站
+            <h2 className="text-xl font-bold text-center mb-6 md:text-2xl">
+              关于轻核健身AI工具站
             </h2>
-            <div className="prose prose-sm max-w-none text-muted-foreground">
-              <p className="text-center mb-6">
-                健身AI工具站是一个免费的在线健身计算器平台，为健身爱好者、健美运动员、
+            <div className="text-muted-foreground">
+              <p className="text-center text-sm mb-6 md:text-base">
+                轻核健身AI工具站是一个免费的在线健身计算器平台，为健身爱好者、健美运动员、
                 私人教练提供专业的身体成分分析和训练评估工具。无需下载APP，打开网页即可使用。
               </p>
               
-              <div className="grid md:grid-cols-2 gap-6 mt-8">
-                <div className="bg-muted/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">🎯 我们的目标</h3>
+              <div className="grid md:grid-cols-2 gap-4 mt-6">
+                <div className="bg-white rounded-2xl p-5" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)' }}>
+                  <h3 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <div 
+                      className="w-9 h-9 rounded-xl flex items-center justify-center"
+                      style={{ background: 'linear-gradient(135deg, #4CAF50, #81C784)' }}
+                    >
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    我们的目标
+                  </h3>
                   <p className="text-sm">
                     让每一位健身爱好者都能获得专业级的数据分析工具，
                     用科学的方法评估训练效果，制定合理的健身计划。
                   </p>
                 </div>
-                <div className="bg-muted/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">💡 核心理念</h3>
+                <div className="bg-white rounded-2xl p-5" style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)' }}>
+                  <h3 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <div 
+                      className="w-9 h-9 rounded-xl flex items-center justify-center"
+                      style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)' }}
+                    >
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    核心理念
+                  </h3>
                   <p className="text-sm">
                     数据驱动健身，科学指导训练。通过量化指标帮助你了解身体状况，
                     避免盲目训练，提高健身效率。
