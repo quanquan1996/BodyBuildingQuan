@@ -15,14 +15,17 @@ import {
   type FatLossDietMode,
 } from '@/lib/utils/fat-loss-diet';
 import { activityLevelLabels, type ActivityLevel } from '@/lib/utils/bmr';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface FatLossDietFormProps {
   onCalculate: (data: FatLossDietInput) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const activityLevels: ActivityLevel[] = ['sedentary', 'light', 'moderate', 'active', 'very_active'];
 
-function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
+function FatLossDietFormInner({ onCalculate, locale, dict }: FatLossDietFormProps) {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<FatLossDietMode>('basic');
   const [height, setHeight] = useState('170');
@@ -33,6 +36,8 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
   const [activityLevel, setActivityLevel] = useState<ActivityLevel>('light');
   const [weeks, setWeeks] = useState('4');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = dict.fatLossDietCalculator.form;
+  const isZh = locale === 'zh';
 
   // 从 URL 参数读取预填数据
   useEffect(() => {
@@ -85,19 +90,31 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
     }
   };
 
+  // Activity level labels with translations
+  const getActivityLabel = (level: ActivityLevel) => {
+    const labels: Record<ActivityLevel, { label: string; description: string }> = {
+      sedentary: { label: isZh ? '久坐' : 'Sedentary', description: isZh ? '几乎不运动' : 'Little or no exercise' },
+      light: { label: isZh ? '轻度活动' : 'Light', description: isZh ? '每周1-3天运动' : '1-3 days/week' },
+      moderate: { label: isZh ? '中度活动' : 'Moderate', description: isZh ? '每周3-5天运动' : '3-5 days/week' },
+      active: { label: isZh ? '活跃' : 'Active', description: isZh ? '每周6-7天运动' : '6-7 days/week' },
+      very_active: { label: isZh ? '非常活跃' : 'Very Active', description: isZh ? '每天高强度运动' : 'Intense daily exercise' },
+    };
+    return labels[level];
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🥗</span>
-          减脂饮食计算
+          {dict.fatLossDietCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 模式切换 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">计算模式</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '计算模式' : 'Calculation Mode'}</h3>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -108,8 +125,8 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                     : 'border-muted hover:border-primary/50'
                 }`}
               >
-                <div className="font-medium text-sm">普通计算</div>
-                <div className="text-xs text-muted-foreground">适合大部分人</div>
+                <div className="font-medium text-sm">{isZh ? '普通计算' : 'Basic'}</div>
+                <div className="text-xs text-muted-foreground">{isZh ? '适合大部分人' : 'For most people'}</div>
               </button>
               <button
                 type="button"
@@ -120,8 +137,8 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                     : 'border-muted hover:border-primary/50'
                 }`}
               >
-                <div className="font-medium text-sm">进阶计算</div>
-                <div className="text-xs text-muted-foreground">基于体脂率</div>
+                <div className="font-medium text-sm">{isZh ? '进阶计算' : 'Advanced'}</div>
+                <div className="text-xs text-muted-foreground">{isZh ? '基于体脂率' : 'Body fat based'}</div>
               </button>
             </div>
           </div>
@@ -130,10 +147,10 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
           {mode === 'basic' && (
             <>
               <div className="space-y-4">
-                <h3 className="font-medium text-sm text-muted-foreground">基本信息</h3>
+                <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '基本信息' : 'Basic Info'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="height">身高</Label>
+                    <Label htmlFor="height">{isZh ? '身高' : 'Height'}</Label>
                     <div className="relative">
                       <Input
                         id="height"
@@ -151,7 +168,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                     {errors.height && <p className="text-xs text-destructive">{errors.height}</p>}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="weight">体重</Label>
+                    <Label htmlFor="weight">{t.weight}</Label>
                     <div className="relative">
                       <Input
                         id="weight"
@@ -170,7 +187,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="age">年龄</Label>
+                  <Label htmlFor="age">{isZh ? '年龄' : 'Age'}</Label>
                   <div className="relative">
                     <Input
                       id="age"
@@ -181,7 +198,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                       className="min-h-[44px] pr-12"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                      岁
+                      {isZh ? '岁' : 'yrs'}
                     </span>
                   </div>
                   {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
@@ -190,7 +207,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
 
               {/* 性别选择 */}
               <div className="space-y-3">
-                <h3 className="font-medium text-sm text-muted-foreground">性别选择</h3>
+                <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '性别选择' : 'Gender'}</h3>
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -202,7 +219,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                     }`}
                   >
                     <span className="text-3xl">👨</span>
-                    <span className="text-sm font-medium">男性</span>
+                    <span className="text-sm font-medium">{dict.common.male}</span>
                   </button>
                   <button
                     type="button"
@@ -214,7 +231,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                     }`}
                   >
                     <span className="text-3xl">👩</span>
-                    <span className="text-sm font-medium">女性</span>
+                    <span className="text-sm font-medium">{dict.common.female}</span>
                   </button>
                 </div>
               </div>
@@ -224,13 +241,13 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
           {/* 进阶模式输入 */}
           {mode === 'advanced' && (
             <div className="space-y-4">
-              <h3 className="font-medium text-sm text-muted-foreground">身体成分</h3>
+              <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '身体成分' : 'Body Composition'}</h3>
               <div className="p-3 bg-blue-500/10 rounded-lg text-sm text-blue-600 mb-2">
-                💡 进阶模式使用体脂率计算，对健身人群更准确
+                💡 {isZh ? '进阶模式使用体脂率计算，对健身人群更准确' : 'Advanced mode uses body fat for more accurate results'}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="weight-adv">体重</Label>
+                  <Label htmlFor="weight-adv">{t.weight}</Label>
                   <div className="relative">
                     <Input
                       id="weight-adv"
@@ -248,7 +265,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                   {errors.weight && <p className="text-xs text-destructive">{errors.weight}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bodyFat">体脂率</Label>
+                  <Label htmlFor="bodyFat">{t.bodyFat}</Label>
                   <div className="relative">
                     <Input
                       id="bodyFat"
@@ -265,11 +282,11 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                   </div>
                   {errors.bodyFat && <p className="text-xs text-destructive">{errors.bodyFat}</p>}
                   <Link
-                    href="/tools/skinfold-calculator"
+                    href={`/${locale}/tools/skinfold-calculator`}
                     className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                   >
                     <Ruler className="w-3 h-3" />
-                    不知道体脂率？用体脂夹测量
+                    {isZh ? '不知道体脂率？用体脂夹测量' : "Don't know your body fat? Measure with calipers"}
                   </Link>
                 </div>
               </div>
@@ -278,9 +295,9 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
 
           {/* 减脂周数 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">减脂周期</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '减脂周期' : 'Diet Duration'}</h3>
             <div className="space-y-2">
-              <Label htmlFor="weeks">计划周数</Label>
+              <Label htmlFor="weeks">{isZh ? '计划周数' : 'Weeks'}</Label>
               <div className="relative">
                 <Input
                   id="weeks"
@@ -293,17 +310,17 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                   className="min-h-[44px] pr-12"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                  周
+                  {isZh ? '周' : 'wks'}
                 </span>
               </div>
               {errors.weeks && <p className="text-xs text-destructive">{errors.weeks}</p>}
-              <p className="text-xs text-muted-foreground">建议 4-8 周为一个减脂周期</p>
+              <p className="text-xs text-muted-foreground">{isZh ? '建议 4-8 周为一个减脂周期' : 'Recommended: 4-8 weeks per cycle'}</p>
             </div>
           </div>
 
           {/* 活动水平 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">活动水平</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{t.activityLevel}</h3>
             <div className="space-y-2">
               {activityLevels.map((level) => (
                 <button
@@ -316,9 +333,9 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
                       : 'border-muted hover:border-primary/50'
                   }`}
                 >
-                  <div className="font-medium text-sm">{activityLevelLabels[level].label}</div>
+                  <div className="font-medium text-sm">{getActivityLabel(level).label}</div>
                   <div className="text-xs text-muted-foreground">
-                    {activityLevelLabels[level].description}
+                    {getActivityLabel(level).description}
                   </div>
                 </button>
               ))}
@@ -326,7 +343,7 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
           </div>
 
           <Button type="submit" className="w-full min-h-[48px] text-base">
-            🥗 生成减脂饮食计划
+            🥗 {t.calculate}
           </Button>
         </form>
       </CardContent>
@@ -334,21 +351,21 @@ function FatLossDietFormInner({ onCalculate }: FatLossDietFormProps) {
   );
 }
 
-export function FatLossDietForm({ onCalculate }: FatLossDietFormProps) {
+export function FatLossDietForm({ onCalculate, locale, dict }: FatLossDietFormProps) {
   return (
-    <Suspense fallback={<FormSkeleton />}>
-      <FatLossDietFormInner onCalculate={onCalculate} />
+    <Suspense fallback={<FormSkeleton dict={dict} />}>
+      <FatLossDietFormInner onCalculate={onCalculate} locale={locale} dict={dict} />
     </Suspense>
   );
 }
 
-function FormSkeleton() {
+function FormSkeleton({ dict }: { dict: Dictionary }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🥗</span>
-          减脂饮食计算
+          {dict.fatLossDietCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>

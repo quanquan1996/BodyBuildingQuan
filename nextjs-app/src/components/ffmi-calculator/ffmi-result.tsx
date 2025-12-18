@@ -4,21 +4,16 @@ import { GradientProgress, StatusBadge } from '@/components/ui/gradient-progress
 import { type FFMIOutput, type FFMICategory } from '@/lib/utils/ffmi';
 import { toolGradients } from '@/lib/config/theme';
 import { BarChart3 } from 'lucide-react';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface FFMIResultProps {
   result: FFMIOutput;
   weight: number;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const gradient = toolGradients['ffmi-calculator'];
-
-const categoryLabels: Record<FFMICategory, string> = {
-  below_average: '低于平均',
-  average: '平均水平',
-  above_average: '高于平均',
-  excellent: '优秀',
-  elite: '精英级',
-};
 
 const categoryStatus: Record<FFMICategory, 'poor' | 'average' | 'good' | 'excellent'> = {
   below_average: 'average',
@@ -28,7 +23,15 @@ const categoryStatus: Record<FFMICategory, 'poor' | 'average' | 'good' | 'excell
   elite: 'excellent',
 };
 
-export function FFMIResult({ result, weight }: FFMIResultProps) {
+export function FFMIResult({ result, weight, locale, dict }: FFMIResultProps) {
+  const t = dict.ffmiCalculator;
+  const categoryLabels: Record<FFMICategory, string> = {
+    below_average: t.categories.below_average,
+    average: t.categories.average,
+    above_average: t.categories.above_average,
+    excellent: t.categories.excellent,
+    elite: t.categories.elite,
+  };
   const progressPercent = Math.min((result.adjustedFfmi / 30) * 100, 100);
   const fatMass = weight - result.ffm;
   const muscleMass = result.ffm * 0.85;
@@ -37,7 +40,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
     <div className="space-y-4">
       {/* 主要结果 */}
       <SectionCard
-        title="计算结果"
+        title={t.result.title}
         icon={<BarChart3 className="w-4 h-4" />}
         iconColor={gradient.from}
       >
@@ -46,7 +49,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
           <div className="text-4xl font-bold tracking-tight" style={{ color: gradient.from }}>
             {result.adjustedFfmi}
           </div>
-          <div className="text-sm text-muted-foreground mt-1">校正后 FFMI</div>
+          <div className="text-sm text-muted-foreground mt-1">{t.result.adjustedFfmi}</div>
           <div className="mt-3">
             <StatusBadge 
               status={categoryStatus[result.category]} 
@@ -78,34 +81,33 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
           columns={2}
           items={[
             {
-              label: 'FFMI 原始值',
+              label: t.result.ffmiRaw,
               value: result.ffmi,
               bgColor: '#FFF5F5',
               valueColor: gradient.from,
-              helpText: '未经身高校正的原始FFMI值',
             },
             {
-              label: '瘦体重',
+              label: t.result.leanMass,
               value: result.ffm,
               unit: 'kg',
               bgColor: '#F0F9FF',
               valueColor: '#3B82F6',
-              helpText: '去除脂肪后的体重，包括肌肉、骨骼、器官等',
+              helpText: t.result.leanMassHelp,
             },
             {
-              label: '脂肪质量',
+              label: t.result.fatMass,
               value: fatMass.toFixed(1),
               unit: 'kg',
               bgColor: '#FFFBEB',
               valueColor: '#F59E0B',
             },
             {
-              label: '估算肌肉量',
+              label: t.result.muscleMass,
               value: muscleMass.toFixed(1),
               unit: 'kg',
               bgColor: '#F0FDF4',
               valueColor: '#22C55E',
-              helpText: '瘦体重的约85%为骨骼肌',
+              helpText: t.result.muscleHelp,
             },
           ]}
         />
@@ -113,7 +115,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
 
       {/* 身体成分分析 */}
       <SectionCard
-        title="身体成分"
+        title={t.result.bodyComposition}
         icon={<BarChart3 className="w-4 h-4" />}
         iconColor="#3B82F6"
         bgColor="#3B82F615"
@@ -121,7 +123,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
         <div className="space-y-4">
           <div>
             <div className="flex justify-between text-sm mb-1.5">
-              <span className="text-muted-foreground">瘦体重</span>
+              <span className="text-muted-foreground">{t.result.leanMass}</span>
               <span className="font-medium">{result.ffm} kg</span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">
@@ -137,7 +139,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
           
           <div>
             <div className="flex justify-between text-sm mb-1.5">
-              <span className="text-muted-foreground">肌肉量</span>
+              <span className="text-muted-foreground">{t.result.muscleMass}</span>
               <span className="font-medium">{muscleMass.toFixed(1)} kg</span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">
@@ -153,7 +155,7 @@ export function FFMIResult({ result, weight }: FFMIResultProps) {
 
           <div>
             <div className="flex justify-between text-sm mb-1.5">
-              <span className="text-muted-foreground">脂肪</span>
+              <span className="text-muted-foreground">{t.result.fatMass}</span>
               <span className="font-medium">{fatMass.toFixed(1)} kg</span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">

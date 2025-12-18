@@ -1,12 +1,32 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Dictionary } from '@/lib/i18n/types';
 
-export function FFMIReference() {
+interface FFMIReferenceProps {
+  dict: Dictionary;
+}
+
+export function FFMIReference({ dict }: FFMIReferenceProps) {
+  const t = dict.ffmiCalculator.reference;
+
+  const ratingColors: Record<string, string> = {
+    '低': 'text-yellow-600',
+    'Low': 'text-yellow-600',
+    '正常': 'text-blue-600',
+    'Normal': 'text-blue-600',
+    '好': 'text-green-600',
+    'Good': 'text-green-600',
+    '优秀': 'text-purple-600',
+    'Excellent': 'text-purple-600',
+    '精英': 'text-red-600',
+    'Elite': 'text-red-600',
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span>📋</span>
-          FFMI 参考标准
+          {t.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -14,42 +34,19 @@ export function FFMIReference() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2 font-medium">FFMI 范围</th>
-                <th className="text-left py-2 font-medium">男性评价</th>
-                <th className="text-left py-2 font-medium">女性评价</th>
+                <th className="text-left py-2 font-medium">{t.headers.range}</th>
+                <th className="text-left py-2 font-medium">{t.headers.maleRating}</th>
+                <th className="text-left py-2 font-medium">{t.headers.femaleRating}</th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              <tr>
-                <td className="py-2">&lt; 15</td>
-                <td className="py-2 text-yellow-600">低</td>
-                <td className="py-2 text-muted-foreground">肌肉量严重不足</td>
-              </tr>
-              <tr>
-                <td className="py-2">16 - 17</td>
-                <td className="py-2 text-yellow-600">低</td>
-                <td className="py-2 text-muted-foreground">肌肉量不足</td>
-              </tr>
-              <tr>
-                <td className="py-2">17 - 19</td>
-                <td className="py-2 text-blue-600">正常</td>
-                <td className="py-2 text-muted-foreground">标准肌肉量</td>
-              </tr>
-              <tr>
-                <td className="py-2">19 - 21</td>
-                <td className="py-2 text-green-600">好</td>
-                <td className="py-2 text-muted-foreground">高于平均肌肉量</td>
-              </tr>
-              <tr>
-                <td className="py-2">21 - 23</td>
-                <td className="py-2 text-purple-600">优秀</td>
-                <td className="py-2 text-muted-foreground">肌肉发达</td>
-              </tr>
-              <tr>
-                <td className="py-2">&gt; 23</td>
-                <td className="py-2 text-red-600">精英</td>
-                <td className="py-2 text-muted-foreground">接近自然极限或可疑</td>
-              </tr>
+              {t.rows.map((row, index) => (
+                <tr key={index}>
+                  <td className="py-2">{row.range}</td>
+                  <td className={`py-2 ${ratingColors[row.rating] || ''}`}>{row.rating}</td>
+                  <td className="py-2 text-muted-foreground">{row.description}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

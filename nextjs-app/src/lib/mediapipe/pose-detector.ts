@@ -1,5 +1,8 @@
 import { PoseResult, PoseLandmark } from '@/types/pose';
 
+// Re-export types for convenience
+export type { PoseResult, PoseLandmark } from '@/types/pose';
+
 let poseLandmarker: any = null;
 let isInitializing = false;
 let FilesetResolver: any = null;
@@ -60,13 +63,27 @@ export async function initializePoseDetector(): Promise<void> {
   }
 }
 
-export async function detectPose(imageElement: HTMLImageElement): Promise<PoseResult | null> {
+export async function detectPose(imageSource: HTMLImageElement | string): Promise<PoseResult | null> {
   if (!poseLandmarker) {
     await initializePoseDetector();
   }
 
   if (!poseLandmarker) {
     throw new Error('Pose detector not initialized');
+  }
+
+  // If imageSource is a string (dataUrl), create an HTMLImageElement
+  let imageElement: HTMLImageElement;
+  if (typeof imageSource === 'string') {
+    imageElement = new Image();
+    imageElement.src = imageSource;
+    // Wait for image to load
+    await new Promise((resolve, reject) => {
+      imageElement.onload = resolve;
+      imageElement.onerror = reject;
+    });
+  } else {
+    imageElement = imageSource;
   }
 
   const result = poseLandmarker.detect(imageElement);

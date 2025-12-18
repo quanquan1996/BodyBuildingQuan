@@ -10,20 +10,24 @@ import { SectionCard } from '@/components/ui/section-card';
 import { Ruler, User } from 'lucide-react';
 import { validateFFMIInput, type FFMIInput } from '@/lib/utils/ffmi';
 import { toolGradients } from '@/lib/config/theme';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface FFMIFormProps {
   onCalculate: (data: FFMIInput) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const gradient = toolGradients['ffmi-calculator'];
 
-function FFMIFormInner({ onCalculate }: FFMIFormProps) {
+function FFMIFormInner({ onCalculate, locale, dict }: FFMIFormProps) {
   const searchParams = useSearchParams();
   const [height, setHeight] = useState('175');
   const [weight, setWeight] = useState('75');
   const [bodyFat, setBodyFat] = useState('15');
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = dict.ffmiCalculator.form;
 
   useEffect(() => {
     const urlHeight = searchParams.get('height');
@@ -56,7 +60,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
 
   return (
     <SectionCard
-      title="基本信息"
+      title={t.basicInfo}
       icon={<User className="w-4 h-4" />}
       iconColor={gradient.from}
     >
@@ -64,7 +68,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
         {/* 身高体重 */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
-            <Label htmlFor="height" className="text-xs text-muted-foreground">身高</Label>
+            <Label htmlFor="height" className="text-xs text-muted-foreground">{t.height}</Label>
             <div className="relative">
               <Input
                 id="height"
@@ -85,7 +89,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="weight" className="text-xs text-muted-foreground">体重</Label>
+            <Label htmlFor="weight" className="text-xs text-muted-foreground">{t.weight}</Label>
             <div className="relative">
               <Input
                 id="weight"
@@ -108,7 +112,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
 
         {/* 体脂率 */}
         <div className="space-y-2">
-          <Label htmlFor="bodyFat" className="text-xs text-muted-foreground">体脂率</Label>
+          <Label htmlFor="bodyFat" className="text-xs text-muted-foreground">{t.bodyFat}</Label>
           <div className="relative">
             <Input
               id="bodyFat"
@@ -127,17 +131,17 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
             <p className="text-xs text-destructive">{errors.bodyFat}</p>
           )}
           <Link
-            href="/tools/skinfold-calculator"
+            href={`/${locale}/tools/skinfold-calculator`}
             className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
           >
             <Ruler className="w-3 h-3" />
-            不知道体脂率？用体脂夹测量
+            {t.bodyFatHint}
           </Link>
         </div>
 
         {/* 性别选择 */}
         <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">性别</Label>
+          <Label className="text-xs text-muted-foreground">{t.gender}</Label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
@@ -149,7 +153,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
               }`}
             >
               <span className="text-xl">👨</span>
-              <span className="text-sm font-medium">男性</span>
+              <span className="text-sm font-medium">{dict.common.male}</span>
             </button>
             <button
               type="button"
@@ -161,7 +165,7 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
               }`}
             >
               <span className="text-xl">👩</span>
-              <span className="text-sm font-medium">女性</span>
+              <span className="text-sm font-medium">{dict.common.female}</span>
             </button>
           </div>
         </div>
@@ -174,25 +178,25 @@ function FFMIFormInner({ onCalculate }: FFMIFormProps) {
             background: `linear-gradient(${gradient.angle}deg, ${gradient.from}, ${gradient.to})`,
           }}
         >
-          计算 FFMI 指数
+          {t.calculate}
         </Button>
       </form>
     </SectionCard>
   );
 }
 
-export function FFMIForm({ onCalculate }: FFMIFormProps) {
+export function FFMIForm({ onCalculate, locale, dict }: FFMIFormProps) {
   return (
-    <Suspense fallback={<FormSkeleton />}>
-      <FFMIFormInner onCalculate={onCalculate} />
+    <Suspense fallback={<FormSkeleton dict={dict} />}>
+      <FFMIFormInner onCalculate={onCalculate} locale={locale} dict={dict} />
     </Suspense>
   );
 }
 
-function FormSkeleton() {
+function FormSkeleton({ dict }: { dict: Dictionary }) {
   return (
     <SectionCard
-      title="基本信息"
+      title={dict.ffmiCalculator.form.basicInfo}
       icon={<User className="w-4 h-4" />}
       iconColor={gradient.from}
     >

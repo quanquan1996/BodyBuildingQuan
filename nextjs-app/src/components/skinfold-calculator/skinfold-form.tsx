@@ -17,18 +17,22 @@ import {
   measurementSites,
   validateSkinfoldInput,
 } from '@/lib/utils/skinfold';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface SkinfoldFormProps {
   onCalculate: (result: SkinfoldOutput, weight: number, height: number) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
-export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
+export function SkinfoldForm({ onCalculate, locale, dict }: SkinfoldFormProps) {
   const [mode, setMode] = useState<MeasurementMode>('simple');
   const [gender, setGender] = useState<Gender>('male');
   const [age, setAge] = useState('30');
   const [weight, setWeight] = useState('70');
   const [height, setHeight] = useState('170');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = dict.skinfoldCalculator.form;
 
   // 简易模式数据
   const [site1, setSite1] = useState('');
@@ -45,26 +49,27 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
   const [thigh, setThigh] = useState('');
 
   // 简易模式的测量部位根据性别不同
+  const guide = dict.skinfoldCalculator.guide;
   const simpleSites = gender === 'male' 
     ? [
-        { key: 'site1', ...measurementSites.chest, value: site1, setter: setSite1 },
-        { key: 'site2', ...measurementSites.abdominal, value: site2, setter: setSite2 },
-        { key: 'site3', ...measurementSites.thigh, value: site3, setter: setSite3 },
+        { key: 'site1', siteKey: 'chest', emoji: '🫁', value: site1, setter: setSite1 },
+        { key: 'site2', siteKey: 'abdominal', emoji: '🎯', value: site2, setter: setSite2 },
+        { key: 'site3', siteKey: 'thigh', emoji: '🦵', value: site3, setter: setSite3 },
       ]
     : [
-        { key: 'site1', ...measurementSites.triceps, value: site1, setter: setSite1 },
-        { key: 'site2', ...measurementSites.suprailiac, value: site2, setter: setSite2 },
-        { key: 'site3', ...measurementSites.thigh, value: site3, setter: setSite3 },
+        { key: 'site1', siteKey: 'triceps', emoji: '💪', value: site1, setter: setSite1 },
+        { key: 'site2', siteKey: 'suprailiac', emoji: '📐', value: site2, setter: setSite2 },
+        { key: 'site3', siteKey: 'thigh', emoji: '🦵', value: site3, setter: setSite3 },
       ];
 
   const preciseSites = [
-    { key: 'chest', ...measurementSites.chest, value: chest, setter: setChest },
-    { key: 'midaxillary', ...measurementSites.midaxillary, value: midaxillary, setter: setMidaxillary },
-    { key: 'triceps', ...measurementSites.triceps, value: triceps, setter: setTriceps },
-    { key: 'subscapular', ...measurementSites.subscapular, value: subscapular, setter: setSubscapular },
-    { key: 'abdominal', ...measurementSites.abdominal, value: abdominal, setter: setAbdominal },
-    { key: 'suprailiac', ...measurementSites.suprailiac, value: suprailiac, setter: setSuprailiac },
-    { key: 'thigh', ...measurementSites.thigh, value: thigh, setter: setThigh },
+    { key: 'chest', siteKey: 'chest', emoji: '🫁', value: chest, setter: setChest },
+    { key: 'midaxillary', siteKey: 'midaxillary', emoji: '📍', value: midaxillary, setter: setMidaxillary },
+    { key: 'triceps', siteKey: 'triceps', emoji: '💪', value: triceps, setter: setTriceps },
+    { key: 'subscapular', siteKey: 'subscapular', emoji: '🔙', value: subscapular, setter: setSubscapular },
+    { key: 'abdominal', siteKey: 'abdominal', emoji: '🎯', value: abdominal, setter: setAbdominal },
+    { key: 'suprailiac', siteKey: 'suprailiac', emoji: '📐', value: suprailiac, setter: setSuprailiac },
+    { key: 'thigh', siteKey: 'thigh', emoji: '🦵', value: thigh, setter: setThigh },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -142,7 +147,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">📏</span>
-          皮褶厚度测量
+          {dict.skinfoldCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -150,19 +155,18 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
           {/* 快速测量指南 */}
           <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
             <h4 className="font-medium text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
-              <span>📋</span> 测量前必读
+              <span>📋</span> {dict.skinfoldCalculator.guide.title}
             </h4>
             <ol className="text-sm text-muted-foreground space-y-1.5 list-decimal list-inside">
-              <li>用<strong className="text-foreground">拇指和食指</strong>捏起皮肤和皮下脂肪</li>
-              <li>在捏起部位<strong className="text-foreground">旁边 1cm 处</strong>夹住体脂夹</li>
-              <li>等待 <strong className="text-foreground">2-3 秒</strong>后读取数值</li>
-              <li>每个部位测量 <strong className="text-foreground">2-3 次取平均值</strong></li>
+              {dict.skinfoldCalculator.guide.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
             </ol>
           </div>
 
           {/* 性别选择 */}
           <div className="space-y-3">
-            <Label className="text-sm text-muted-foreground">性别选择</Label>
+            <Label className="text-sm text-muted-foreground">{t.gender}</Label>
             <div className="flex gap-4">
               <button
                 type="button"
@@ -174,7 +178,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
                 }`}
               >
                 <span className="text-3xl">👨</span>
-                <span className="text-sm font-medium">男性</span>
+                <span className="text-sm font-medium">{dict.common.male}</span>
               </button>
               <button
                 type="button"
@@ -186,7 +190,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
                 }`}
               >
                 <span className="text-3xl">👩</span>
-                <span className="text-sm font-medium">女性</span>
+                <span className="text-sm font-medium">{dict.common.female}</span>
               </button>
             </div>
           </div>
@@ -194,7 +198,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
           {/* 基本信息 */}
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="age">年龄</Label>
+              <Label htmlFor="age">{t.age}</Label>
               <div className="relative">
                 <Input
                   id="age"
@@ -205,13 +209,13 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
                   className="min-h-[44px] pr-12"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                  岁
+                  {dict.common.ageUnit}
                 </span>
               </div>
               {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="height">身高</Label>
+              <Label htmlFor="height">{dict.bmrCalculator.form.height}</Label>
               <div className="relative">
                 <Input
                   id="height"
@@ -229,7 +233,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
               {errors.height && <p className="text-xs text-destructive">{errors.height}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="weight">体重</Label>
+              <Label htmlFor="weight">{dict.bmrCalculator.form.weight}</Label>
               <div className="relative">
                 <Input
                   id="weight"
@@ -251,28 +255,30 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
           {/* 测量模式选择 */}
           <Tabs value={mode} onValueChange={(v) => setMode(v as MeasurementMode)}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="simple">简易模式 (3点)</TabsTrigger>
-              <TabsTrigger value="precise">精确模式 (7点)</TabsTrigger>
+              <TabsTrigger value="simple">{t.threePoint}</TabsTrigger>
+              <TabsTrigger value="precise">{t.sevenPoint}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="simple" className="space-y-4 mt-4">
               <p className="text-sm text-muted-foreground">
                 {gender === 'male' 
-                  ? '男性3点测量：胸部、腹部、大腿'
-                  : '女性3点测量：三头肌、髂骨上、大腿'}
+                  ? dict.common.maleThreePoint
+                  : dict.common.femaleThreePoint}
               </p>
               {simpleSites.map((site) => (
                 <SiteInput
                   key={site.key}
                   site={site}
                   error={errors[site.key]}
+                  locale={locale}
+                  dict={dict}
                 />
               ))}
             </TabsContent>
 
             <TabsContent value="precise" className="space-y-4 mt-4">
               <p className="text-sm text-muted-foreground">
-                7点测量法提供更精确的体脂率估算
+                {dict.common.sevenPointDescription}
               </p>
               <div className="grid gap-4">
                 {preciseSites.map((site) => (
@@ -280,6 +286,8 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
                     key={site.key}
                     site={site}
                     error={errors[site.key]}
+                    locale={locale}
+                    dict={dict}
                   />
                 ))}
               </div>
@@ -287,7 +295,7 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
           </Tabs>
 
           <Button type="submit" className="w-full min-h-[48px] text-base">
-            📊 计算体脂率
+            📊 {t.calculate}
           </Button>
         </form>
       </CardContent>
@@ -298,38 +306,55 @@ export function SkinfoldForm({ onCalculate }: SkinfoldFormProps) {
 interface SiteInputProps {
   site: {
     key: string;
-    name: string;
+    siteKey: string;
     emoji: string;
-    description: string;
-    tips: string;
     value: string;
     setter: (v: string) => void;
   };
   error?: string;
+  locale: Locale;
+  dict: Dictionary;
 }
 
-function SiteInput({ site, error }: SiteInputProps) {
+function SiteInput({ site, error, locale, dict }: SiteInputProps) {
+  const t = dict.skinfoldCalculator.form;
+  const guide = dict.skinfoldCalculator.guide;
+  
+  // Map site keys to translation keys
+  const siteNameMap: Record<string, string> = {
+    chest: t.chest,
+    midaxillary: t.midaxillary,
+    triceps: t.triceps,
+    subscapular: t.subscapular,
+    abdominal: t.abdomen,
+    suprailiac: t.suprailiac,
+    thigh: t.thigh,
+  };
+  
+  const displayName = siteNameMap[site.siteKey] || site.siteKey;
+  const siteData = guide.measurementSites[site.siteKey as keyof typeof guide.measurementSites];
+  
   return (
     <div className="space-y-2 p-3 rounded-lg border bg-muted/30">
       <div className="flex items-center gap-2">
         <Label className="flex items-center gap-2">
           <span>{site.emoji}</span>
-          <span className="font-medium">{site.name}</span>
+          <span className="font-medium">{displayName}</span>
         </Label>
       </div>
       
       {/* 测量方法始终显示 */}
       <div className="text-xs text-muted-foreground bg-background/80 p-2 rounded border-l-2 border-primary/50">
-        <p className="font-medium text-foreground/80 mb-1">📍 测量位置</p>
-        <p>{site.description}</p>
-        <p className="mt-1.5 text-primary">💡 {site.tips}</p>
+        <p className="font-medium text-foreground/80 mb-1">📍 {dict.common.measurementLocation}</p>
+        <p>{siteData.description}</p>
+        <p className="mt-1.5 text-primary">💡 {siteData.tips}</p>
       </div>
       
       <div className="relative">
         <Input
           type="number"
           step="0.1"
-          placeholder="输入测量值"
+          placeholder={dict.common.enterValue}
           value={site.value}
           onChange={(e) => site.setter(e.target.value)}
           className="min-h-[44px] pr-12"

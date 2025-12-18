@@ -1,76 +1,82 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Dictionary } from '@/lib/i18n/types';
 
-export function CarbCyclingReference() {
+interface CarbCyclingReferenceProps {
+  dict: Dictionary;
+}
+
+export function CarbCyclingReference({ dict }: CarbCyclingReferenceProps) {
+  const t = dict.carbCyclingCalculator.reference;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">📋</span>
-          碳循环指南
+          {t.title}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* 简易版周计划 */}
+        {/* Simple Plan */}
         <div className="space-y-3">
-          <h4 className="font-medium text-sm text-muted-foreground">简易版周计划 (2高5低)</h4>
+          <h4 className="font-medium text-sm text-muted-foreground">{t.simplePlan.title}</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between p-2 bg-green-500/10 rounded">
-              <span>🟢 高碳日</span>
-              <span className="font-medium">周三、周六</span>
+              <span>{t.simplePlan.highCarb}</span>
+              <span className="font-medium">{t.simplePlan.highCarbDays}</span>
             </div>
             <div className="flex justify-between p-2 bg-orange-500/10 rounded">
-              <span>🟠 低碳日</span>
-              <span className="font-medium">周一、二、四、五、日</span>
+              <span>{t.simplePlan.lowCarb}</span>
+              <span className="font-medium">{t.simplePlan.lowCarbDays}</span>
             </div>
           </div>
         </div>
 
-        {/* 进阶版周计划 */}
+        {/* Advanced Plan */}
         <div className="space-y-3">
-          <h4 className="font-medium text-sm text-muted-foreground">进阶版周计划 (2高2中3低)</h4>
+          <h4 className="font-medium text-sm text-muted-foreground">{t.advancedPlan.title}</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between p-2 bg-green-500/10 rounded">
-              <span>🟢 高碳日</span>
-              <span className="font-medium">周三、周六</span>
+              <span>{t.advancedPlan.highCarb}</span>
+              <span className="font-medium">{t.advancedPlan.highCarbDays}</span>
             </div>
             <div className="flex justify-between p-2 bg-blue-500/10 rounded">
-              <span>🔵 中碳日</span>
-              <span className="font-medium">周一、周五</span>
+              <span>{t.advancedPlan.mediumCarb}</span>
+              <span className="font-medium">{t.advancedPlan.mediumCarbDays}</span>
             </div>
             <div className="flex justify-between p-2 bg-orange-500/10 rounded">
-              <span>🟠 低碳日</span>
-              <span className="font-medium">周二、四、日</span>
+              <span>{t.advancedPlan.lowCarb}</span>
+              <span className="font-medium">{t.advancedPlan.lowCarbDays}</span>
             </div>
           </div>
         </div>
 
-        {/* 训练安排建议 */}
+        {/* Training Tips */}
         <div className="space-y-3">
-          <h4 className="font-medium text-sm text-muted-foreground">训练安排建议</h4>
+          <h4 className="font-medium text-sm text-muted-foreground">{t.trainingTips.title}</h4>
           <div className="space-y-2 text-sm">
             <div className="p-3 bg-muted/30 rounded-lg">
-              <div className="font-medium text-green-600 mb-1">🟢 高碳日</div>
-              <p className="text-muted-foreground">安排大肌群训练（腿、背、胸），高强度力量训练</p>
+              <div className="font-medium text-green-600 mb-1">{t.trainingTips.highCarb.title}</div>
+              <p className="text-muted-foreground">{t.trainingTips.highCarb.description}</p>
             </div>
             <div className="p-3 bg-muted/30 rounded-lg">
-              <div className="font-medium text-blue-600 mb-1">🔵 中碳日</div>
-              <p className="text-muted-foreground">安排小肌群训练（肩、手臂），中等强度训练</p>
+              <div className="font-medium text-blue-600 mb-1">{t.trainingTips.mediumCarb.title}</div>
+              <p className="text-muted-foreground">{t.trainingTips.mediumCarb.description}</p>
             </div>
             <div className="p-3 bg-muted/30 rounded-lg">
-              <div className="font-medium text-orange-600 mb-1">🟠 低碳日</div>
-              <p className="text-muted-foreground">休息日或低强度有氧，如快走、瑜伽</p>
+              <div className="font-medium text-orange-600 mb-1">{t.trainingTips.lowCarb.title}</div>
+              <p className="text-muted-foreground">{t.trainingTips.lowCarb.description}</p>
             </div>
           </div>
         </div>
 
-        {/* 执行要点 */}
+        {/* Execution Tips */}
         <div className="text-xs text-muted-foreground p-3 bg-muted/20 rounded-lg space-y-2">
-          <p className="font-medium mb-2">💡 执行要点</p>
+          <p className="font-medium mb-2">{t.executionTips.title}</p>
           <ul className="space-y-1 list-disc list-inside">
-            <li>高碳日碳水来源选择复合碳水（燕麦、糙米、红薯）</li>
-            <li>低碳日增加蔬菜摄入，保持饱腹感</li>
-            <li>蛋白质每天保持稳定，分散到每餐</li>
-            <li>根据训练反馈灵活调整，不必严格固定</li>
+            {t.executionTips.items.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
           </ul>
         </div>
       </CardContent>

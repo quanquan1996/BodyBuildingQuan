@@ -6,12 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { validateGrecianInput, type GrecianIdealInput } from '@/lib/utils/grecian-ideal';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface GrecianFormProps {
   onCalculate: (data: GrecianIdealInput) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
-export function GrecianForm({ onCalculate }: GrecianFormProps) {
+export function GrecianForm({ onCalculate, locale, dict }: GrecianFormProps) {
   const [formData, setFormData] = useState<Partial<GrecianIdealInput>>({
     heightCm: 175,
     wristCm: 17,
@@ -26,6 +29,8 @@ export function GrecianForm({ onCalculate }: GrecianFormProps) {
     calfCm: 38,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof GrecianIdealInput, string>>>({});
+  const t = dict.grecianCalculator.form;
+  const isZh = locale === 'zh';
 
   const handleChange = (field: keyof GrecianIdealInput, value: string) => {
     const numValue = parseFloat(value) || 0;
@@ -46,25 +51,25 @@ export function GrecianForm({ onCalculate }: GrecianFormProps) {
   };
 
   const inputFields: { key: keyof GrecianIdealInput; label: string; placeholder: string }[] = [
-    { key: 'heightCm', label: '身高 (cm)', placeholder: '175' },
-    { key: 'wristCm', label: '手腕围度 (cm)', placeholder: '17' },
-    { key: 'shoulderCm', label: '肩围 (cm)', placeholder: '120' },
-    { key: 'chestCm', label: '胸围 (cm)', placeholder: '100' },
-    { key: 'waistCm', label: '腰围 (cm)', placeholder: '80' },
-    { key: 'hipCm', label: '臀围 (cm)', placeholder: '95' },
-    { key: 'neckCm', label: '颈围 (cm)', placeholder: '38' },
-    { key: 'bicepCm', label: '上臂围 (cm)', placeholder: '35' },
-    { key: 'forearmCm', label: '前臂围 (cm)', placeholder: '30' },
-    { key: 'thighCm', label: '大腿围 (cm)', placeholder: '55' },
-    { key: 'calfCm', label: '小腿围 (cm)', placeholder: '38' },
+    { key: 'heightCm', label: isZh ? '身高 (cm)' : 'Height (cm)', placeholder: '175' },
+    { key: 'wristCm', label: `${t.wrist} (cm)`, placeholder: '17' },
+    { key: 'shoulderCm', label: isZh ? '肩围 (cm)' : 'Shoulders (cm)', placeholder: '120' },
+    { key: 'chestCm', label: `${t.chest} (cm)`, placeholder: '100' },
+    { key: 'waistCm', label: `${t.waist} (cm)`, placeholder: '80' },
+    { key: 'hipCm', label: `${t.hips} (cm)`, placeholder: '95' },
+    { key: 'neckCm', label: `${t.neck} (cm)`, placeholder: '38' },
+    { key: 'bicepCm', label: `${t.biceps} (cm)`, placeholder: '35' },
+    { key: 'forearmCm', label: `${t.forearm} (cm)`, placeholder: '30' },
+    { key: 'thighCm', label: `${t.thigh} (cm)`, placeholder: '55' },
+    { key: 'calfCm', label: `${t.calf} (cm)`, placeholder: '38' },
   ];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>输入你的身体围度</CardTitle>
+        <CardTitle>{isZh ? '输入你的身体围度' : 'Enter Your Body Measurements'}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          手腕围度是计算理想比例的基准，请准确测量
+          {isZh ? '手腕围度是计算理想比例的基准，请准确测量' : 'Wrist circumference is the baseline for calculating ideal proportions'}
         </p>
       </CardHeader>
       <CardContent>
@@ -89,7 +94,7 @@ export function GrecianForm({ onCalculate }: GrecianFormProps) {
             ))}
           </div>
           <Button type="submit" className="w-full">
-            计算古典比例
+            {t.calculate}
           </Button>
         </form>
       </CardContent>

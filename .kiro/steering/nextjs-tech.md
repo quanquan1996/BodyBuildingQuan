@@ -168,20 +168,55 @@ export default function ToolLayout({ children }: { children: React.ReactNode }) 
 
 需要体脂率输入的工具（FFMI、BMR进阶、碳循环）应在表单中添加"不知道体脂率？用体脂夹测量"的引导链接。
 
+### 工具联动多语言规范
+
+⚠️ **重要：toolLinks 函数必须接收 dict 参数**
+
+所有 `toolLinks` 中的函数都需要接收 `dict: Dictionary` 作为第一个参数，从翻译文件获取标题和描述。
+
+**翻译键位置：** `dict.common.toolLinks`
+
+**标题翻译键：**
+- `exploreMore` - "🔗 继续探索" / "🔗 Explore More"
+- `otherFatLossPlans` - "🔗 其他减脂方案" / "🔗 Other Fat Loss Plans"
+
+**正确用法：**
+```tsx
+// ✅ 正确：传递 dict 参数
+<ToolLinkCard {...toolLinks.skinfoldToFfmi(dict, bodyFat, weight, height)} />
+<ToolLinkCard {...toolLinks.needBodyFat(dict)} />
+
+// ✅ 正确：使用翻译键作为标题
+<h4>{dict.common.toolLinks.exploreMore}</h4>
+```
+
+**错误用法：**
+```tsx
+// ❌ 错误：不传递 dict 参数
+<ToolLinkCard {...toolLinks.skinfoldToFfmi(bodyFat, weight, height)} />
+
+// ❌ 错误：硬编码中文
+<h4>{isZh ? '🔗 继续探索' : '🔗 Explore More'}</h4>
+```
+
 ### 实现要点
 
 1. **结果组件联动** - 在 `xxx-result.tsx` 中导入 `ToolLinkCard` 和 `toolLinks`，在结果展示后添加联动入口
-2. **表单引导** - 在需要体脂输入的表单中添加指向体脂夹计算器的链接
-3. **URL 参数传递** - 使用 `toolLinks` 中的函数自动构建带参数的 URL
-4. **参数接收** - 表单组件使用 `useSearchParams` 读取 URL 参数并预填（需用 Suspense 包裹）
+2. **传递 dict 参数** - 调用 `toolLinks` 函数时必须传递 `dict` 作为第一个参数
+3. **使用翻译键** - 联动区域标题使用 `dict.common.toolLinks.exploreMore` 或 `dict.common.toolLinks.otherFatLossPlans`
+4. **表单引导** - 在需要体脂输入的表单中添加指向体脂夹计算器的链接
+5. **URL 参数传递** - 使用 `toolLinks` 中的函数自动构建带参数的 URL
+6. **参数接收** - 表单组件使用 `useSearchParams` 读取 URL 参数并预填（需用 Suspense 包裹）
 
 ### 新增工具联动步骤
 
-1. 在 `tool-link-card.tsx` 的 `toolLinks` 对象中添加新的联动配置
-2. 如需新图标，在 `iconMap` 中添加
-3. 在相关工具的结果组件中添加 `ToolLinkCard`
-4. 如新工具需要体脂输入，在表单中添加引导链接
-5. 表单组件支持 URL 参数预填（使用 Suspense 包裹 useSearchParams）
+1. 在 `types.ts` 的 `ToolLinksDict` 中添加新的翻译键类型
+2. 在 `zh.ts` 和 `en.ts` 的 `common.toolLinks` 中添加翻译
+3. 在 `tool-link-card.tsx` 的 `toolLinks` 对象中添加新的联动配置（接收 dict 参数）
+4. 如需新图标，在 `iconMap` 中添加
+5. 在相关工具的结果组件中添加 `ToolLinkCard`（传递 dict 参数）
+6. 如新工具需要体脂输入，在表单中添加引导链接
+7. 表单组件支持 URL 参数预填（使用 Suspense 包裹 useSearchParams）
 
 ## UI 设计规范（薄荷健康风格）
 
@@ -346,3 +381,332 @@ export default function ToolLayout({ children }: { children: React.ReactNode }) 
 ## 联系方式
 
 - 合作/广告: quanquanyiyi520@gmail.com
+
+
+## 多语言 (i18n) 开发规范
+
+### 支持的语言
+
+- `zh` - 中文（简体）
+- `en` - 英文（默认语言）
+
+### 路由结构
+
+所有页面都在 `[locale]` 动态路由段下：
+- 首页: `/zh` 或 `/en`
+- 工具页面: `/zh/tools/ffmi-calculator` 或 `/en/tools/ffmi-calculator`
+
+⚠️ **重要：** 不要在 `src/app/tools/` 下创建页面，这会与 `[locale]` 路由冲突！
+
+### 翻译文件位置
+
+```
+src/lib/i18n/
+├── index.ts      # i18n 配置和工具函数
+├── types.ts      # 类型定义
+├── zh.ts         # 中文翻译
+└── en.ts         # 英文翻译
+```
+
+### 翻译键命名约定
+
+使用嵌套结构，按页面/组件分层：
+
+```typescript
+{
+  common: { ... },           // 通用文本
+  nav: { ... },              // 导航
+  home: { ... },             // 首页
+  footer: { ... },           // 页脚
+  ffmiCalculator: {          // 工具页面
+    title: '...',
+    description: '...',
+    form: { ... },
+    result: { ... },
+    explanation: { ... },
+  },
+}
+```
+
+### 新增页面多语言检查清单
+
+1. **翻译文件** - 在 `zh.ts` 和 `en.ts` 中添加对应的翻译键
+2. **页面路由** - 在 `src/app/[locale]/` 下创建页面（不是 `src/app/tools/`）
+3. **组件参数** - 组件接收 `locale` 和 `dict` 参数
+4. **链接前缀** - 所有内部链接添加 `/${locale}` 前缀
+5. **SEO metadata** - 在 layout.tsx 中设置多语言 metadata 和 hreflang
+6. **Sitemap** - 更新 sitemap.ts 添加新页面的多语言 URL
+
+### 禁止硬编码文本
+
+❌ **错误示例：**
+```tsx
+// 硬编码中文
+<h1>FFMI 计算器</h1>
+<button>计算</button>
+
+// 三元运算符硬编码
+{isZh ? '相关工具' : 'Related Tools'}
+
+// 缺少 locale 前缀
+<Link href="/tools/ffmi-calculator">
+
+// 组件不接收 dict 参数
+export function MyComponent() {
+  return <div>硬编码文本</div>;
+}
+```
+
+✅ **正确示例：**
+```tsx
+// 使用翻译键
+<h1>{dict.ffmiCalculator.title}</h1>
+<button>{dict.common.calculate}</button>
+
+// 使用翻译键替代三元运算符
+{dict.common.relatedTools}
+
+// 包含 locale 前缀
+<Link href={`/${locale}/tools/ffmi-calculator`}>
+
+// 组件接收 dict 参数
+interface MyComponentProps {
+  dict: Dictionary;
+}
+
+export function MyComponent({ dict }: MyComponentProps) {
+  return <div>{dict.myComponent.text}</div>;
+}
+```
+
+### 组件多语言模式
+
+**标准组件模式：**
+```tsx
+import type { Locale, Dictionary } from '@/lib/i18n';
+
+interface MyComponentProps {
+  locale: Locale;
+  dict: Dictionary;
+}
+
+export function MyComponent({ locale, dict }: MyComponentProps) {
+  return (
+    <div>
+      <h1>{dict.myComponent.title}</h1>
+      <p>{dict.myComponent.description}</p>
+      <Link href={`/${locale}/tools/ffmi-calculator`}>
+        {dict.ffmiCalculator.title}
+      </Link>
+    </div>
+  );
+}
+```
+
+**页面组件模式：**
+```tsx
+import { getDictionary, type Locale } from '@/lib/i18n';
+
+export default async function MyPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const dict = getDictionary(locale);
+
+  return (
+    <div>
+      <MyComponent locale={locale} dict={dict} />
+    </div>
+  );
+}
+```
+
+### 常见组件的 dict 参数传递
+
+所有自定义组件都需要接收并传递 `dict` 参数：
+
+```tsx
+// ✅ 正确：传递 dict 参数
+<SkinfoldGuide dict={dict} />
+<RelatedTools currentToolId="ffmi-calculator" locale={locale} dict={dict} />
+<ToolHero toolId="ffmi-calculator" title={dict.ffmiCalculator.title} />
+
+// ❌ 错误：忘记传递 dict 参数
+<SkinfoldGuide />
+<RelatedTools currentToolId="ffmi-calculator" locale={locale} />
+```
+
+### 类型定义更新流程
+
+当添加新的翻译键时，必须同步更新类型定义：
+
+1. **在 `types.ts` 中添加接口定义**
+```typescript
+export interface MyComponentDict {
+  title: string;
+  description: string;
+  items: string[];
+}
+
+export interface Dictionary {
+  // ... 其他字段
+  myComponent: MyComponentDict;
+}
+```
+
+2. **在 `zh.ts` 中添加中文翻译**
+```typescript
+export const zh: Dictionary = {
+  // ... 其他字段
+  myComponent: {
+    title: '我的组件',
+    description: '组件描述',
+    items: ['项目1', '项目2'],
+  },
+};
+```
+
+3. **在 `en.ts` 中添加英文翻译**
+```typescript
+export const en: Dictionary = {
+  // ... 其他字段
+  myComponent: {
+    title: 'My Component',
+    description: 'Component description',
+    items: ['Item 1', 'Item 2'],
+  },
+};
+```
+
+### 语言检测优先级
+
+1. IP 地理位置（中国大陆强制中文）
+2. 浏览器 Accept-Language
+3. 默认英文
+
+### 品牌名称
+
+- 中文版: "轻核" + "健身AI工具站"
+- 英文版: "MT" + "Muscle Tool"
+
+### 多语言开发最佳实践
+
+#### 1. 注释可以保留中文
+```tsx
+// ✅ 代码注释可以用中文
+// 计算 FFMI 指数
+const ffmi = calculateFFMI(data);
+
+// ✅ console.log 可以用中文
+console.log('开始计算体脂率');
+```
+
+#### 2. 所有用户可见文本必须使用 dict
+```tsx
+// ❌ 错误
+<div className="text-sm text-muted-foreground">
+  建议在相同时间、相同条件下测量
+</div>
+
+// ✅ 正确
+<div className="text-sm text-muted-foreground">
+  {dict.skinfoldCalculator.guide.tips[5]}
+</div>
+```
+
+#### 3. 动态文本也要使用翻译
+```tsx
+// ❌ 错误
+const message = isSuccess ? '计算成功' : '计算失败';
+
+// ✅ 正确
+const message = isSuccess 
+  ? dict.common.calculateSuccess 
+  : dict.common.calculateFailed;
+```
+
+#### 4. 数组和列表使用 map
+```tsx
+// ✅ 正确
+<ul>
+  {dict.myComponent.tips.map((tip, index) => (
+    <li key={index}>{tip}</li>
+  ))}
+</ul>
+```
+
+### 常见错误和解决方案
+
+#### 错误 1: 组件不接收 dict 参数
+```tsx
+// ❌ 错误
+export function MyComponent() {
+  return <h1>标题</h1>;
+}
+
+// ✅ 修复
+interface MyComponentProps {
+  dict: Dictionary;
+}
+
+export function MyComponent({ dict }: MyComponentProps) {
+  return <h1>{dict.myComponent.title}</h1>;
+}
+```
+
+#### 错误 2: 使用三元运算符硬编码
+```tsx
+// ❌ 错误
+const title = isZh ? '相关工具' : 'Related Tools';
+
+// ✅ 修复
+const title = dict.common.relatedTools;
+```
+
+#### 错误 3: 链接缺少 locale 前缀
+```tsx
+// ❌ 错误
+<Link href="/tools/ffmi-calculator">
+
+// ✅ 修复
+<Link href={`/${locale}/tools/ffmi-calculator`}>
+```
+
+#### 错误 4: 忘记传递 dict 参数
+```tsx
+// ❌ 错误
+<MyComponent locale={locale} />
+
+// ✅ 修复
+<MyComponent locale={locale} dict={dict} />
+```
+
+### 多语言测试检查清单
+
+开发完成后，使用以下清单验证：
+
+- [ ] 所有页面都在 `[locale]/` 路由下
+- [ ] 没有 `src/app/tools/` 下的页面
+- [ ] 所有组件都接收 `dict` 参数
+- [ ] 没有硬编码的中文或英文文本
+- [ ] 所有链接都包含 `/${locale}` 前缀
+- [ ] 翻译文件中的键都有对应的类型定义
+- [ ] 中英文翻译文件结构一致
+- [ ] 运行 TypeScript 检查无错误
+- [ ] 测试中英文切换功能正常
+- [ ] 检查控制台无缺失翻译键的警告
+
+### 快速检查命令
+
+```bash
+# 检查是否有硬编码的中文（在 PowerShell 中）
+Get-ChildItem -Path "src\components" -Recurse -Filter "*.tsx" | Select-String -Pattern "[\u4e00-\u9fa5]"
+
+# 检查是否有旧路由文件
+Test-Path "src\app\tools"
+
+# TypeScript 类型检查
+npm run type-check
+```

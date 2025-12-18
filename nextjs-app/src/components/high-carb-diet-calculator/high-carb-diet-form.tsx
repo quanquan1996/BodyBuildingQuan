@@ -15,27 +15,17 @@ import {
   type DeficitLevel,
   type RefeedFrequency,
 } from '@/lib/utils/high-carb-diet';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface HighCarbDietFormProps {
   onCalculate: (data: HighCarbDietInput) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const activityLevels: ActivityLevel[] = ['sedentary', 'light', 'moderate', 'active', 'very_active'];
 
-const deficitLabels: Record<DeficitLevel, { label: string; desc: string }> = {
-  conservative: { label: '保守', desc: '-300 kcal，慢速减脂' },
-  standard: { label: '标准', desc: '-500 kcal，推荐' },
-  aggressive: { label: '激进', desc: '-700 kcal，快速减脂' },
-};
-
-const refeedLabels: Record<RefeedFrequency, { label: string; desc: string }> = {
-  weekly: { label: '每周1次', desc: '适合体脂较低者' },
-  biweekly: { label: '每2周1次', desc: '适合体脂较高者' },
-  none: { label: '不需要', desc: '短期减脂可不设' },
-};
-
-
-function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
+function HighCarbDietFormInner({ onCalculate, locale, dict }: HighCarbDietFormProps) {
   const searchParams = useSearchParams();
   const [weight, setWeight] = useState('70');
   const [height, setHeight] = useState('175');
@@ -47,6 +37,32 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
   const [trainingDays, setTrainingDays] = useState(4);
   const [refeedFrequency, setRefeedFrequency] = useState<RefeedFrequency>('weekly');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = dict.highCarbDietCalculator.form;
+  const isZh = locale === 'zh';
+
+  const deficitLabels: Record<DeficitLevel, { label: string; desc: string }> = {
+    conservative: { label: isZh ? '保守' : 'Conservative', desc: isZh ? '-300 kcal，慢速减脂' : '-300 kcal, slow' },
+    standard: { label: isZh ? '标准' : 'Standard', desc: isZh ? '-500 kcal，推荐' : '-500 kcal, recommended' },
+    aggressive: { label: isZh ? '激进' : 'Aggressive', desc: isZh ? '-700 kcal，快速减脂' : '-700 kcal, fast' },
+  };
+
+  const refeedLabels: Record<RefeedFrequency, { label: string; desc: string }> = {
+    weekly: { label: isZh ? '每周1次' : 'Weekly', desc: isZh ? '适合体脂较低者' : 'For lower body fat' },
+    biweekly: { label: isZh ? '每2周1次' : 'Biweekly', desc: isZh ? '适合体脂较高者' : 'For higher body fat' },
+    none: { label: isZh ? '不需要' : 'None', desc: isZh ? '短期减脂可不设' : 'For short-term diets' },
+  };
+
+  // Activity level labels with translations
+  const getActivityLabel = (level: ActivityLevel) => {
+    const labels: Record<ActivityLevel, { label: string; description: string }> = {
+      sedentary: { label: isZh ? '久坐' : 'Sedentary', description: isZh ? '几乎不运动' : 'Little or no exercise' },
+      light: { label: isZh ? '轻度活动' : 'Light', description: isZh ? '每周1-3天运动' : '1-3 days/week' },
+      moderate: { label: isZh ? '中度活动' : 'Moderate', description: isZh ? '每周3-5天运动' : '3-5 days/week' },
+      active: { label: isZh ? '活跃' : 'Active', description: isZh ? '每周6-7天运动' : '6-7 days/week' },
+      very_active: { label: isZh ? '非常活跃' : 'Very Active', description: isZh ? '每天高强度运动' : 'Intense daily exercise' },
+    };
+    return labels[level];
+  };
 
   // 从 URL 参数读取预填数据
   useEffect(() => {
@@ -88,17 +104,17 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🍚</span>
-          高碳减脂计算
+          {dict.highCarbDietCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 基础信息 */}
           <div className="space-y-4">
-            <h3 className="font-medium text-sm text-muted-foreground">基础信息</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '基础信息' : 'Basic Info'}</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="weight">体重</Label>
+                <Label htmlFor="weight">{t.weight}</Label>
                 <div className="relative">
                   <Input
                     id="weight"
@@ -114,7 +130,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                 {errors.weight && <p className="text-xs text-destructive">{errors.weight}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="height">身高</Label>
+                <Label htmlFor="height">{isZh ? '身高' : 'Height'}</Label>
                 <div className="relative">
                   <Input
                     id="height"
@@ -132,7 +148,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="age">年龄</Label>
+                <Label htmlFor="age">{isZh ? '年龄' : 'Age'}</Label>
                 <Input
                   id="age"
                   type="number"
@@ -144,7 +160,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                 {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
               </div>
               <div className="space-y-2">
-                <Label>性别</Label>
+                <Label>{isZh ? '性别' : 'Gender'}</Label>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -153,7 +169,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                       gender === 'male' ? 'border-primary bg-primary/5' : 'border-muted hover:border-primary/50'
                     }`}
                   >
-                    男
+                    {isZh ? '男' : 'M'}
                   </button>
                   <button
                     type="button"
@@ -162,7 +178,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                       gender === 'female' ? 'border-primary bg-primary/5' : 'border-muted hover:border-primary/50'
                     }`}
                   >
-                    女
+                    {isZh ? '女' : 'F'}
                   </button>
                 </div>
               </div>
@@ -172,7 +188,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
 
           {/* 体脂率（可选） */}
           <div className="space-y-2">
-            <Label htmlFor="bodyFat">体脂率（可选，更精准）</Label>
+            <Label htmlFor="bodyFat">{t.bodyFat} {isZh ? '（可选，更精准）' : '(optional, more accurate)'}</Label>
             <div className="relative">
               <Input
                 id="bodyFat"
@@ -187,17 +203,17 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
             </div>
             {errors.bodyFat && <p className="text-xs text-destructive">{errors.bodyFat}</p>}
             <Link
-              href="/tools/skinfold-calculator"
+              href={`/${locale}/tools/skinfold-calculator`}
               className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
             >
               <Ruler className="w-3 h-3" />
-              不知道体脂率？用体脂夹测量
+              {isZh ? '不知道体脂率？用体脂夹测量' : "Don't know your body fat? Measure with calipers"}
             </Link>
           </div>
 
           {/* 活动水平 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">活动水平</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{t.activityLevel}</h3>
             <div className="space-y-2">
               {activityLevels.map((level) => (
                 <button
@@ -210,8 +226,8 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                       : 'border-muted hover:border-primary/50'
                   }`}
                 >
-                  <div className="font-medium text-sm">{activityLevelLabels[level].label}</div>
-                  <div className="text-xs text-muted-foreground">{activityLevelLabels[level].description}</div>
+                  <div className="font-medium text-sm">{getActivityLabel(level).label}</div>
+                  <div className="text-xs text-muted-foreground">{getActivityLabel(level).description}</div>
                 </button>
               ))}
             </div>
@@ -219,7 +235,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
 
           {/* 减脂强度 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">减脂强度</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '减脂强度' : 'Deficit Level'}</h3>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(deficitLabels) as DeficitLevel[]).map((level) => (
                 <button
@@ -241,7 +257,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
 
           {/* 每周训练天数 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">每周训练天数</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{t.trainingDays}</h3>
             <div className="grid grid-cols-4 gap-2">
               {[3, 4, 5, 6].map((days) => (
                 <button
@@ -255,7 +271,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
                   }`}
                 >
                   <div className="font-bold text-lg">{days}</div>
-                  <div className="text-xs text-muted-foreground">天</div>
+                  <div className="text-xs text-muted-foreground">{isZh ? '天' : 'days'}</div>
                 </button>
               ))}
             </div>
@@ -263,7 +279,7 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
 
           {/* 再喂日频率 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">再喂日频率</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{isZh ? '再喂日频率' : 'Refeed Frequency'}</h3>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(refeedLabels) as RefeedFrequency[]).map((freq) => (
                 <button
@@ -282,12 +298,12 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
-              💡 再喂日用于恢复瘦素和甲状腺激素，打破减脂平台期
+              💡 {isZh ? '再喂日用于恢复瘦素和甲状腺激素，打破减脂平台期' : 'Refeed days help restore leptin and thyroid hormones'}
             </p>
           </div>
 
           <Button type="submit" className="w-full min-h-[48px] text-base">
-            🍚 计算高碳减脂方案
+            🍚 {t.calculate}
           </Button>
         </form>
       </CardContent>
@@ -295,21 +311,21 @@ function HighCarbDietFormInner({ onCalculate }: HighCarbDietFormProps) {
   );
 }
 
-export function HighCarbDietForm({ onCalculate }: HighCarbDietFormProps) {
+export function HighCarbDietForm({ onCalculate, locale, dict }: HighCarbDietFormProps) {
   return (
-    <Suspense fallback={<FormSkeleton />}>
-      <HighCarbDietFormInner onCalculate={onCalculate} />
+    <Suspense fallback={<FormSkeleton dict={dict} />}>
+      <HighCarbDietFormInner onCalculate={onCalculate} locale={locale} dict={dict} />
     </Suspense>
   );
 }
 
-function FormSkeleton() {
+function FormSkeleton({ dict }: { dict: Dictionary }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🍚</span>
-          高碳减脂计算
+          {dict.highCarbDietCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>

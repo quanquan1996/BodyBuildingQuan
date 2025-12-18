@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ToolLinkCard, toolLinks } from '@/components/common/tool-link-card';
 import { type CarbCyclingOutput, type DayPlan } from '@/lib/utils/carb-cycling';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface CarbCyclingResultProps {
   result: CarbCyclingOutput;
@@ -11,6 +12,8 @@ interface CarbCyclingResultProps {
     bodyFat: number;
     activityLevel: string;
   };
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const dayTypeColors = {
@@ -34,7 +37,7 @@ const dayTypeColors = {
   },
 };
 
-function DayPlanCard({ plan }: { plan: DayPlan }) {
+function DayPlanCard({ plan, isZh }: { plan: DayPlan; isZh: boolean }) {
   const colors = dayTypeColors[plan.dayType];
 
   return (
@@ -45,22 +48,22 @@ function DayPlanCard({ plan }: { plan: DayPlan }) {
       </div>
       
       <div className={`text-2xl font-bold ${colors.text} mb-2`}>
-        {plan.calories} <span className="text-sm font-normal">千卡</span>
+        {plan.calories} <span className="text-sm font-normal">{isZh ? '千卡' : 'kcal'}</span>
       </div>
       
       <div className="grid grid-cols-3 gap-2 text-center text-sm">
         <div className="p-2 bg-white/50 rounded">
-          <div className="text-muted-foreground text-xs">蛋白质</div>
+          <div className="text-muted-foreground text-xs">{isZh ? '蛋白质' : 'Protein'}</div>
           <div className="font-bold">{plan.protein}g</div>
           <div className="text-xs text-muted-foreground">{plan.proteinPercent}%</div>
         </div>
         <div className="p-2 bg-white/50 rounded">
-          <div className="text-muted-foreground text-xs">碳水</div>
+          <div className="text-muted-foreground text-xs">{isZh ? '碳水' : 'Carbs'}</div>
           <div className="font-bold">{plan.carbs}g</div>
           <div className="text-xs text-muted-foreground">{plan.carbsPercent}%</div>
         </div>
         <div className="p-2 bg-white/50 rounded">
-          <div className="text-muted-foreground text-xs">脂肪</div>
+          <div className="text-muted-foreground text-xs">{isZh ? '脂肪' : 'Fat'}</div>
           <div className="font-bold">{plan.fat}g</div>
           <div className="text-xs text-muted-foreground">{plan.fatPercent}%</div>
         </div>
@@ -74,37 +77,41 @@ function DayPlanCard({ plan }: { plan: DayPlan }) {
 }
 
 
-export function CarbCyclingResult({ result, inputData }: CarbCyclingResultProps) {
+export function CarbCyclingResult({ result, inputData, locale, dict }: CarbCyclingResultProps) {
   const { bmr, tdee, leanMass, mode, dayPlans, weeklyAverage, weekSchedule } = result;
+  const t = dict.carbCyclingCalculator;
+  const isZh = locale === 'zh';
+  const calUnit = isZh ? '千卡/天' : 'kcal/day';
+  const calLabel = isZh ? '千卡' : 'kcal';
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">📊</span>
-          碳循环方案
+          {t.result.title}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* 使用的模式 */}
         <div className="text-xs text-muted-foreground text-center p-2 bg-muted/30 rounded">
-          {mode === 'simple' ? '简易版（高碳/低碳）' : '进阶版（高碳/中碳/低碳）'} · Katch-McArdle 公式
+          {mode === 'simple' ? (isZh ? '简易版（高碳/低碳）' : 'Simple (High/Low Carb)') : (isZh ? '进阶版（高碳/中碳/低碳）' : 'Advanced (High/Med/Low Carb)')} · Katch-McArdle
         </div>
 
         {/* 基础数据 */}
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center p-3 bg-muted/50 rounded-lg">
-            <div className="text-xs text-muted-foreground mb-1">基础代谢 (BMR)</div>
+            <div className="text-xs text-muted-foreground mb-1">{isZh ? '基础代谢 (BMR)' : 'BMR'}</div>
             <div className="text-xl font-bold text-primary">{bmr}</div>
-            <div className="text-xs text-muted-foreground">千卡/天</div>
+            <div className="text-xs text-muted-foreground">{calUnit}</div>
           </div>
           <div className="text-center p-3 bg-muted/50 rounded-lg">
-            <div className="text-xs text-muted-foreground mb-1">每日消耗 (TDEE)</div>
+            <div className="text-xs text-muted-foreground mb-1">{isZh ? '每日消耗 (TDEE)' : 'TDEE'}</div>
             <div className="text-xl font-bold text-orange-500">{tdee}</div>
-            <div className="text-xs text-muted-foreground">千卡/天</div>
+            <div className="text-xs text-muted-foreground">{calUnit}</div>
           </div>
           <div className="text-center p-3 bg-muted/50 rounded-lg">
-            <div className="text-xs text-muted-foreground mb-1">瘦体重</div>
+            <div className="text-xs text-muted-foreground mb-1">{isZh ? '瘦体重' : 'Lean Mass'}</div>
             <div className="text-xl font-bold text-green-500">{leanMass}</div>
             <div className="text-xs text-muted-foreground">kg</div>
           </div>
@@ -112,17 +119,17 @@ export function CarbCyclingResult({ result, inputData }: CarbCyclingResultProps)
 
         {/* 各日期类型方案 */}
         <div className="space-y-3">
-          <h4 className="font-medium text-sm">每日营养方案</h4>
+          <h4 className="font-medium text-sm">{isZh ? '每日营养方案' : 'Daily Nutrition Plan'}</h4>
           <div className={`grid gap-3 ${mode === 'advanced' ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
             {dayPlans.map((plan) => (
-              <DayPlanCard key={plan.dayType} plan={plan} />
+              <DayPlanCard key={plan.dayType} plan={plan} isZh={isZh} />
             ))}
           </div>
         </div>
 
         {/* 周计划 */}
         <div className="space-y-3">
-          <h4 className="font-medium text-sm">建议周计划</h4>
+          <h4 className="font-medium text-sm">{isZh ? '建议周计划' : 'Weekly Schedule'}</h4>
           <div className="grid grid-cols-7 gap-1 text-center text-xs">
             {weekSchedule.days.map(({ day, type }) => {
               const colors = dayTypeColors[type];
@@ -135,31 +142,34 @@ export function CarbCyclingResult({ result, inputData }: CarbCyclingResultProps)
             })}
           </div>
           <div className="flex justify-center gap-4 text-xs text-muted-foreground">
-            <span>🟢 高碳 ×{weekSchedule.highDays}</span>
-            {weekSchedule.mediumDays > 0 && <span>🔵 中碳 ×{weekSchedule.mediumDays}</span>}
-            <span>🟠 低碳 ×{weekSchedule.lowDays}</span>
+            <span>🟢 {isZh ? '高碳' : 'High'} ×{weekSchedule.highDays}</span>
+            {weekSchedule.mediumDays > 0 && <span>🔵 {isZh ? '中碳' : 'Med'} ×{weekSchedule.mediumDays}</span>}
+            <span>🟠 {isZh ? '低碳' : 'Low'} ×{weekSchedule.lowDays}</span>
           </div>
         </div>
 
         {/* 周平均热量 */}
         <div className="p-4 bg-purple-500/10 rounded-lg text-center">
-          <div className="text-sm text-muted-foreground mb-1">周平均每日热量</div>
-          <div className="text-2xl font-bold text-purple-600">{weeklyAverage} 千卡</div>
+          <div className="text-sm text-muted-foreground mb-1">{isZh ? '周平均每日热量' : 'Weekly Avg Daily Calories'}</div>
+          <div className="text-2xl font-bold text-purple-600">{weeklyAverage} {calLabel}</div>
           <div className="text-xs text-muted-foreground mt-1">
-            相比 TDEE {weeklyAverage < tdee ? '减少' : '增加'} {Math.abs(weeklyAverage - tdee)} 千卡/天
+            {isZh 
+              ? `相比 TDEE ${weeklyAverage < tdee ? '减少' : '增加'} ${Math.abs(weeklyAverage - tdee)} 千卡/天`
+              : `${weeklyAverage < tdee ? '-' : '+'}${Math.abs(weeklyAverage - tdee)} kcal/day vs TDEE`
+            }
           </div>
         </div>
 
         {/* 工具联动 */}
         {inputData && (
           <div className="space-y-3 pt-4 border-t">
-            <h4 className="font-medium text-sm text-muted-foreground">🔗 其他减脂方案</h4>
+            <h4 className="font-medium text-sm text-muted-foreground">{dict.common.toolLinks.otherFatLossPlans}</h4>
             <div className="space-y-2">
               <ToolLinkCard
-                {...toolLinks.carbCyclingToFatLossDiet(inputData.bodyFat, inputData.weight)}
+                {...toolLinks.carbCyclingToFatLossDiet(dict, inputData.bodyFat, inputData.weight)}
               />
               <ToolLinkCard
-                {...toolLinks.toMetabolicDamageTest(inputData.weight, undefined, undefined, inputData.bodyFat)}
+                {...toolLinks.toMetabolicDamageTest(dict, inputData.weight, undefined, undefined, inputData.bodyFat)}
               />
             </div>
           </div>

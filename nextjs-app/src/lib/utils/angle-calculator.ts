@@ -27,53 +27,54 @@ export function calculateAngle(a: PoseLandmark, b: PoseLandmark, c: PoseLandmark
   return angleRad * (180 / Math.PI);
 }
 
-// 健美造型关键角度定义
+// 健美造型关键角度定义（不含翻译文本）
 const BODYBUILDING_ANGLES = [
   {
-    name: '左手肘角度',
+    nameKey: 'leftElbow',
+    descKey: 'biceps',
     jointIndex: LandmarkIndex.LEFT_ELBOW,
     points: [LandmarkIndex.LEFT_SHOULDER, LandmarkIndex.LEFT_ELBOW, LandmarkIndex.LEFT_WRIST],
-    description: '二头肌展示角度',
   },
   {
-    name: '右手肘角度',
+    nameKey: 'rightElbow',
+    descKey: 'biceps',
     jointIndex: LandmarkIndex.RIGHT_ELBOW,
     points: [LandmarkIndex.RIGHT_SHOULDER, LandmarkIndex.RIGHT_ELBOW, LandmarkIndex.RIGHT_WRIST],
-    description: '二头肌展示角度',
   },
   {
-    name: '左肩角度',
+    nameKey: 'leftShoulder',
+    descKey: 'armRaise',
     jointIndex: LandmarkIndex.LEFT_SHOULDER,
     points: [LandmarkIndex.LEFT_HIP, LandmarkIndex.LEFT_SHOULDER, LandmarkIndex.LEFT_ELBOW],
-    description: '手臂抬起角度',
   },
   {
-    name: '右肩角度',
+    nameKey: 'rightShoulder',
+    descKey: 'armRaise',
     jointIndex: LandmarkIndex.RIGHT_SHOULDER,
     points: [LandmarkIndex.RIGHT_HIP, LandmarkIndex.RIGHT_SHOULDER, LandmarkIndex.RIGHT_ELBOW],
-    description: '手臂抬起角度',
   },
-
   {
-    name: '左膝角度',
+    nameKey: 'leftKnee',
+    descKey: 'legBend',
     jointIndex: LandmarkIndex.LEFT_KNEE,
     points: [LandmarkIndex.LEFT_HIP, LandmarkIndex.LEFT_KNEE, LandmarkIndex.LEFT_ANKLE],
-    description: '腿部弯曲角度',
   },
   {
-    name: '右膝角度',
+    nameKey: 'rightKnee',
+    descKey: 'legBend',
     jointIndex: LandmarkIndex.RIGHT_KNEE,
     points: [LandmarkIndex.RIGHT_HIP, LandmarkIndex.RIGHT_KNEE, LandmarkIndex.RIGHT_ANKLE],
-    description: '腿部弯曲角度',
   },
 ];
 
 // 计算所有健美关键角度
 export function calculateBodybuildingAngles(
   refPose: PoseResult,
-  userPose: PoseResult
+  userPose: PoseResult,
+  angleNames?: Record<string, string>,
+  angleDescriptions?: Record<string, string>
 ): AngleResult[] {
-  return BODYBUILDING_ANGLES.map(({ name, jointIndex, points, description }) => {
+  return BODYBUILDING_ANGLES.map(({ nameKey, descKey, jointIndex, points }) => {
     const [a, b, c] = points;
     const refAngle = calculateAngle(
       refPose.landmarks[a],
@@ -87,12 +88,12 @@ export function calculateBodybuildingAngles(
     );
 
     return {
-      name,
+      name: angleNames?.[nameKey] || nameKey,
       jointIndex,
       referenceAngle: refAngle,
       userAngle: userAngle,
       difference: userAngle - refAngle,
-      description,
+      description: angleDescriptions?.[descKey] || descKey,
     };
   });
 }
@@ -115,19 +116,24 @@ export function calculateTotalScore(angles: AngleResult[]): number {
 }
 
 // 获取分数评级
-export function getScoreRating(score: number): { text: string; color: string } {
-  if (score >= 90) return { text: '完美', color: 'text-green-500' };
-  if (score >= 80) return { text: '优秀', color: 'text-green-400' };
-  if (score >= 70) return { text: '良好', color: 'text-yellow-500' };
-  if (score >= 60) return { text: '及格', color: 'text-orange-500' };
-  return { text: '需改进', color: 'text-red-500' };
+export function getScoreRating(score: number, labels?: { excellent: string; good: string; fair: string; needsWork: string }): { text: string; color: string } {
+  const defaultLabels = { excellent: 'Excellent', good: 'Good', fair: 'Fair', needsWork: 'Needs Work' };
+  const l = labels || defaultLabels;
+  
+  if (score >= 90) return { text: l.excellent, color: 'text-green-500' };
+  if (score >= 75) return { text: l.good, color: 'text-green-400' };
+  if (score >= 60) return { text: l.fair, color: 'text-yellow-500' };
+  return { text: l.needsWork, color: 'text-red-500' };
 }
 
 // 获取单项评级
-export function getAngleRating(diff: number): { text: string; color: string } {
+export function getAngleRating(diff: number, labels?: { perfect: string; good: string; acceptable: string; needsAdjustment: string }): { text: string; color: string } {
+  const defaultLabels = { perfect: 'Perfect', good: 'Excellent', acceptable: 'Good', needsAdjustment: 'Needs Adjustment' };
+  const l = labels || defaultLabels;
+  
   const absDiff = Math.abs(diff);
-  if (absDiff <= 5) return { text: '优秀', color: 'bg-green-100 text-green-700' };
-  if (absDiff <= 10) return { text: '良好', color: 'bg-green-50 text-green-600' };
-  if (absDiff <= 20) return { text: '一般', color: 'bg-yellow-100 text-yellow-700' };
-  return { text: '需改进', color: 'bg-red-100 text-red-700' };
+  if (absDiff <= 5) return { text: l.perfect, color: 'bg-green-100 text-green-700' };
+  if (absDiff <= 10) return { text: l.good, color: 'bg-green-50 text-green-600' };
+  if (absDiff <= 20) return { text: l.acceptable, color: 'bg-yellow-100 text-yellow-700' };
+  return { text: l.needsAdjustment, color: 'bg-red-100 text-red-700' };
 }

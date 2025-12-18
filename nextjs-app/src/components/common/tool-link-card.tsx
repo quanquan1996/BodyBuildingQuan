@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight, Calculator, Ruler, Flame, Heart, Camera, Ratio, HelpCircle, Salad, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { Dictionary } from '@/lib/i18n';
 
 export interface ToolLinkProps {
   targetTool: string;
@@ -87,146 +88,146 @@ export function ToolLinkCard({
   );
 }
 
-// 预定义的工具联动配置
+// 预定义的工具联动配置 - 使用 dict 获取翻译文本
 export const toolLinks = {
   // 体脂夹 → 其他工具
-  skinfoldToFfmi: (bodyFat: number, weight: number, height: number): ToolLinkProps => ({
+  skinfoldToFfmi: (dict: Dictionary, bodyFat: number, weight: number, height: number): ToolLinkProps => ({
     targetTool: '/tools/ffmi-calculator',
-    title: '计算 FFMI 肌肉指数',
-    description: '用测得的体脂率评估肌肉发达程度',
+    title: dict.common.toolLinks.skinfoldToFfmi.title,
+    description: dict.common.toolLinks.skinfoldToFfmi.description,
     icon: 'calculator',
     params: { bodyFat, weight, height },
     type: 'next-step',
   }),
-  skinfoldToBmr: (bodyFat: number, weight: number): ToolLinkProps => ({
+  skinfoldToBmr: (dict: Dictionary, bodyFat: number, weight: number): ToolLinkProps => ({
     targetTool: '/tools/bmr-calculator',
-    title: '计算精准基础代谢',
-    description: '基于体脂率的 Katch-McArdle 公式更准确',
+    title: dict.common.toolLinks.skinfoldToBmr.title,
+    description: dict.common.toolLinks.skinfoldToBmr.description,
     icon: 'flame',
     params: { bodyFat, weight, mode: 'advanced' },
     type: 'next-step',
   }),
-  skinfoldToCarbCycling: (bodyFat: number, weight: number): ToolLinkProps => ({
+  skinfoldToCarbCycling: (dict: Dictionary, bodyFat: number, weight: number): ToolLinkProps => ({
     targetTool: '/tools/carb-cycling-calculator',
-    title: '制定碳循环饮食计划',
-    description: '根据体脂率定制高低碳日方案',
+    title: dict.common.toolLinks.skinfoldToCarbCycling.title,
+    description: dict.common.toolLinks.skinfoldToCarbCycling.description,
     icon: 'flame',
     params: { bodyFat, weight },
     type: 'next-step',
   }),
 
   // BMR → 其他工具
-  bmrToCarbCycling: (bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
+  bmrToCarbCycling: (dict: Dictionary, bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
     targetTool: '/tools/carb-cycling-calculator',
-    title: '制定碳循环饮食计划',
-    description: '基于代谢数据定制饮食方案',
+    title: dict.common.toolLinks.bmrToCarbCycling.title,
+    description: dict.common.toolLinks.bmrToCarbCycling.description,
     icon: 'flame',
     params: { bodyFat, weight, activityLevel },
     type: 'next-step',
   }),
-  bmrToHeartRate: (age: number): ToolLinkProps => ({
+  bmrToHeartRate: (dict: Dictionary, age: number): ToolLinkProps => ({
     targetTool: '/tools/heart-rate-calculator',
-    title: '计算训练心率区间',
-    description: '了解不同强度的目标心率',
+    title: dict.common.toolLinks.bmrToHeartRate.title,
+    description: dict.common.toolLinks.bmrToHeartRate.description,
     icon: 'heart',
     params: { age },
     type: 'next-step',
   }),
 
   // 需要体脂的工具 → 体脂夹
-  needBodyFat: (): ToolLinkProps => ({
+  needBodyFat: (dict: Dictionary): ToolLinkProps => ({
     targetTool: '/tools/skinfold-calculator',
-    title: '不知道体脂率？',
-    description: '用体脂夹测量你的体脂率',
+    title: dict.common.toolLinks.needBodyFat.title,
+    description: dict.common.toolLinks.needBodyFat.description,
     icon: 'ruler',
     type: 'prerequisite',
   }),
 
   // 古典比例 ↔ 健美造型
-  grecianToPose: (): ToolLinkProps => ({
+  grecianToPose: (dict: Dictionary): ToolLinkProps => ({
     targetTool: '/tools/pose-comparator',
-    title: '评估健美造型',
-    description: '上传照片评估你的造型表现',
+    title: dict.common.toolLinks.grecianToPose.title,
+    description: dict.common.toolLinks.grecianToPose.description,
     icon: 'camera',
     type: 'next-step',
   }),
-  poseToGrecian: (): ToolLinkProps => ({
+  poseToGrecian: (dict: Dictionary): ToolLinkProps => ({
     targetTool: '/tools/grecian-calculator',
-    title: '计算理想围度',
-    description: '了解古典黄金比例的理想身材',
+    title: dict.common.toolLinks.poseToGrecian.title,
+    description: dict.common.toolLinks.poseToGrecian.description,
     icon: 'ratio',
     type: 'next-step',
   }),
 
   // 体脂夹 → 减脂饮食
-  skinfoldToFatLossDiet: (bodyFat: number, weight: number): ToolLinkProps => ({
+  skinfoldToFatLossDiet: (dict: Dictionary, bodyFat: number, weight: number): ToolLinkProps => ({
     targetTool: '/tools/fat-loss-diet-calculator',
-    title: '制定减脂饮食计划',
-    description: '碳水递减策略，科学减脂不反弹',
+    title: dict.common.toolLinks.skinfoldToFatLossDiet.title,
+    description: dict.common.toolLinks.skinfoldToFatLossDiet.description,
     icon: 'salad',
     params: { bodyFat, weight, mode: 'advanced' },
     type: 'next-step',
   }),
 
   // BMR → 减脂饮食
-  bmrToFatLossDiet: (weight: number): ToolLinkProps => ({
+  bmrToFatLossDiet: (dict: Dictionary, weight: number): ToolLinkProps => ({
     targetTool: '/tools/fat-loss-diet-calculator',
-    title: '制定减脂饮食计划',
-    description: '碳水递减策略，适合普通人',
+    title: dict.common.toolLinks.bmrToFatLossDiet.title,
+    description: dict.common.toolLinks.bmrToFatLossDiet.description,
     icon: 'salad',
     params: { weight },
     type: 'next-step',
   }),
 
   // 碳循环 ↔ 减脂饮食 双向联动
-  carbCyclingToFatLossDiet: (bodyFat: number, weight: number): ToolLinkProps => ({
+  carbCyclingToFatLossDiet: (dict: Dictionary, bodyFat: number, weight: number): ToolLinkProps => ({
     targetTool: '/tools/fat-loss-diet-calculator',
-    title: '尝试碳水递减方案',
-    description: '更简单的线性减脂策略，适合新手',
+    title: dict.common.toolLinks.carbCyclingToFatLossDiet.title,
+    description: dict.common.toolLinks.carbCyclingToFatLossDiet.description,
     icon: 'salad',
     params: { bodyFat, weight, mode: 'advanced' },
     type: 'next-step',
   }),
-  fatLossDietToCarbCycling: (bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
+  fatLossDietToCarbCycling: (dict: Dictionary, bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
     targetTool: '/tools/carb-cycling-calculator',
-    title: '尝试碳循环方案',
-    description: '高低碳日交替，适合有训练基础者',
+    title: dict.common.toolLinks.fatLossDietToCarbCycling.title,
+    description: dict.common.toolLinks.fatLossDietToCarbCycling.description,
     icon: 'flame',
     params: { bodyFat, weight, activityLevel },
     type: 'next-step',
   }),
 
   // 高碳减脂相关联动
-  skinfoldToHighCarbDiet: (bodyFat: number, weight: number): ToolLinkProps => ({
+  skinfoldToHighCarbDiet: (dict: Dictionary, bodyFat: number, weight: number): ToolLinkProps => ({
     targetTool: '/tools/high-carb-diet-calculator',
-    title: '制定高碳减脂计划',
-    description: '高碳水低脂肪策略，适合训练量大者',
+    title: dict.common.toolLinks.skinfoldToHighCarbDiet.title,
+    description: dict.common.toolLinks.skinfoldToHighCarbDiet.description,
     icon: 'flame',
     params: { bodyFat, weight },
     type: 'next-step',
   }),
-  bmrToHighCarbDiet: (weight: number, bodyFat?: number): ToolLinkProps => ({
+  bmrToHighCarbDiet: (dict: Dictionary, weight: number, bodyFat?: number): ToolLinkProps => ({
     targetTool: '/tools/high-carb-diet-calculator',
-    title: '制定高碳减脂计划',
-    description: '高碳水低脂肪，保持训练表现',
+    title: dict.common.toolLinks.bmrToHighCarbDiet.title,
+    description: dict.common.toolLinks.bmrToHighCarbDiet.description,
     icon: 'flame',
     params: { weight, ...(bodyFat ? { bodyFat } : {}) },
     type: 'next-step',
   }),
-  highCarbDietToCarbCycling: (bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
+  highCarbDietToCarbCycling: (dict: Dictionary, bodyFat: number, weight: number, activityLevel: string): ToolLinkProps => ({
     targetTool: '/tools/carb-cycling-calculator',
-    title: '尝试碳循环方案',
-    description: '高低碳日交替，更灵活的减脂策略',
+    title: dict.common.toolLinks.highCarbDietToCarbCycling.title,
+    description: dict.common.toolLinks.highCarbDietToCarbCycling.description,
     icon: 'flame',
     params: { bodyFat, weight, activityLevel },
     type: 'next-step',
   }),
 
   // 代谢受损检测相关联动
-  toMetabolicDamageTest: (weight: number, height?: number, age?: number, bodyFat?: number): ToolLinkProps => ({
+  toMetabolicDamageTest: (dict: Dictionary, weight: number, height?: number, age?: number, bodyFat?: number): ToolLinkProps => ({
     targetTool: '/tools/metabolic-damage-test',
-    title: '检测代谢受损程度',
-    description: '评估是否存在代谢适应，获取恢复方案',
+    title: dict.common.toolLinks.toMetabolicDamageTest.title,
+    description: dict.common.toolLinks.toMetabolicDamageTest.description,
     icon: 'activity',
     params: { 
       weight, 
@@ -236,10 +237,10 @@ export const toolLinks = {
     },
     type: 'next-step',
   }),
-  metabolicDamageToReverseDiet: (weight: number, bodyFat?: number): ToolLinkProps => ({
+  metabolicDamageToReverseDiet: (dict: Dictionary, weight: number, bodyFat?: number): ToolLinkProps => ({
     targetTool: '/tools/high-carb-diet-calculator',
-    title: '制定恢复饮食计划',
-    description: '高碳水策略帮助恢复代谢',
+    title: dict.common.toolLinks.metabolicDamageToReverseDiet.title,
+    description: dict.common.toolLinks.metabolicDamageToReverseDiet.description,
     icon: 'flame',
     params: { weight, ...(bodyFat ? { bodyFat } : {}) },
     type: 'next-step',

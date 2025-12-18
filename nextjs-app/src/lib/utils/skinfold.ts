@@ -33,7 +33,6 @@ export interface SkinfoldOutput {
   fatMass: number;      // 脂肪重量 (kg)
   leanMass: number;     // 瘦体重 (kg)
   category: BodyFatCategory;
-  interpretation: string;
 }
 
 export type BodyFatCategory = 
@@ -44,31 +43,31 @@ export type BodyFatCategory =
   | 'obese';       // 肥胖
 
 // 男性体脂分类标准
-const maleCategories: { max: number; category: BodyFatCategory; label: string }[] = [
-  { max: 6, category: 'essential', label: '必需脂肪（可能过低）' },
-  { max: 13, category: 'athlete', label: '运动员水平' },
-  { max: 17, category: 'fitness', label: '健身水平' },
-  { max: 24, category: 'average', label: '平均水平' },
-  { max: 100, category: 'obese', label: '超重/肥胖' },
+const maleCategories: { max: number; category: BodyFatCategory }[] = [
+  { max: 6, category: 'essential' },
+  { max: 13, category: 'athlete' },
+  { max: 17, category: 'fitness' },
+  { max: 24, category: 'average' },
+  { max: 100, category: 'obese' },
 ];
 
 // 女性体脂分类标准
-const femaleCategories: { max: number; category: BodyFatCategory; label: string }[] = [
-  { max: 14, category: 'essential', label: '必需脂肪（可能过低）' },
-  { max: 20, category: 'athlete', label: '运动员水平' },
-  { max: 24, category: 'fitness', label: '健身水平' },
-  { max: 31, category: 'average', label: '平均水平' },
-  { max: 100, category: 'obese', label: '超重/肥胖' },
+const femaleCategories: { max: number; category: BodyFatCategory }[] = [
+  { max: 14, category: 'essential' },
+  { max: 20, category: 'athlete' },
+  { max: 24, category: 'fitness' },
+  { max: 31, category: 'average' },
+  { max: 100, category: 'obese' },
 ];
 
-function getBodyFatCategory(bodyFatPercent: number, gender: Gender): { category: BodyFatCategory; label: string } {
+function getBodyFatCategory(bodyFatPercent: number, gender: Gender): BodyFatCategory {
   const categories = gender === 'male' ? maleCategories : femaleCategories;
   for (const cat of categories) {
     if (bodyFatPercent <= cat.max) {
-      return { category: cat.category, label: cat.label };
+      return cat.category;
     }
   }
-  return { category: 'obese', label: '超重/肥胖' };
+  return 'obese';
 }
 
 // Jackson-Pollock 3点公式计算体密度
@@ -112,7 +111,7 @@ export function calculateSimpleSkinfold(input: SimpleSkinfoldInput, weightKg: nu
   const fatMass = weightKg * (clampedBF / 100);
   const leanMass = weightKg - fatMass;
   
-  const { category, label } = getBodyFatCategory(clampedBF, input.gender);
+  const category = getBodyFatCategory(clampedBF, input.gender);
   
   return {
     bodyFatPercent: Math.round(clampedBF * 10) / 10,
@@ -120,7 +119,6 @@ export function calculateSimpleSkinfold(input: SimpleSkinfoldInput, weightKg: nu
     fatMass: Math.round(fatMass * 10) / 10,
     leanMass: Math.round(leanMass * 10) / 10,
     category,
-    interpretation: label,
   };
 }
 
@@ -133,7 +131,7 @@ export function calculatePreciseSkinfold(input: PreciseSkinfoldInput, weightKg: 
   const fatMass = weightKg * (clampedBF / 100);
   const leanMass = weightKg - fatMass;
   
-  const { category, label } = getBodyFatCategory(clampedBF, input.gender);
+  const category = getBodyFatCategory(clampedBF, input.gender);
   
   return {
     bodyFatPercent: Math.round(clampedBF * 10) / 10,
@@ -141,7 +139,6 @@ export function calculatePreciseSkinfold(input: PreciseSkinfoldInput, weightKg: 
     fatMass: Math.round(fatMass * 10) / 10,
     leanMass: Math.round(leanMass * 10) / 10,
     category,
-    interpretation: label,
   };
 }
 
@@ -197,28 +194,39 @@ export interface ValidationResult {
   errors: Record<string, string>;
 }
 
+export interface ValidationMessages {
+  ageRange: string;
+  measurementRange: string;
+}
+
 export function validateSkinfoldInput(
   values: Record<string, number | undefined>,
-  requiredFields: string[]
+  requiredFields: string[],
+  messages?: ValidationMessages
 ): ValidationResult {
+  const defaultMessages: ValidationMessages = {
+    ageRange: 'Age range: 18-80 years',
+    measurementRange: 'Skinfold range: 1-80 mm',
+  };
+  const msg = messages || defaultMessages;
   const errors: Record<string, string> = {};
   
   for (const field of requiredFields) {
     const value = values[field];
     if (value === undefined || isNaN(value)) {
-      errors[field] = '请输入有效数值';
+      errors[field] = 'Invalid value';
     } else if (field === 'age') {
       if (value < 18 || value > 80) {
-        errors[field] = '年龄范围: 18-80岁';
+        errors[field] = msg.ageRange;
       }
     } else if (field === 'weight') {
       if (value < 30 || value > 300) {
-        errors[field] = '体重范围: 30-300 kg';
+        errors[field] = 'Weight range: 30-300 kg';
       }
     } else {
       // 皮褶厚度验证
       if (value < 1 || value > 80) {
-        errors[field] = '皮褶厚度范围: 1-80 mm';
+        errors[field] = msg.measurementRange;
       }
     }
   }

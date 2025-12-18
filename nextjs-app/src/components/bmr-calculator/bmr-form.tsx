@@ -16,14 +16,17 @@ import {
   type ActivityLevel,
   type CalculationMode,
 } from '@/lib/utils/bmr';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface BMRFormProps {
   onCalculate: (data: BMRInput) => void;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const activityLevels: ActivityLevel[] = ['sedentary', 'light', 'moderate', 'active', 'very_active'];
 
-function BMRFormInner({ onCalculate }: BMRFormProps) {
+function BMRFormInner({ onCalculate, locale, dict }: BMRFormProps) {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<CalculationMode>('basic');
   const [height, setHeight] = useState('170');
@@ -33,6 +36,8 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [activityLevel, setActivityLevel] = useState<ActivityLevel>('moderate');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = dict.bmrCalculator.form;
+  const c = dict.common;
 
   // 从 URL 参数读取预填数据
   useEffect(() => {
@@ -83,19 +88,31 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
     }
   };
 
+  // Activity level labels from common translations
+  const getActivityLabel = (level: ActivityLevel) => {
+    const levelMap: Record<ActivityLevel, keyof typeof c.activityLevels> = {
+      sedentary: 'sedentary',
+      light: 'light',
+      moderate: 'moderate',
+      active: 'active',
+      very_active: 'veryActive',
+    };
+    return c.activityLevels[levelMap[level]];
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🔥</span>
-          基础代谢计算
+          {dict.bmrCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 模式切换 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">计算模式</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{c.calculationMode}</h3>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -106,8 +123,8 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                     : 'border-muted hover:border-primary/50'
                 }`}
               >
-                <div className="font-medium text-sm">基础计算</div>
-                <div className="text-xs text-muted-foreground">Mifflin-St Jeor 公式</div>
+                <div className="font-medium text-sm">{c.basicMode}</div>
+                <div className="text-xs text-muted-foreground">Mifflin-St Jeor</div>
               </button>
               <button
                 type="button"
@@ -118,8 +135,8 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                     : 'border-muted hover:border-primary/50'
                 }`}
               >
-                <div className="font-medium text-sm">进阶计算</div>
-                <div className="text-xs text-muted-foreground">Katch-McArdle 公式</div>
+                <div className="font-medium text-sm">{c.advancedMode}</div>
+                <div className="text-xs text-muted-foreground">Katch-McArdle</div>
               </button>
             </div>
           </div>
@@ -128,10 +145,10 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
           {mode === 'basic' && (
             <>
               <div className="space-y-4">
-                <h3 className="font-medium text-sm text-muted-foreground">基本信息</h3>
+                <h3 className="font-medium text-sm text-muted-foreground">{t.basicInfo}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="height">身高</Label>
+                    <Label htmlFor="height">{t.height}</Label>
                     <div className="relative">
                       <Input
                         id="height"
@@ -149,7 +166,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                     {errors.height && <p className="text-xs text-destructive">{errors.height}</p>}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="weight">体重</Label>
+                    <Label htmlFor="weight">{t.weight}</Label>
                     <div className="relative">
                       <Input
                         id="weight"
@@ -168,7 +185,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="age">年龄</Label>
+                  <Label htmlFor="age">{t.age}</Label>
                   <div className="relative">
                     <Input
                       id="age"
@@ -179,7 +196,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                       className="min-h-[44px] pr-12"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                      岁
+                      {c.ageUnit}
                     </span>
                   </div>
                   {errors.age && <p className="text-xs text-destructive">{errors.age}</p>}
@@ -188,7 +205,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
 
               {/* 性别选择 */}
               <div className="space-y-3">
-                <h3 className="font-medium text-sm text-muted-foreground">性别选择</h3>
+                <h3 className="font-medium text-sm text-muted-foreground">{t.gender}</h3>
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -200,7 +217,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                     }`}
                   >
                     <span className="text-3xl">👨</span>
-                    <span className="text-sm font-medium">男性</span>
+                    <span className="text-sm font-medium">{dict.common.male}</span>
                   </button>
                   <button
                     type="button"
@@ -212,7 +229,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                     }`}
                   >
                     <span className="text-3xl">👩</span>
-                    <span className="text-sm font-medium">女性</span>
+                    <span className="text-sm font-medium">{dict.common.female}</span>
                   </button>
                 </div>
               </div>
@@ -222,13 +239,13 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
           {/* 进阶模式输入 */}
           {mode === 'advanced' && (
             <div className="space-y-4">
-              <h3 className="font-medium text-sm text-muted-foreground">身体成分</h3>
+              <h3 className="font-medium text-sm text-muted-foreground">{c.bodyComposition}</h3>
               <div className="p-3 bg-blue-500/10 rounded-lg text-sm text-blue-600 mb-2">
-                💡 进阶模式使用体脂率计算瘦体重，对健身人群更准确
+                💡 {c.advancedModeHint}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="weight-adv">体重</Label>
+                  <Label htmlFor="weight-adv">{t.weight}</Label>
                   <div className="relative">
                     <Input
                       id="weight-adv"
@@ -246,7 +263,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                   {errors.weight && <p className="text-xs text-destructive">{errors.weight}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bodyFat">体脂率</Label>
+                  <Label htmlFor="bodyFat">{t.bodyFat}</Label>
                   <div className="relative">
                     <Input
                       id="bodyFat"
@@ -263,11 +280,11 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                   </div>
                   {errors.bodyFat && <p className="text-xs text-destructive">{errors.bodyFat}</p>}
                   <Link
-                    href="/tools/skinfold-calculator"
+                    href={`/${locale}/tools/skinfold-calculator`}
                     className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                   >
                     <Ruler className="w-3 h-3" />
-                    不知道体脂率？用体脂夹测量
+                    {c.bodyFatHint}
                   </Link>
                 </div>
               </div>
@@ -276,7 +293,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
 
           {/* 活动水平 */}
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">活动水平</h3>
+            <h3 className="font-medium text-sm text-muted-foreground">{t.activityLevel}</h3>
             <div className="space-y-2">
               {activityLevels.map((level) => (
                 <button
@@ -289,9 +306,9 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
                       : 'border-muted hover:border-primary/50'
                   }`}
                 >
-                  <div className="font-medium text-sm">{activityLevelLabels[level].label}</div>
+                  <div className="font-medium text-sm">{getActivityLabel(level).label}</div>
                   <div className="text-xs text-muted-foreground">
-                    {activityLevelLabels[level].description}
+                    {getActivityLabel(level).description}
                   </div>
                 </button>
               ))}
@@ -299,7 +316,7 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
           </div>
 
           <Button type="submit" className="w-full min-h-[48px] text-base">
-            🔥 计算基础代谢
+            🔥 {t.calculate}
           </Button>
         </form>
       </CardContent>
@@ -308,21 +325,21 @@ function BMRFormInner({ onCalculate }: BMRFormProps) {
 }
 
 // 导出的组件，用 Suspense 包裹
-export function BMRForm({ onCalculate }: BMRFormProps) {
+export function BMRForm({ onCalculate, locale, dict }: BMRFormProps) {
   return (
-    <Suspense fallback={<FormSkeleton />}>
-      <BMRFormInner onCalculate={onCalculate} />
+    <Suspense fallback={<FormSkeleton dict={dict} />}>
+      <BMRFormInner onCalculate={onCalculate} locale={locale} dict={dict} />
     </Suspense>
   );
 }
 
-function FormSkeleton() {
+function FormSkeleton({ dict }: { dict: Dictionary }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">🔥</span>
-          基础代谢计算
+          {dict.bmrCalculator.title}
         </CardTitle>
       </CardHeader>
       <CardContent>

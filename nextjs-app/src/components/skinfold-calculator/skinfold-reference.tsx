@@ -1,48 +1,69 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Dictionary } from '@/lib/i18n/types';
 
-export function SkinfoldReference() {
+interface SkinfoldReferenceProps {
+  dict: Dictionary;
+}
+
+export function SkinfoldReference({ dict }: SkinfoldReferenceProps) {
+  const t = dict.skinfoldCalculator.reference;
+
+  const categoryColors: Record<string, string> = {
+    essential: 'bg-yellow-400',
+    athletic: 'bg-green-400',
+    fitness: 'bg-blue-400',
+    average: 'bg-orange-400',
+    obese: 'bg-red-400',
+  };
+
+  const categories = ['essential', 'athletic', 'fitness', 'average', 'obese'] as const;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <span className="text-2xl">📋</span>
-          体脂率参考标准
+          {t.title}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* 男性标准 */}
+        {/* Male Standards */}
         <div>
           <h4 className="font-medium mb-2 flex items-center gap-2">
-            <span>👨</span> 男性体脂率标准
+            <span>👨</span> {t.maleTitle}
           </h4>
           <div className="space-y-1">
-            <ReferenceRow label="必需脂肪" range="2-5%" color="bg-yellow-400" />
-            <ReferenceRow label="运动员" range="6-13%" color="bg-green-400" />
-            <ReferenceRow label="健身水平" range="14-17%" color="bg-blue-400" />
-            <ReferenceRow label="平均水平" range="18-24%" color="bg-orange-400" />
-            <ReferenceRow label="肥胖" range=">25%" color="bg-red-400" />
+            {categories.map((category) => (
+              <ReferenceRow
+                key={category}
+                label={t.categories[category]}
+                range={t.maleRanges[category]}
+                color={categoryColors[category]}
+              />
+            ))}
           </div>
         </div>
 
-        {/* 女性标准 */}
+        {/* Female Standards */}
         <div>
           <h4 className="font-medium mb-2 flex items-center gap-2">
-            <span>👩</span> 女性体脂率标准
+            <span>👩</span> {t.femaleTitle}
           </h4>
           <div className="space-y-1">
-            <ReferenceRow label="必需脂肪" range="10-13%" color="bg-yellow-400" />
-            <ReferenceRow label="运动员" range="14-20%" color="bg-green-400" />
-            <ReferenceRow label="健身水平" range="21-24%" color="bg-blue-400" />
-            <ReferenceRow label="平均水平" range="25-31%" color="bg-orange-400" />
-            <ReferenceRow label="肥胖" range=">32%" color="bg-red-400" />
+            {categories.map((category) => (
+              <ReferenceRow
+                key={category}
+                label={t.categories[category]}
+                range={t.femaleRanges[category]}
+                color={categoryColors[category]}
+              />
+            ))}
           </div>
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          * 参考标准来自美国运动医学会 (ACSM)
-        </p>
+        <p className="text-xs text-muted-foreground">{t.source}</p>
       </CardContent>
     </Card>
   );

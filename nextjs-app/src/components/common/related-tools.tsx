@@ -18,6 +18,8 @@ interface RelatedToolsProps {
   currentToolId: ToolId;
   relatedToolIds?: ToolId[];
   title?: string;
+  locale: string;
+  dict: any; // 使用 any 避免循环依赖，实际使用时会传入 Dictionary
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -60,24 +62,44 @@ const defaultRelatedTools: Record<ToolId, ToolId[]> = {
   'metabolic-damage-test': ['bmr-calculator', 'fat-loss-diet-calculator', 'carb-cycling-calculator'],
 };
 
+// 工具标题映射函数
+function getToolTitle(toolId: ToolId, dict: any): string {
+  const titleMap: Record<ToolId, string> = {
+    'ffmi-calculator': dict.ffmiCalculator.title,
+    'skinfold-calculator': dict.skinfoldCalculator.title,
+    'bmr-calculator': dict.bmrCalculator.title,
+    'heart-rate-calculator': dict.heartRateCalculator.title,
+    'pose-comparator': dict.poseComparator.title,
+    'grecian-calculator': dict.grecianCalculator.title,
+    'carb-cycling-calculator': dict.carbCyclingCalculator.title,
+    'fat-loss-diet-calculator': dict.fatLossDietCalculator.title,
+    'high-carb-diet-calculator': dict.highCarbDietCalculator.title,
+    'metabolic-damage-test': dict.metabolicDamageTest.title,
+  };
+  return titleMap[toolId];
+}
+
 export function RelatedTools({ 
   currentToolId, 
   relatedToolIds,
-  title = '相关工具推荐'
+  title,
+  locale,
+  dict
 }: RelatedToolsProps) {
   const toolIds = relatedToolIds || defaultRelatedTools[currentToolId] || [];
+  const displayTitle = title || dict.common.relatedTools;
   
   if (toolIds.length === 0) return null;
 
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold">{title}</h3>
+        <h3 className="text-base font-semibold">{displayTitle}</h3>
         <Link 
-          href="/" 
+          href={`/${locale}`} 
           className="text-sm text-primary flex items-center gap-1 hover:underline"
         >
-          查看全部
+          {dict.common.viewAll}
           <ChevronRight className="w-4 h-4" />
         </Link>
       </div>
@@ -88,11 +110,13 @@ export function RelatedTools({
           const config = toolConfigs[toolId];
           const gradient = toolGradients[toolId];
           const icon = iconMap[config.icon];
+          const toolRoute = `/${locale}${toolRoutes[toolId]}`;
+          const toolTitle = getToolTitle(toolId, dict);
 
           return (
             <Link
               key={toolId}
-              href={toolRoutes[toolId]}
+              href={toolRoute}
               className="flex-shrink-0 group"
             >
               <div 
@@ -109,7 +133,7 @@ export function RelatedTools({
                   {icon}
                 </div>
                 <span className="text-sm font-medium whitespace-nowrap group-hover:text-primary transition-colors">
-                  {config.title}
+                  {toolTitle}
                 </span>
               </div>
             </Link>

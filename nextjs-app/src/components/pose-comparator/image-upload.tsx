@@ -3,11 +3,12 @@
 import { useCallback, useState } from 'react';
 import { Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { zh } from '@/lib/i18n/zh';
+import type { Dictionary } from '@/lib/i18n';
 
 interface ImageUploadProps {
   label: string;
   onImageSelect: (file: File, dataUrl: string) => void;
+  dict: Dictionary;
   accept?: string;
   className?: string;
 }
@@ -15,20 +16,23 @@ interface ImageUploadProps {
 export function ImageUpload({
   label,
   onImageSelect,
+  dict,
   accept = 'image/*',
   className,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const uploadHint = dict.poseComparator?.uploadHint || 'Click or drag image here';
+
   const handleFile = useCallback(
     (file: File) => {
       if (!file.type.startsWith('image/')) {
-        alert('请上传图片文件');
+        alert(uploadHint);
         return;
       }
       if (file.size > 10 * 1024 * 1024) {
-        alert('文件大小不能超过 10MB');
+        alert('File size cannot exceed 10MB');
         return;
       }
 
@@ -40,7 +44,7 @@ export function ImageUpload({
       };
       reader.readAsDataURL(file);
     },
-    [onImageSelect]
+    [onImageSelect, uploadHint]
   );
 
   const handleDrop = useCallback(
@@ -103,7 +107,7 @@ export function ImageUpload({
           <div className="flex flex-col items-center gap-2 p-4 text-center">
             <Upload className="h-10 w-10 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              {zh.poseComparator.uploadHint}
+              {uploadHint}
             </p>
           </div>
         )}

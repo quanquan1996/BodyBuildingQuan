@@ -7,9 +7,12 @@ import { ArrowUp, ArrowDown, Check, AlertCircle } from 'lucide-react';
 import { ToolLinkCard, toolLinks } from '@/components/common/tool-link-card';
 import { type GrecianIdealOutput, getCategoryLabel, GOLDEN_RATIO } from '@/lib/utils/grecian-ideal';
 import { cn } from '@/lib/utils';
+import type { Locale, Dictionary } from '@/lib/i18n';
 
 interface GrecianResultProps {
   result: GrecianIdealOutput;
+  locale: Locale;
+  dict: Dictionary;
 }
 
 const categoryColors: Record<GrecianIdealOutput['category'], string> = {
@@ -20,7 +23,7 @@ const categoryColors: Record<GrecianIdealOutput['category'], string> = {
   developing: 'bg-gray-500',
 };
 
-const measurementLabels: Record<string, string> = {
+const measurementLabelsZh: Record<string, string> = {
   chest: '胸围',
   waist: '腰围',
   hip: '臀围',
@@ -32,16 +35,31 @@ const measurementLabels: Record<string, string> = {
   calf: '小腿围',
 };
 
-export function GrecianResult({ result }: GrecianResultProps) {
+const measurementLabelsEn: Record<string, string> = {
+  chest: 'Chest',
+  waist: 'Waist',
+  hip: 'Hips',
+  shoulder: 'Shoulders',
+  neck: 'Neck',
+  bicep: 'Biceps',
+  forearm: 'Forearm',
+  thigh: 'Thigh',
+  calf: 'Calf',
+};
+
+export function GrecianResult({ result, locale, dict }: GrecianResultProps) {
+  const t = dict.grecianCalculator;
+  const isZh = locale === 'zh';
+  const measurementLabels = isZh ? measurementLabelsZh : measurementLabelsEn;
   return (
     <div className="space-y-6">
       {/* 总体得分卡片 */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center justify-between">
-            <span>古典比例得分</span>
+            <span>{t.result.score}</span>
             <Badge className={cn('text-white', categoryColors[result.category])}>
-              {result.overallScore} 分
+              {result.overallScore} {isZh ? '分' : 'pts'}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -56,33 +74,37 @@ export function GrecianResult({ result }: GrecianResultProps) {
       {/* 关键比例卡片 */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">黄金分割比例 (φ = {GOLDEN_RATIO})</CardTitle>
+          <CardTitle className="text-lg">{isZh ? '黄金分割比例' : 'Golden Ratio'} (φ = {GOLDEN_RATIO})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <RatioItem
-              label="肩腰比"
+              label={isZh ? '肩腰比' : 'Shoulder/Waist'}
               current={result.keyRatios.shoulderToWaist.current}
               ideal={result.keyRatios.shoulderToWaist.ideal}
               score={result.keyRatios.shoulderToWaist.score}
+              isZh={isZh}
             />
             <RatioItem
-              label="胸腰比"
+              label={isZh ? '胸腰比' : 'Chest/Waist'}
               current={result.keyRatios.chestToWaist.current}
               ideal={result.keyRatios.chestToWaist.ideal}
               score={result.keyRatios.chestToWaist.score}
+              isZh={isZh}
             />
             <RatioItem
-              label="臂颈比"
+              label={isZh ? '臂颈比' : 'Arm/Neck'}
               current={result.keyRatios.armToNeck.current}
               ideal={result.keyRatios.armToNeck.ideal}
               score={result.keyRatios.armToNeck.score}
+              isZh={isZh}
             />
             <RatioItem
-              label="腿颈比"
+              label={isZh ? '腿颈比' : 'Calf/Neck'}
               current={result.keyRatios.calfToNeck.current}
               ideal={result.keyRatios.calfToNeck.ideal}
               score={result.keyRatios.calfToNeck.score}
+              isZh={isZh}
             />
           </div>
         </CardContent>
@@ -91,7 +113,7 @@ export function GrecianResult({ result }: GrecianResultProps) {
       {/* 各部位详情 */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">各部位围度分析</CardTitle>
+          <CardTitle className="text-lg">{isZh ? '各部位围度分析' : 'Measurement Analysis'}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -100,6 +122,7 @@ export function GrecianResult({ result }: GrecianResultProps) {
                 key={key}
                 label={measurementLabels[key]}
                 measurement={measurement}
+                isZh={isZh}
               />
             ))}
           </div>
@@ -111,7 +134,7 @@ export function GrecianResult({ result }: GrecianResultProps) {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-primary" />
-            改进建议
+            {isZh ? '改进建议' : 'Recommendations'}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -129,21 +152,22 @@ export function GrecianResult({ result }: GrecianResultProps) {
       {/* 工具联动 */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">🔗 继续探索</CardTitle>
+          <CardTitle className="text-lg">{dict.common.toolLinks.exploreMore}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ToolLinkCard {...toolLinks.grecianToPose()} />
+          <ToolLinkCard {...toolLinks.grecianToPose(dict)} />
         </CardContent>
       </Card>
     </div>
   );
 }
 
-function RatioItem({ label, current, ideal, score }: {
+function RatioItem({ label, current, ideal, score, isZh }: {
   label: string;
   current: number;
   ideal: number;
   score: number;
+  isZh: boolean;
 }) {
   const isGood = score >= 85;
   return (
@@ -154,7 +178,7 @@ function RatioItem({ label, current, ideal, score }: {
           {current}
         </span>
         <span className="text-sm text-muted-foreground">
-          理想: {ideal}
+          {isZh ? '理想' : 'Ideal'}: {ideal}
         </span>
       </div>
       <Progress value={score} className="h-1.5 mt-2" />
@@ -162,9 +186,10 @@ function RatioItem({ label, current, ideal, score }: {
   );
 }
 
-function MeasurementRow({ label, measurement }: {
+function MeasurementRow({ label, measurement, isZh }: {
   label: string;
   measurement: GrecianIdealOutput['measurements']['chest'];
+  isZh: boolean;
 }) {
   const { current, ideal, difference, status } = measurement;
   
@@ -181,8 +206,8 @@ function MeasurementRow({ label, measurement }: {
         <span className="font-medium">{label}</span>
       </div>
       <div className="flex items-center gap-4 text-sm">
-        <span>当前: <strong>{current}</strong> cm</span>
-        <span className="text-muted-foreground">理想: {ideal} cm</span>
+        <span>{isZh ? '当前' : 'Current'}: <strong>{current}</strong> cm</span>
+        <span className="text-muted-foreground">{isZh ? '理想' : 'Ideal'}: {ideal} cm</span>
         {difference !== 0 && (
           <Badge variant={difference > 0 ? 'outline' : 'destructive'} className="text-xs">
             {difference > 0 ? '+' : ''}{difference} cm
