@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { locales, isValidLocale, getDictionary, type Locale } from '@/lib/i18n';
 import { siteConfig } from '@/lib/config/site';
-import { SiteHeader } from '@/components/layout/site-header';
+import { SiteHeaderServer } from '@/components/layout/site-header-server';
 import { Footer } from '@/components/layout/footer';
 
 interface LocaleLayoutProps {
@@ -78,7 +78,7 @@ export default async function LocaleLayout({
 
   return (
     <>
-      <SiteHeader locale={locale as Locale} dict={dict} />
+      <SiteHeaderServer locale={locale as Locale} dict={dict} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale as Locale} dict={dict} />
     </>

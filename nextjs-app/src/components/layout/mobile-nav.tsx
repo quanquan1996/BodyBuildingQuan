@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, Home, Calculator, Ruler, Flame, Heart, Camera, Ratio, RefreshCw, Salad, Wheat, Activity, Sparkles } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -21,34 +21,16 @@ interface MobileNavProps {
   dict: Dictionary;
 }
 
-// 图标映射（使用相对路径）
-const iconMap: Record<string, React.ElementType> = {
-  'ffmi-calculator': Calculator,
-  'skinfold-calculator': Ruler,
-  'bmr-calculator': Flame,
-  'heart-rate-calculator': Heart,
-  'pose-comparator': Camera,
-  'grecian-calculator': Ratio,
-  'carb-cycling-calculator': RefreshCw,
-  'fat-loss-diet-calculator': Salad,
-  'high-carb-diet-calculator': Wheat,
-  'metabolic-damage-test': Activity,
-};
-
 export function MobileNav({ locale, dict }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isZh = locale === 'zh';
 
-  // 分类导航配置（多语言）
+  // 简化的导航配置 - 移除图标减少 bundle
   const navCategories = [
-    {
-      title: dict.nav.home,
-      href: `/${locale}`,
-    },
+    { title: dict.nav.home, href: `/${locale}` },
     {
       title: dict.nav.aiTools,
-      icon: Sparkles,
       items: [
         { title: dict.poseComparator.title, href: `/${locale}/tools/pose-comparator`, toolId: 'pose-comparator' as ToolId },
         { title: dict.metabolicDamageTest.title, href: `/${locale}/tools/metabolic-damage-test`, toolId: 'metabolic-damage-test' as ToolId },
@@ -62,7 +44,6 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
         { title: dict.grecianCalculator.title, href: `/${locale}/tools/grecian-calculator`, toolId: 'grecian-calculator' as ToolId },
       ],
     },
-
     {
       title: dict.nav.dietCalculation,
       items: [
@@ -131,33 +112,27 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
                   onClick={() => setOpen(false)}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all',
-                    pathname === category.href
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-muted'
+                    pathname === category.href ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
                   )}
                 >
+                  {/* 使用 CSS 圆点替代图标 */}
                   <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-white"
-                    style={{
-                      background: 'linear-gradient(135deg, #4CAF50, #81C784)',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    }}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-sm"
+                    style={{ background: 'linear-gradient(135deg, #4CAF50, #81C784)' }}
                   >
-                    <Home className="h-4.5 w-4.5" />
+                    🏠
                   </div>
                   <span className="font-medium text-sm">{category.title}</span>
                 </Link>
               ) : (
                 <>
                   <div className="flex items-center gap-2 px-3 py-2 mb-1">
-                    {category.icon && <category.icon className="w-4 h-4 text-primary" />}
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       {category.title}
                     </span>
                   </div>
                   <div className="space-y-1">
                     {category.items?.map((item) => {
-                      const Icon = iconMap[item.toolId] || Calculator;
                       const isActive = pathname === item.href;
                       const gradient = toolGradients[item.toolId];
 
@@ -171,17 +146,15 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
                             isActive ? 'bg-primary/10' : 'hover:bg-muted'
                           )}
                         >
+                          {/* 使用纯色圆点替代图标 */}
                           <div
-                            className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-white"
+                            className="w-3 h-3 rounded-full flex-shrink-0"
                             style={{
                               background: gradient
                                 ? `linear-gradient(${gradient.angle}deg, ${gradient.from}, ${gradient.to})`
-                                : 'linear-gradient(135deg, #4CAF50, #81C784)',
-                              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                                : '#4CAF50',
                             }}
-                          >
-                            <Icon className="h-4.5 w-4.5" />
-                          </div>
+                          />
                           <span className={cn('font-medium text-sm', isActive && 'text-primary')}>
                             {item.title}
                           </span>
