@@ -792,6 +792,8 @@ export interface PoseComparatorDict {
     angleComparison: {
       title: string;
       description: string;
+      referenceLabel: string;
+      userLabel: string;
     };
     scoringSystem: {
       title: string;

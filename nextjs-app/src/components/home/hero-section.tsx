@@ -32,26 +32,16 @@ export function HeroSection({
 
   return (
     <section className="relative py-8 md:py-12 lg:py-16 overflow-hidden">
-      {/* 背景装饰 */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <svg className="absolute top-0 right-0 w-48 h-48 md:w-72 md:h-72" viewBox="0 0 200 200">
-          <defs>
-            <linearGradient id="heroGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFE5B4" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#FFDAB9" stopOpacity="0.2" />
-            </linearGradient>
-            <linearGradient id="heroGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#E8F5E9" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#C8E6C9" stopOpacity="0.2" />
-            </linearGradient>
-          </defs>
-          <circle cx="140" cy="60" r="60" fill="url(#heroGrad1)" />
-          <circle cx="170" cy="100" r="30" fill="#FFE5B4" opacity="0.3" />
-        </svg>
-        <svg className="absolute bottom-0 left-0 w-32 h-32 md:w-48 md:h-48" viewBox="0 0 150 150">
-          <circle cx="30" cy="120" r="50" fill="url(#heroGrad2)" />
-          <circle cx="60" cy="100" r="25" fill="#C8E6C9" opacity="0.3" />
-        </svg>
+      {/* 背景装饰 - 使用 CSS 替代 SVG 减少 DOM 节点 */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute top-0 right-0 w-48 h-48 md:w-72 md:h-72 rounded-full opacity-30"
+          style={{ background: 'radial-gradient(circle, #FFE5B4 0%, transparent 70%)' }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-32 h-32 md:w-48 md:h-48 rounded-full opacity-25"
+          style={{ background: 'radial-gradient(circle, #C8E6C9 0%, transparent 70%)' }}
+        />
       </div>
 
       <div className="container px-4 md:px-6">

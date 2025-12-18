@@ -1,11 +1,88 @@
 // i18n 配置和工具函数
+// 从模块化文件组装 Dictionary
 
-import { zh } from './zh';
-import { en } from './en';
+import {
+  common as zhCommon,
+  nav as zhNav,
+  home as zhHome,
+  whyChooseUs as zhWhyChooseUs,
+  useCases as zhUseCases,
+  footer as zhFooter,
+  ffmiCalculator as zhFfmiCalculator,
+  skinfoldCalculator as zhSkinfoldCalculator,
+  bmrCalculator as zhBmrCalculator,
+  heartRateCalculator as zhHeartRateCalculator,
+  poseComparator as zhPoseComparator,
+  grecianCalculator as zhGrecianCalculator,
+  carbCyclingCalculator as zhCarbCyclingCalculator,
+  fatLossDietCalculator as zhFatLossDietCalculator,
+  highCarbDietCalculator as zhHighCarbDietCalculator,
+  metabolicDamageTest as zhMetabolicDamageTest,
+} from './locales/zh';
+
+import {
+  common as enCommon,
+  nav as enNav,
+  home as enHome,
+  whyChooseUs as enWhyChooseUs,
+  useCases as enUseCases,
+  footer as enFooter,
+  ffmiCalculator as enFfmiCalculator,
+  skinfoldCalculator as enSkinfoldCalculator,
+  bmrCalculator as enBmrCalculator,
+  heartRateCalculator as enHeartRateCalculator,
+  poseComparator as enPoseComparator,
+  grecianCalculator as enGrecianCalculator,
+  carbCyclingCalculator as enCarbCyclingCalculator,
+  fatLossDietCalculator as enFatLossDietCalculator,
+  highCarbDietCalculator as enHighCarbDietCalculator,
+  metabolicDamageTest as enMetabolicDamageTest,
+} from './locales/en';
+
 import { type Dictionary, type Locale, locales, defaultLocale } from './types';
 
 export { locales, defaultLocale };
 export type { Locale, Dictionary };
+
+// 从模块组装中文字典
+const zh: Dictionary = {
+  common: zhCommon,
+  nav: zhNav,
+  home: zhHome,
+  whyChooseUs: zhWhyChooseUs,
+  useCases: zhUseCases,
+  footer: zhFooter,
+  ffmiCalculator: zhFfmiCalculator,
+  skinfoldCalculator: zhSkinfoldCalculator,
+  bmrCalculator: zhBmrCalculator,
+  heartRateCalculator: zhHeartRateCalculator,
+  poseComparator: zhPoseComparator,
+  grecianCalculator: zhGrecianCalculator,
+  carbCyclingCalculator: zhCarbCyclingCalculator,
+  fatLossDietCalculator: zhFatLossDietCalculator,
+  highCarbDietCalculator: zhHighCarbDietCalculator,
+  metabolicDamageTest: zhMetabolicDamageTest,
+};
+
+// 从模块组装英文字典
+const en: Dictionary = {
+  common: enCommon,
+  nav: enNav,
+  home: enHome,
+  whyChooseUs: enWhyChooseUs,
+  useCases: enUseCases,
+  footer: enFooter,
+  ffmiCalculator: enFfmiCalculator,
+  skinfoldCalculator: enSkinfoldCalculator,
+  bmrCalculator: enBmrCalculator,
+  heartRateCalculator: enHeartRateCalculator,
+  poseComparator: enPoseComparator,
+  grecianCalculator: enGrecianCalculator,
+  carbCyclingCalculator: enCarbCyclingCalculator,
+  fatLossDietCalculator: enFatLossDietCalculator,
+  highCarbDietCalculator: enHighCarbDietCalculator,
+  metabolicDamageTest: enMetabolicDamageTest,
+};
 
 // 获取翻译字典
 export function getDictionary(locale: Locale): Dictionary {
@@ -46,7 +123,6 @@ export function getAlternateLocalePath(
   currentLocale: Locale,
   targetLocale: Locale
 ): string {
-  // 替换路径中的语言前缀
   const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '');
   return `/${targetLocale}${pathWithoutLocale || ''}`;
 }

@@ -1,5 +1,4 @@
-'use client';
-
+// 服务端组件 - 移除 'use client' 以减少 JS bundle
 import Link from 'next/link';
 import {
   Camera,

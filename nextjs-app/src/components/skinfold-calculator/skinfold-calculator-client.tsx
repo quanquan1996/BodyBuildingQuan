@@ -8,6 +8,7 @@ import { SkinfoldGuide } from './skinfold-guide';
 import { SkinfoldExplanation } from './skinfold-explanation';
 import { ToolHero } from '@/components/common/tool-hero';
 import { RelatedTools } from '@/components/common/related-tools';
+import { siteConfig } from '@/lib/config/site';
 import { type Locale, type Dictionary } from '@/lib/i18n';
 import { type SkinfoldOutput } from '@/lib/utils/skinfold';
 
@@ -17,6 +18,7 @@ interface SkinfoldCalculatorClientProps {
 }
 
 export function SkinfoldCalculatorClient({ locale, dict }: SkinfoldCalculatorClientProps) {
+  const isZh = locale === 'zh';
   const [result, setResult] = useState<SkinfoldOutput | null>(null);
   const [inputWeight, setInputWeight] = useState<number>(70);
   const [inputHeight, setInputHeight] = useState<number>(170);
@@ -27,8 +29,30 @@ export function SkinfoldCalculatorClient({ locale, dict }: SkinfoldCalculatorCli
     setInputHeight(height);
   };
 
+  // JSON-LD structured data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: dict.skinfoldCalculator.title,
+    applicationCategory: 'HealthApplication',
+    operatingSystem: 'Web Browser',
+    description: dict.skinfoldCalculator.metaDescription,
+    url: `${siteConfig.url}/${locale}/tools/skinfold-calculator`,
+    inLanguage: isZh ? 'zh-CN' : 'en',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: isZh ? 'CNY' : 'USD',
+    },
+  };
+
   return (
-    <div className="container py-6 md:py-10 px-4 md:px-6">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container py-6 md:py-10 px-4 md:px-6">
       <ToolHero
         toolId="skinfold-calculator"
         title={dict.skinfoldCalculator.title}
@@ -59,6 +83,7 @@ export function SkinfoldCalculatorClient({ locale, dict }: SkinfoldCalculatorCli
       </div>
 
       <RelatedTools currentToolId="skinfold-calculator" locale={locale} dict={dict} />
-    </div>
+      </div>
+    </>
   );
 }

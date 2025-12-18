@@ -116,3 +116,33 @@
 .help-icon {
   @apply w-4 h-4 text-muted-foreground cursor-help hover:text-foreground transition-colors;
 }
+
+/* 性能优化：减少重绘 */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* 骨架屏动画 */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* 优化字体渲染 */
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 减少 CLS：预留图标空间 */
+.icon-placeholder {
+  min-width: 1em;
+  min-height: 1em;
+}

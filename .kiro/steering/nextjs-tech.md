@@ -55,11 +55,32 @@ npx shadcn@latest add [component-name]
 ```
 nextjs-app/
 ├── src/
-│   ├── app/           # 页面路由
-│   ├── components/    # React 组件
-│   ├── lib/           # 工具函数和配置
-│   └── types/         # TypeScript 类型定义
-├── public/            # 静态资源
+│   ├── app/
+│   │   ├── [locale]/          # 多语言动态路由段
+│   │   │   ├── page.tsx       # 首页
+│   │   │   └── tools/         # 工具页面
+│   │   │       ├── ffmi-calculator/
+│   │   │       ├── skinfold-calculator/
+│   │   │       └── ...
+│   │   ├── sitemap.ts         # 站点地图
+│   │   ├── robots.ts          # 爬虫规则
+│   │   └── globals.css        # 全局样式
+│   ├── components/            # React 组件
+│   │   ├── common/            # 通用组件
+│   │   ├── home/              # 首页组件
+│   │   ├── layout/            # 布局组件
+│   │   ├── ui/                # UI 基础组件
+│   │   └── [tool-name]/       # 各工具组件
+│   └── lib/
+│       ├── config/            # 配置文件
+│       ├── i18n/              # 多语言系统
+│       │   ├── index.ts       # 主入口
+│       │   ├── types.ts       # 类型定义
+│       │   └── locales/       # 翻译文件
+│       │       ├── zh/        # 中文
+│       │       └── en/        # 英文
+│       └── utils/             # 工具函数
+├── public/                    # 静态资源
 └── package.json
 ```
 
@@ -79,28 +100,32 @@ nextjs-app/
 新增工具页面时，必须更新以下文件：
 
 1. **导航栏配置** - `src/lib/config/navigation.ts` 添加新工具链接
-2. **首页工具列表** - `src/app/page.tsx` 的 features 数组添加新工具
-3. **国际化文本** - `src/lib/i18n/zh.ts` 添加新工具的标题和描述
+2. **首页工具列表** - `src/app/[locale]/page.tsx` 的 features 数组添加新工具
+3. **国际化文本** - 创建 `src/lib/i18n/locales/zh/new-tool.ts` 和 `src/lib/i18n/locales/en/new-tool.ts`
 4. **首页图标支持** - 如需新图标，更新 `src/components/home/feature-grid.tsx` 的 iconMap
 5. **移动端导航图标** - 更新 `src/components/layout/mobile-nav.tsx` 的 iconMap
 6. **工具联动配置** - 更新 `src/components/common/tool-link-card.tsx` 的 toolLinks 对象
-7. **SEO layout.tsx** - 在工具目录下创建 `layout.tsx` 导出 metadata（title、description、canonical、openGraph）
-8. **Sitemap** - 更新 `src/app/sitemap.ts` 添加新工具 URL
+7. **SEO layout.tsx** - 在 `src/app/[locale]/tools/tool-name/` 下创建 `layout.tsx` 导出多语言 metadata
+8. **Sitemap** - 更新 `src/app/sitemap.ts` 添加新工具的多语言 URL
+9. **类型定义** - 更新 `src/lib/i18n/types.ts` 添加新工具的类型接口
+10. **i18n 索引** - 更新 `src/lib/i18n/index.ts` 导入并组装新模块
 
 ## 现有工具列表
 
-| 工具名称 | 路由 | 图标 |
-|---------|------|------|
-| FFMI计算器 | `/tools/ffmi-calculator` | Calculator |
-| 体脂夹计算器 | `/tools/skinfold-calculator` | Ruler |
-| 代谢计算器 | `/tools/bmr-calculator` | Flame |
-| 心率区间计算器 | `/tools/heart-rate-calculator` | Heart |
-| 健美造型评分器 | `/tools/pose-comparator` | Camera |
-| 古典比例计算器 | `/tools/grecian-calculator` | Ratio |
-| 碳循环减脂计算器 | `/tools/carb-cycling-calculator` | RefreshCw |
-| 减脂饮食计算器 | `/tools/fat-loss-diet-calculator` | Salad |
-| 高碳减脂计算器 | `/tools/high-carb-diet-calculator` | Wheat |
-| 代谢受损检测器 | `/tools/metabolic-damage-test` | Activity |
+| 工具名称 | 路由 | 图标 | 翻译键 |
+|---------|------|------|--------|
+| FFMI计算器 | `/[locale]/tools/ffmi-calculator` | Calculator | `ffmiCalculator` |
+| 体脂夹计算器 | `/[locale]/tools/skinfold-calculator` | Ruler | `skinfoldCalculator` |
+| 代谢计算器 | `/[locale]/tools/bmr-calculator` | Flame | `bmrCalculator` |
+| 心率区间计算器 | `/[locale]/tools/heart-rate-calculator` | Heart | `heartRateCalculator` |
+| 健美造型评分器 | `/[locale]/tools/pose-comparator` | Camera | `poseComparator` |
+| 古典比例计算器 | `/[locale]/tools/grecian-calculator` | Ratio | `grecianCalculator` |
+| 碳循环减脂计算器 | `/[locale]/tools/carb-cycling-calculator` | RefreshCw | `carbCyclingCalculator` |
+| 减脂饮食计算器 | `/[locale]/tools/fat-loss-diet-calculator` | Salad | `fatLossDietCalculator` |
+| 高碳减脂计算器 | `/[locale]/tools/high-carb-diet-calculator` | Wheat | `highCarbDietCalculator` |
+| 代谢受损检测器 | `/[locale]/tools/metabolic-damage-test` | Activity | `metabolicDamageTest` |
+
+> 注意：`[locale]` 为 `zh` 或 `en`，例如 `/zh/tools/ffmi-calculator`
 
 ## 工具页面结构模板
 
@@ -114,25 +139,42 @@ nextjs-app/
 - 隐藏的 SEO 关键词
 - **工具联动入口**（在结果组件中添加相关工具链接）
 
-### layout.tsx 模板
+### layout.tsx 多语言模板
 
 ```tsx
+// src/app/[locale]/tools/tool-name/layout.tsx
 import type { Metadata } from 'next';
 import { siteConfig } from '@/lib/config/site';
+import { getDictionary, type Locale } from '@/lib/i18n';
 
-export const metadata: Metadata = {
-  title: '工具名称 - 副标题',
-  description: '工具描述，包含关键词...',
-  alternates: {
-    canonical: `${siteConfig.url}/tools/tool-name`,
-  },
-  openGraph: {
-    title: '工具名称 - 副标题',
-    description: '简短描述',
-    url: `${siteConfig.url}/tools/tool-name`,
-    type: 'website',
-  },
-};
+// 动态生成多语言 metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const dict = getDictionary(locale);
+  
+  return {
+    title: dict.toolNameCalculator.title,
+    description: dict.toolNameCalculator.metaDescription,
+    alternates: {
+      canonical: `${siteConfig.url}/${locale}/tools/tool-name`,
+      languages: {
+        'zh': `${siteConfig.url}/zh/tools/tool-name`,
+        'en': `${siteConfig.url}/en/tools/tool-name`,
+      },
+    },
+    openGraph: {
+      title: dict.toolNameCalculator.title,
+      description: dict.toolNameCalculator.description,
+      url: `${siteConfig.url}/${locale}/tools/tool-name`,
+      type: 'website',
+      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+    },
+  };
+}
 
 export default function ToolLayout({ children }: { children: React.ReactNode }) {
   return children;
@@ -398,15 +440,127 @@ export default function ToolLayout({ children }: { children: React.ReactNode }) 
 
 ⚠️ **重要：** 不要在 `src/app/tools/` 下创建页面，这会与 `[locale]` 路由冲突！
 
-### 翻译文件位置
+### 翻译文件位置（模块化架构）
 
 ```
 src/lib/i18n/
-├── index.ts      # i18n 配置和工具函数
-├── types.ts      # 类型定义
-├── zh.ts         # 中文翻译
-└── en.ts         # 英文翻译
+├── index.ts      # 主入口，从模块组装 Dictionary，导出 getDictionary()
+├── types.ts      # 类型定义（Dictionary 接口、Locale 类型）
+└── locales/      # 模块化翻译文件（唯一数据源）
+    ├── zh/       # 中文模块
+    │   ├── index.ts       # 模块索引，统一导出所有模块
+    │   ├── common.ts      # 通用文本（按钮、标签、活动水平等）
+    │   ├── nav.ts         # 导航菜单
+    │   ├── home.ts        # 首页（含 whyChooseUs、useCases）
+    │   ├── footer.ts      # 页脚
+    │   ├── ffmi.ts        # FFMI 计算器
+    │   ├── skinfold.ts    # 体脂夹计算器
+    │   ├── bmr.ts         # BMR 代谢计算器
+    │   ├── heart-rate.ts  # 心率区间计算器
+    │   ├── pose-comparator.ts  # 健美造型评分器
+    │   ├── grecian.ts     # 古典比例计算器
+    │   ├── carb-cycling.ts     # 碳循环计算器
+    │   ├── fat-loss-diet.ts    # 减脂饮食计算器
+    │   ├── high-carb-diet.ts   # 高碳减脂计算器
+    │   └── metabolic-damage.ts # 代谢受损检测
+    └── en/       # 英文模块（结构完全相同）
+        ├── index.ts
+        ├── common.ts
+        ├── nav.ts
+        ├── home.ts
+        ├── footer.ts
+        ├── ffmi.ts
+        ├── skinfold.ts
+        ├── bmr.ts
+        ├── heart-rate.ts
+        ├── pose-comparator.ts
+        ├── grecian.ts
+        ├── carb-cycling.ts
+        ├── fat-loss-diet.ts
+        ├── high-carb-diet.ts
+        └── metabolic-damage.ts
 ```
+
+### AI 编程时的 i18n 文件操作
+
+**查看/修改翻译：** 直接读取对应的模块文件
+```
+# 修改 FFMI 计算器翻译
+读取: locales/zh/ffmi.ts 或 locales/en/ffmi.ts (~5KB)
+
+# 修改通用文本
+读取: locales/zh/common.ts 或 locales/en/common.ts (~6KB)
+```
+
+**新增工具翻译（完整步骤）：**
+
+1. **创建中文翻译模块** - `locales/zh/new-tool.ts`
+   ```typescript
+   // 定义类型并导出中文翻译
+   export const newToolCalculator = {
+     title: '新工具计算器',
+     description: '工具描述...',
+     form: { ... },
+     result: { ... },
+     explanation: { ... },
+     reference: { ... },
+   };
+   ```
+
+2. **创建英文翻译模块** - `locales/en/new-tool.ts`
+   ```typescript
+   // 导出英文翻译（结构必须与中文完全一致）
+   export const newToolCalculator = {
+     title: 'New Tool Calculator',
+     description: 'Tool description...',
+     form: { ... },
+     result: { ... },
+     explanation: { ... },
+     reference: { ... },
+   };
+   ```
+
+3. **更新模块索引** - `locales/zh/index.ts` 和 `locales/en/index.ts`
+   ```typescript
+   export { newToolCalculator } from './new-tool';
+   ```
+
+4. **更新类型定义** - `src/lib/i18n/types.ts`
+   ```typescript
+   // 添加新工具的类型接口
+   export interface NewToolCalculatorDict {
+     title: string;
+     description: string;
+     form: { ... };
+     result: { ... };
+     explanation: { ... };
+     reference: { ... };
+   }
+   
+   // 在 Dictionary 接口中添加
+   export interface Dictionary {
+     // ... 其他字段
+     newToolCalculator: NewToolCalculatorDict;
+   }
+   ```
+
+5. **更新主入口** - `src/lib/i18n/index.ts`
+   ```typescript
+   // 导入新模块
+   import { newToolCalculator as zhNewToolCalculator } from './locales/zh';
+   import { newToolCalculator as enNewToolCalculator } from './locales/en';
+   
+   // 添加到字典对象
+   const zh: Dictionary = {
+     // ... 其他字段
+     newToolCalculator: zhNewToolCalculator,
+   };
+   
+   const en: Dictionary = {
+     // ... 其他字段
+     newToolCalculator: enNewToolCalculator,
+   };
+   ```
 
 ### 翻译键命名约定
 
@@ -430,12 +584,15 @@ src/lib/i18n/
 
 ### 新增页面多语言检查清单
 
-1. **翻译文件** - 在 `zh.ts` 和 `en.ts` 中添加对应的翻译键
-2. **页面路由** - 在 `src/app/[locale]/` 下创建页面（不是 `src/app/tools/`）
-3. **组件参数** - 组件接收 `locale` 和 `dict` 参数
-4. **链接前缀** - 所有内部链接添加 `/${locale}` 前缀
-5. **SEO metadata** - 在 layout.tsx 中设置多语言 metadata 和 hreflang
-6. **Sitemap** - 更新 sitemap.ts 添加新页面的多语言 URL
+1. **翻译模块** - 创建 `locales/zh/new-tool.ts` 和 `locales/en/new-tool.ts`
+2. **更新索引** - 更新 `locales/zh/index.ts`、`locales/en/index.ts`
+3. **更新类型** - 更新 `src/lib/i18n/types.ts` 添加类型接口
+4. **更新主入口** - 更新 `src/lib/i18n/index.ts` 导入并组装新模块
+5. **页面路由** - 在 `src/app/[locale]/tools/` 下创建页面（不是 `src/app/tools/`）
+6. **组件参数** - 组件接收 `locale` 和 `dict` 参数
+7. **链接前缀** - 所有内部链接添加 `/${locale}` 前缀
+8. **SEO metadata** - 在 layout.tsx 中设置多语言 metadata 和 hreflang
+9. **Sitemap** - 更新 sitemap.ts 添加新页面的多语言 URL
 
 ### 禁止硬编码文本
 
@@ -544,6 +701,7 @@ export default async function MyPage({
 
 1. **在 `types.ts` 中添加接口定义**
 ```typescript
+// src/lib/i18n/types.ts
 export interface MyComponentDict {
   title: string;
   description: string;
@@ -556,27 +714,44 @@ export interface Dictionary {
 }
 ```
 
-2. **在 `zh.ts` 中添加中文翻译**
+2. **在 `locales/zh/my-component.ts` 中添加中文翻译**
 ```typescript
-export const zh: Dictionary = {
-  // ... 其他字段
-  myComponent: {
-    title: '我的组件',
-    description: '组件描述',
-    items: ['项目1', '项目2'],
-  },
+// src/lib/i18n/locales/zh/my-component.ts
+export const myComponent = {
+  title: '我的组件',
+  description: '组件描述',
+  items: ['项目1', '项目2'],
 };
 ```
 
-3. **在 `en.ts` 中添加英文翻译**
+3. **在 `locales/en/my-component.ts` 中添加英文翻译**
 ```typescript
-export const en: Dictionary = {
+// src/lib/i18n/locales/en/my-component.ts
+export const myComponent = {
+  title: 'My Component',
+  description: 'Component description',
+  items: ['Item 1', 'Item 2'],
+};
+```
+
+4. **更新 `locales/zh/index.ts` 和 `locales/en/index.ts`**
+```typescript
+export { myComponent } from './my-component';
+```
+
+5. **更新 `src/lib/i18n/index.ts`**
+```typescript
+import { myComponent as zhMyComponent } from './locales/zh';
+import { myComponent as enMyComponent } from './locales/en';
+
+const zh: Dictionary = {
   // ... 其他字段
-  myComponent: {
-    title: 'My Component',
-    description: 'Component description',
-    items: ['Item 1', 'Item 2'],
-  },
+  myComponent: zhMyComponent,
+};
+
+const en: Dictionary = {
+  // ... 其他字段
+  myComponent: enMyComponent,
 };
 ```
 
@@ -704,9 +879,54 @@ const title = dict.common.relatedTools;
 # 检查是否有硬编码的中文（在 PowerShell 中）
 Get-ChildItem -Path "src\components" -Recurse -Filter "*.tsx" | Select-String -Pattern "[\u4e00-\u9fa5]"
 
-# 检查是否有旧路由文件
+# 检查是否有旧路由文件（不应存在）
 Test-Path "src\app\tools"
 
 # TypeScript 类型检查
 npm run type-check
+
+# 构建检查（验证所有翻译键存在）
+npm run build
 ```
+
+### i18n 核心 API
+
+```typescript
+// 导入方式
+import { getDictionary, type Locale, type Dictionary } from '@/lib/i18n';
+
+// 获取翻译字典
+const dict = getDictionary(locale); // locale: 'zh' | 'en'
+
+// 使用翻译
+dict.common.calculate           // "计算" / "Calculate"
+dict.ffmiCalculator.title       // "FFMI 计算器" / "FFMI Calculator"
+dict.common.toolLinks.exploreMore  // "🔗 继续探索" / "🔗 Explore More"
+
+// 辅助函数
+import { isValidLocale, getAlternateLocalePath, getLocaleFromPath } from '@/lib/i18n';
+
+isValidLocale('zh')  // true
+isValidLocale('fr')  // false
+getAlternateLocalePath('/zh/tools/ffmi', 'zh', 'en')  // '/en/tools/ffmi'
+getLocaleFromPath('/zh/tools/ffmi')  // 'zh'
+```
+
+### 现有翻译模块一览
+
+| 模块文件 | 对应 Dictionary 键 | 用途 |
+|---------|-------------------|------|
+| `common.ts` | `common` | 通用文本、按钮、活动水平、工具联动 |
+| `nav.ts` | `nav` | 导航菜单分类 |
+| `home.ts` | `home`, `whyChooseUs`, `useCases` | 首页内容 |
+| `footer.ts` | `footer` | 页脚内容 |
+| `ffmi.ts` | `ffmiCalculator` | FFMI 计算器 |
+| `skinfold.ts` | `skinfoldCalculator` | 体脂夹计算器 |
+| `bmr.ts` | `bmrCalculator` | BMR 代谢计算器 |
+| `heart-rate.ts` | `heartRateCalculator` | 心率区间计算器 |
+| `pose-comparator.ts` | `poseComparator` | 健美造型评分器 |
+| `grecian.ts` | `grecianCalculator` | 古典比例计算器 |
+| `carb-cycling.ts` | `carbCyclingCalculator` | 碳循环计算器 |
+| `fat-loss-diet.ts` | `fatLossDietCalculator` | 减脂饮食计算器 |
+| `high-carb-diet.ts` | `highCarbDietCalculator` | 高碳减脂计算器 |
+| `metabolic-damage.ts` | `metabolicDamageTest` | 代谢受损检测 |

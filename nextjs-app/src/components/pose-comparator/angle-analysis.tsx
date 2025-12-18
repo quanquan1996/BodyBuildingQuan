@@ -42,10 +42,12 @@ export function AngleAnalysis({ angles, dict }: AngleAnalysisProps) {
               <div className="flex items-center gap-4 text-sm">
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-red-500" />
+                  <span className="text-muted-foreground text-xs">{explanation.angleComparison.referenceLabel}:</span>
                   {angle.referenceAngle.toFixed(1)}°
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-muted-foreground text-xs">{explanation.angleComparison.userLabel}:</span>
                   {angle.userAngle.toFixed(1)}°
                 </span>
                 <span className={isPositive ? 'text-orange-500' : 'text-blue-500'}>

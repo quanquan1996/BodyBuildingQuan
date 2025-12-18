@@ -1,22 +1,15 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Noto_Sans_SC } from 'next/font/google';
+import { Noto_Sans_SC } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/lib/config/site';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
+// 优化：只加载必要的字体和字重，添加 display: swap
 const notoSansSC = Noto_Sans_SC({
   variable: '--font-noto-sans-sc',
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
+  weight: ['400', '500', '700'],  // 移除 300，减少字体文件
+  display: 'swap',  // 防止字体阻塞渲染
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -75,9 +68,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preconnect to external resources for better performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* DNS prefetch for CDN resources */}
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoSansSC.variable} font-[family-name:var(--font-noto-sans-sc)] antialiased min-h-screen flex flex-col`}
+        className={`${notoSansSC.variable} font-[family-name:var(--font-noto-sans-sc)] antialiased min-h-screen flex flex-col`}
       >
         {children}
       </body>

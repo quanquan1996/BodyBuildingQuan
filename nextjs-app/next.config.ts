@@ -11,12 +11,16 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 天缓存
+    deviceSizes: [640, 750, 828, 1080, 1200],  // 优化设备尺寸
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],  // 优化图片尺寸
   },
 
   // 实验性优化
   experimental: {
-    optimizeCss: true, // CSS 优化
+    optimizeCss: true, // CSS 优化 - 内联关键 CSS
   },
+
+
 
   async headers() {
     return [
@@ -47,6 +51,26 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // HTML 页面缓存 - 启用 stale-while-revalidate
+        source: "/:locale(zh|en)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, stale-while-revalidate=600",
+          },
+        ],
+      },
+      {
+        // 工具页面缓存
+        source: "/:locale(zh|en)/tools/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, stale-while-revalidate=600",
           },
         ],
       },

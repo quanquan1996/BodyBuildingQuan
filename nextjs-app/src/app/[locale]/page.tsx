@@ -1,9 +1,12 @@
 import { getDictionary, type Locale } from '@/lib/i18n';
 import { HeroSection } from '@/components/home/hero-section';
 import { FeatureGrid } from '@/components/home/feature-grid';
-import { WhyChooseUs } from '@/components/home/why-choose-us';
-import { UseCases } from '@/components/home/use-cases';
 import { siteConfig } from '@/lib/config/site';
+import dynamic from 'next/dynamic';
+
+// 懒加载非首屏组件，减少初始 JS bundle
+const WhyChooseUs = dynamic(() => import('@/components/home/why-choose-us').then(m => ({ default: m.WhyChooseUs })));
+const UseCases = dynamic(() => import('@/components/home/use-cases').then(m => ({ default: m.UseCases })));
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
