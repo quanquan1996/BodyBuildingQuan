@@ -3,11 +3,12 @@
 import type { CommonDict } from '../zh/common';
 
 export const common: CommonDict = {
-  siteName: 'Muscle Tool - Fitness AI Tools',
-  siteNameShort: 'MT',
-  siteSlogan: 'Fitness AI Tools',
+  siteName: 'LightCore AI Fitness',
+  siteNameShort: 'LC',
+  siteSlogan: 'AI Fitness Tools',
   home: 'Home',
   tools: 'Tools',
+  menu: 'Menu',
   loading: 'Loading...',
   error: 'Error',
   retry: 'Retry',

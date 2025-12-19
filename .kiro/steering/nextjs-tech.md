@@ -764,7 +764,7 @@ const en: Dictionary = {
 ### 品牌名称
 
 - 中文版: "轻核" + "健身AI工具站"
-- 英文版: "MT" + "Muscle Tool"
+- 英文版: "LC" + "LightCore AI Fitness"
 
 ### 多语言开发最佳实践
 

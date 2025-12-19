@@ -65,12 +65,13 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="lg:hidden gap-2 hover:bg-primary/10"
+          className="lg:hidden gap-1.5 hover:bg-primary/10 border-border/60 text-foreground"
           aria-label={isZh ? '打开菜单' : 'Open menu'}
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-4 w-4" />
+          <span className="text-sm font-medium">{dict.common.menu}</span>
         </Button>
       </SheetTrigger>
       <SheetContent

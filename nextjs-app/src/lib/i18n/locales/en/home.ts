@@ -3,7 +3,7 @@
 import type { HomeDict, WhyChooseUsDict, UseCasesDict } from '../zh/home';
 
 export const home: HomeDict = {
-  heroTitle: 'Muscle Tool - Fitness AI Tools',
+  heroTitle: 'LightCore AI Fitness',
   heroDescription: 'Free online fitness tools to scientifically evaluate your training results',
   heroSubtitle: 'FFMI Calculator · Body Fat Analysis · Bodybuilding Pose Scoring · Muscle Mass Assessment',
   ctaButton: 'Get Started',
@@ -13,8 +13,8 @@ export const home: HomeDict = {
   whySubtitle: 'Professional, free, and secure fitness data analysis platform',
   useCasesTitle: 'Who Is This For',
   useCasesSubtitle: 'Whether you are a fitness beginner or a professional athlete, our tools can help you better understand your body',
-  aboutTitle: 'About Muscle Tool',
-  aboutDescription: 'Muscle Tool is a free online fitness calculator platform, providing professional body composition analysis and training evaluation tools for fitness enthusiasts, bodybuilders, and personal trainers. No app download required, just open the webpage to use.',
+  aboutTitle: 'About LightCore',
+  aboutDescription: 'LightCore AI Fitness is a free online fitness calculator platform, providing professional body composition analysis and training evaluation tools for fitness enthusiasts, bodybuilders, and personal trainers. No app download required, just open the webpage to use.',
   aboutGoalTitle: 'Our Goal',
   aboutGoalDescription: 'To provide every fitness enthusiast with professional-grade data analysis tools, using scientific methods to evaluate training results and develop reasonable fitness plans.',
   aboutPhilosophyTitle: 'Core Philosophy',

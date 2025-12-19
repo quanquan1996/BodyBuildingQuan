@@ -28,6 +28,7 @@ export interface CommonDict {
   siteSlogan: string;
   home: string;
   tools: string;
+  menu: string;
   loading: string;
   error: string;
   retry: string;
@@ -75,6 +76,7 @@ export const common: CommonDict = {
   siteSlogan: '健身AI工具站',
   home: '首页',
   tools: '工具',
+  menu: '菜单',
   loading: '加载中...',
   error: '出错了',
   retry: '重试',

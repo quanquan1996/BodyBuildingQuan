@@ -30,10 +30,11 @@ export interface ToolLinksDict {
 // 通用文本
 export interface CommonDict {
   siteName: string;
-  siteNameShort: string; // Logo 短名称：轻核 / MT
+  siteNameShort: string; // Logo 短名称：轻核 / LC
   siteSlogan: string;
   home: string;
   tools: string;
+  menu: string;
   loading: string;
   error: string;
   retry: string;
