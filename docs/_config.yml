@@ -1,0 +1,36 @@
+title: Muscle Tool Tech Blog
+description: 健身工具站技术博客 | Fitness Tool Technical Blog
+baseurl: "/BodyBuildingQuan"
+url: "https://quanquan1996.github.io"
+theme: minima
+
+# 作者信息
+author:
+  name: quanquan1996
+  email: quanquanyiyi520@gmail.com
+
+# 社交链接
+social_links:
+  - platform: github
+    user_url: "https://github.com/quanquan1996"
+
+# 插件
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Markdown 设置
+markdown: kramdown
+highlighter: rouge
+
+# 永久链接格式
+permalink: /:title/
+
+# 默认设置
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "quanquan1996"
