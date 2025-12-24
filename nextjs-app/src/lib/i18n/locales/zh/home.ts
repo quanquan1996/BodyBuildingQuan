@@ -6,6 +6,7 @@ export interface HomeDict {
   heroSubtitle: string;
   ctaButton: string;
   secondaryCta: string;
+  tertiaryCta: string;
   featuresTitle: string;
   whyTitle: string;
   whySubtitle: string;
@@ -45,6 +46,7 @@ export const home: HomeDict = {
   heroSubtitle: 'FFMI计算 · 体脂率分析 · 健美造型评分 · 肌肉量评估',
   ctaButton: '开始使用',
   secondaryCta: '减脂饮食计算',
+  tertiaryCta: '3D肌肉功能解剖',
   featuresTitle: '热门健身工具',
   whyTitle: '为什么选择我们？',
   whySubtitle: '专业、免费、安全的健身数据分析平台',

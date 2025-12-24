@@ -85,6 +85,9 @@ export {
   type MetabolicDamageReferenceDict,
 } from './metabolic-damage';
 
+// 3D肌肉解剖
+export { muscleAnatomy } from './muscle-anatomy';
+
 // === 使用说明 ===
 // 
 // AI 编程时，直接导入需要的模块：

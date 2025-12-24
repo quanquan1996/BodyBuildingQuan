@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'fat-loss-diet-calculator',
     'high-carb-diet-calculator',
     'metabolic-damage-test',
+    'muscle-anatomy',
   ];
 
   const urls: MetadataRoute.Sitemap = [];

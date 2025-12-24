@@ -59,4 +59,9 @@ export const mainNav: NavItem[] = [
     href: '/tools/metabolic-damage-test',
     description: '评估代谢适应程度，获取恢复方案',
   },
+  {
+    title: '3D肌肉解剖图',
+    href: '/tools/muscle-anatomy',
+    description: '交互式3D人体肌肉解剖展示',
+  },
 ];

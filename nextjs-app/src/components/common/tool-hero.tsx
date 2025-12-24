@@ -10,7 +10,8 @@ import {
   RefreshCw, 
   Salad, 
   Wheat, 
-  Activity 
+  Activity,
+  Bone
 } from 'lucide-react';
 
 interface ToolHeroProps {
@@ -30,6 +31,7 @@ const iconMap: Record<ToolId, React.ReactNode> = {
   'fat-loss-diet-calculator': <Salad className="w-8 h-8" />,
   'high-carb-diet-calculator': <Wheat className="w-8 h-8" />,
   'metabolic-damage-test': <Activity className="w-8 h-8" />,
+  'muscle-anatomy': <Bone className="w-8 h-8" />,
 };
 
 export function ToolHero({ toolId, title, description }: ToolHeroProps) {

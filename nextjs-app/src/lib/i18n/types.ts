@@ -84,6 +84,7 @@ export interface CommonDict {
 export interface NavDict {
   home: string;
   bodyAssessment: string;
+  muscleAnatomy3D: string;
   dietCalculation: string;
   aiTools: string;
   trainingAssist: string;
@@ -96,6 +97,7 @@ export interface HomeDict {
   heroSubtitle: string;
   ctaButton: string;
   secondaryCta: string;
+  tertiaryCta: string;
   featuresTitle: string;
   whyTitle: string;
   whySubtitle: string;
@@ -1012,6 +1014,38 @@ export interface MetabolicDamageTestDict {
   reference: MetabolicDamageReferenceDict;
 }
 
+// 3D肌肉解剖
+export interface MuscleAnatomyDict {
+  title: string;
+  description: string;
+  metaDescription: string;
+  controls: {
+    frontView: string;
+    backView: string;
+    reset: string;
+  };
+  loading: string;
+  webglError: string;
+  clickToView: string;
+  selectedMuscle: string;
+  muscleGroups: {
+    upper: string;
+    torso: string;
+    lower: string;
+  };
+  explanation: {
+    title: string;
+    whatIs: string;
+    whatIsContent: string;
+    benefits: string;
+    benefitsList: string[];
+    howToUse: string;
+    howToUseList: string[];
+  };
+  // 肌肉名称翻译（动态键）
+  muscles: Record<string, string>;
+}
+
 // 完整字典类型
 export interface Dictionary {
   common: CommonDict;
@@ -1030,4 +1064,5 @@ export interface Dictionary {
   fatLossDietCalculator: FatLossDietCalculatorDict;
   highCarbDietCalculator: HighCarbDietCalculatorDict;
   metabolicDamageTest: MetabolicDamageTestDict;
+  muscleAnatomy: MuscleAnatomyDict;
 }

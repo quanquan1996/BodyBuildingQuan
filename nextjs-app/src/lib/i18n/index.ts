@@ -18,6 +18,7 @@ import {
   fatLossDietCalculator as zhFatLossDietCalculator,
   highCarbDietCalculator as zhHighCarbDietCalculator,
   metabolicDamageTest as zhMetabolicDamageTest,
+  muscleAnatomy as zhMuscleAnatomy,
 } from './locales/zh';
 
 import {
@@ -37,6 +38,7 @@ import {
   fatLossDietCalculator as enFatLossDietCalculator,
   highCarbDietCalculator as enHighCarbDietCalculator,
   metabolicDamageTest as enMetabolicDamageTest,
+  muscleAnatomy as enMuscleAnatomy,
 } from './locales/en';
 
 import { type Dictionary, type Locale, locales, defaultLocale } from './types';
@@ -62,6 +64,7 @@ const zh: Dictionary = {
   fatLossDietCalculator: zhFatLossDietCalculator,
   highCarbDietCalculator: zhHighCarbDietCalculator,
   metabolicDamageTest: zhMetabolicDamageTest,
+  muscleAnatomy: zhMuscleAnatomy,
 };
 
 // 从模块组装英文字典
@@ -82,6 +85,7 @@ const en: Dictionary = {
   fatLossDietCalculator: enFatLossDietCalculator,
   highCarbDietCalculator: enHighCarbDietCalculator,
   metabolicDamageTest: enMetabolicDamageTest,
+  muscleAnatomy: enMuscleAnatomy,
 };
 
 // 获取翻译字典

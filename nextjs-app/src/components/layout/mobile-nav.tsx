@@ -42,6 +42,7 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
         { title: dict.ffmiCalculator.title, href: `/${locale}/tools/ffmi-calculator`, toolId: 'ffmi-calculator' as ToolId },
         { title: dict.skinfoldCalculator.title, href: `/${locale}/tools/skinfold-calculator`, toolId: 'skinfold-calculator' as ToolId },
         { title: dict.grecianCalculator.title, href: `/${locale}/tools/grecian-calculator`, toolId: 'grecian-calculator' as ToolId },
+        { title: dict.nav.muscleAnatomy3D, href: `/${locale}/tools/muscle-anatomy`, toolId: 'muscle-anatomy' as ToolId },
       ],
     },
     {
@@ -116,7 +117,7 @@ export function MobileNav({ locale, dict }: MobileNavProps) {
                     pathname === category.href ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
                   )}
                 >
-                  {/* 使用 CSS 圆点替代图标 */}
+                  {/* 首页图标 */}
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-sm"
                     style={{ background: 'linear-gradient(135deg, #4CAF50, #81C784)' }}

@@ -35,6 +35,35 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* Container 居中配置 - 支持高分辨率屏幕 */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 100%;
+  @media (width >= 640px) {
+    max-width: 640px;
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 768px) {
+    max-width: 768px;
+  }
+  @media (width >= 1024px) {
+    max-width: 1024px;
+  }
+  @media (width >= 1280px) {
+    max-width: 1280px;
+  }
+  @media (width >= 1536px) {
+    max-width: 1440px;
+  }
+  @media (width >= 1920px) {
+    max-width: 1600px;
+  }
+  @media (width >= 2560px) {
+    max-width: 1920px;
+  }
+}
+
 :root {
   --radius: 0.75rem;
   /* 薄荷健康风格 - 温和柔和配色 */

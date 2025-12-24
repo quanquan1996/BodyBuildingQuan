@@ -46,6 +46,9 @@ export { highCarbDietCalculator } from './high-carb-diet';
 // Metabolic Damage Test
 export { metabolicDamageTest } from './metabolic-damage';
 
+// 3D Muscle Anatomy
+export { muscleAnatomy } from './muscle-anatomy';
+
 // === Usage ===
 //
 // For AI programming, import needed modules:

@@ -9,6 +9,8 @@ interface HeroSectionProps {
   ctaHref: string;
   secondaryCtaText?: string;
   secondaryCtaHref?: string;
+  tertiaryCtaText?: string;
+  tertiaryCtaHref?: string;
   stats?: {
     users: string;
     usersLabel: string;
@@ -25,6 +27,8 @@ export function HeroSection({
   ctaHref,
   secondaryCtaText,
   secondaryCtaHref,
+  tertiaryCtaText,
+  tertiaryCtaHref,
   stats,
 }: HeroSectionProps) {
   // 检测是否为中文标题
@@ -126,10 +130,31 @@ export function HeroSection({
                 asChild
                 variant="outline"
                 size="lg"
-                className="w-full h-12 rounded-full text-base font-medium transition-all hover:bg-gray-50"
-                style={{ borderColor: '#E8E8E8', borderWidth: '1px', color: '#666666' }}
+                className="w-full h-11 rounded-full text-sm font-medium transition-all hover:bg-orange-50/50"
+                style={{
+                  borderColor: '#F59E0B',
+                  borderWidth: '1.5px',
+                  color: '#D97706',
+                  background: 'rgba(251, 191, 36, 0.06)',
+                }}
               >
-                <Link href={secondaryCtaHref}>{secondaryCtaText}</Link>
+                <Link href={secondaryCtaHref}>🔥 {secondaryCtaText}</Link>
+              </Button>
+            )}
+            {tertiaryCtaText && tertiaryCtaHref && (
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full h-11 rounded-full text-sm font-medium transition-all hover:bg-purple-50/50"
+                style={{
+                  borderColor: '#A78BFA',
+                  borderWidth: '1.5px',
+                  color: '#7C3AED',
+                  background: 'rgba(167, 139, 250, 0.06)',
+                }}
+              >
+                <Link href={tertiaryCtaHref}>🦴 {tertiaryCtaText}</Link>
               </Button>
             )}
           </div>

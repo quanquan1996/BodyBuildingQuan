@@ -27,6 +27,7 @@ export function DesktopNav({ locale, dict }: DesktopNavProps) {
         { title: dict.grecianCalculator.title, href: `/${locale}/tools/grecian-calculator` },
       ],
     },
+    { title: dict.nav.muscleAnatomy3D, href: `/${locale}/tools/muscle-anatomy` },
     {
       title: dict.nav.dietCalculation,
       items: [
@@ -45,7 +46,9 @@ export function DesktopNav({ locale, dict }: DesktopNavProps) {
     },
     {
       title: dict.nav.trainingAssist,
-      items: [{ title: dict.heartRateCalculator.title, href: `/${locale}/tools/heart-rate-calculator` }],
+      items: [
+        { title: dict.heartRateCalculator.title, href: `/${locale}/tools/heart-rate-calculator` },
+      ],
     },
   ];
 

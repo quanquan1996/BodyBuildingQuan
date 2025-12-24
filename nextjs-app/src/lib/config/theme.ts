@@ -52,6 +52,11 @@ export const toolGradients = {
     to: '#A29BFE',
     angle: 135,
   },
+  'muscle-anatomy': {
+    from: '#FF9A9E',  // 珊瑚粉
+    to: '#FECFEF',
+    angle: 135,
+  },
 } as const;
 
 export type ToolId = keyof typeof toolGradients;
@@ -125,4 +130,5 @@ export const toolConfigs: Record<ToolId, { title: string; icon: string }> = {
   'fat-loss-diet-calculator': { title: '减脂饮食计算器', icon: 'salad' },
   'high-carb-diet-calculator': { title: '高碳减脂计算器', icon: 'wheat' },
   'metabolic-damage-test': { title: '代谢受损检测器', icon: 'activity' },
+  'muscle-anatomy': { title: '3D肌肉解剖图', icon: 'bone' },
 };

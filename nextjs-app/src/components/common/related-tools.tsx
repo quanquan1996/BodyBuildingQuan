@@ -10,6 +10,7 @@ import {
   Salad, 
   Wheat, 
   Activity,
+  Bone,
   ChevronRight
 } from 'lucide-react';
 import { toolGradients, toolConfigs, type ToolId } from '@/lib/config/theme';
@@ -33,6 +34,7 @@ const iconMap: Record<string, React.ReactNode> = {
   salad: <Salad className="w-5 h-5" />,
   wheat: <Wheat className="w-5 h-5" />,
   activity: <Activity className="w-5 h-5" />,
+  bone: <Bone className="w-5 h-5" />,
 };
 
 const toolRoutes: Record<ToolId, string> = {
@@ -46,6 +48,7 @@ const toolRoutes: Record<ToolId, string> = {
   'fat-loss-diet-calculator': '/tools/fat-loss-diet-calculator',
   'high-carb-diet-calculator': '/tools/high-carb-diet-calculator',
   'metabolic-damage-test': '/tools/metabolic-damage-test',
+  'muscle-anatomy': '/tools/muscle-anatomy',
 };
 
 // 默认相关工具推荐
@@ -60,6 +63,7 @@ const defaultRelatedTools: Record<ToolId, ToolId[]> = {
   'fat-loss-diet-calculator': ['carb-cycling-calculator', 'high-carb-diet-calculator', 'bmr-calculator'],
   'high-carb-diet-calculator': ['fat-loss-diet-calculator', 'carb-cycling-calculator', 'bmr-calculator'],
   'metabolic-damage-test': ['bmr-calculator', 'fat-loss-diet-calculator', 'carb-cycling-calculator'],
+  'muscle-anatomy': ['ffmi-calculator', 'grecian-calculator', 'pose-comparator'],
 };
 
 // 工具标题映射函数
@@ -75,6 +79,7 @@ function getToolTitle(toolId: ToolId, dict: any): string {
     'fat-loss-diet-calculator': dict.fatLossDietCalculator.title,
     'high-carb-diet-calculator': dict.highCarbDietCalculator.title,
     'metabolic-damage-test': dict.metabolicDamageTest.title,
+    'muscle-anatomy': dict.muscleAnatomy.title,
   };
   return titleMap[toolId];
 }

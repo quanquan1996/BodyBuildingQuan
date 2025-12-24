@@ -11,6 +11,7 @@ import {
   Salad,
   Wheat,
   Activity,
+  Bone,
 } from 'lucide-react';
 import { toolGradients, type ToolId } from '@/lib/config/theme';
 
@@ -29,7 +30,8 @@ interface FeatureItem {
     | 'refresh'
     | 'salad'
     | 'wheat'
-    | 'activity';
+    | 'activity'
+    | 'bone';
 }
 
 interface FeatureGridProps {
@@ -48,6 +50,7 @@ const iconMap = {
   salad: Salad,
   wheat: Wheat,
   activity: Activity,
+  bone: Bone,
 };
 
 // 图标类型到工具ID映射
@@ -62,6 +65,7 @@ const iconToToolId: Record<string, ToolId> = {
   salad: 'fat-loss-diet-calculator',
   wheat: 'high-carb-diet-calculator',
   activity: 'metabolic-damage-test',
+  bone: 'muscle-anatomy',
 };
 
 export function FeatureGrid({ features, title }: FeatureGridProps) {

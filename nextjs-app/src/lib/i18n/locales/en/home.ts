@@ -8,6 +8,7 @@ export const home: HomeDict = {
   heroSubtitle: 'FFMI Calculator · Body Fat Analysis · Bodybuilding Pose Scoring · Muscle Mass Assessment',
   ctaButton: 'Get Started',
   secondaryCta: 'Fat Loss Diet Calculator',
+  tertiaryCta: '3D Muscle Anatomy',
   featuresTitle: 'Popular Fitness Tools',
   whyTitle: 'Why Choose Us?',
   whySubtitle: 'Professional, free, and secure fitness data analysis platform',

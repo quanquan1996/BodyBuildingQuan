@@ -90,6 +90,13 @@ export default async function HomePage({ params }: HomePageProps) {
       href: `/${locale}/tools/metabolic-damage-test`,
       icon: 'activity' as const,
     },
+    {
+      id: 'muscle-anatomy',
+      title: dict.muscleAnatomy.title,
+      description: dict.muscleAnatomy.description,
+      href: `/${locale}/tools/muscle-anatomy`,
+      icon: 'bone' as const,
+    },
   ];
 
   // JSON-LD structured data
@@ -131,6 +138,8 @@ export default async function HomePage({ params }: HomePageProps) {
         ctaHref={`/${locale}/tools/ffmi-calculator`}
         secondaryCtaText={dict.home.secondaryCta}
         secondaryCtaHref={`/${locale}/tools/fat-loss-diet-calculator`}
+        tertiaryCtaText={dict.home.tertiaryCta}
+        tertiaryCtaHref={`/${locale}/tools/muscle-anatomy`}
         stats={dict.home.stats}
       />
 
