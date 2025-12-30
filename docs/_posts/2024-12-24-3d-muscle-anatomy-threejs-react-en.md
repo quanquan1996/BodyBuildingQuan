@@ -265,6 +265,209 @@ export const muscleAnatomy = {
 };
 ```
 
+## Mobile Interaction Optimization
+
+On mobile devices, traditional OrbitControls conflicts with page scrolling, resulting in poor user experience. We need a custom interaction solution.
+
+### 1. Disable Default Touch Behavior
+
+First, disable default touch behavior on Canvas and container to prevent scroll passthrough:
+
+```tsx
+// muscle-scene.tsx
+<Canvas
+  style={{ 
+    touchAction: 'none',  // Disable touch gestures
+  }}
+  onPointerMissed={() => {}}  // Disable default click behavior
+>
+```
+
+Also add non-passive event listeners on the container:
+
+```tsx
+// muscle-anatomy-client.tsx
+useEffect(() => {
+  const container = containerRef.current;
+  if (!container) return;
+
+  const preventScroll = (e: TouchEvent) => {
+    e.preventDefault();
+  };
+
+  // Use non-passive listeners to prevent scrolling
+  container.addEventListener('touchmove', preventScroll, { passive: false });
+  container.addEventListener('touchstart', preventScroll, { passive: false });
+
+  return () => {
+    container.removeEventListener('touchmove', preventScroll);
+    container.removeEventListener('touchstart', preventScroll);
+  };
+}, []);
+```
+
+### 2. Virtual Joystick Controller
+
+To provide a good interaction experience on mobile, I implemented a virtual joystick component:
+
+```tsx
+// virtual-joystick.tsx
+export function VirtualJoystick({ onRotate, onZoom, onReset }) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [knobPosition, setKnobPosition] = useState({ x: 0, y: 0 });
+  const animationRef = useRef<number | null>(null);
+
+  const joystickRadius = 50;
+  const knobRadius = 24;
+  const maxDistance = joystickRadius - knobRadius / 2;
+
+  // Continuous rotation animation
+  useEffect(() => {
+    if (isDragging && (knobPosition.x !== 0 || knobPosition.y !== 0)) {
+      const animate = () => {
+        const rotateSpeed = 0.04;
+        onRotate(knobPosition.x * rotateSpeed, knobPosition.y * rotateSpeed);
+        animationRef.current = requestAnimationFrame(animate);
+      };
+      animationRef.current = requestAnimationFrame(animate);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isDragging, knobPosition, onRotate]);
+
+  // Handle drag
+  const handleMove = (clientX: number, clientY: number) => {
+    const rect = joystickRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    let deltaX = clientX - centerX;
+    let deltaY = clientY - centerY;
+
+    // Constrain within circular bounds
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    if (distance > maxDistance) {
+      deltaX = (deltaX / distance) * maxDistance;
+      deltaY = (deltaY / distance) * maxDistance;
+    }
+
+    setKnobPosition({ x: deltaX, y: deltaY });
+  };
+
+  // Stop rotation on release
+  const handleEnd = () => {
+    setIsDragging(false);
+    setKnobPosition({ x: 0, y: 0 });
+    onRotate(0, 0);  // Key: notify parent to stop rotation
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      {/* Zoom buttons */}
+      <div className="flex flex-col gap-2">
+        <Button onMouseDown={() => startZoom(-0.15)}>
+          <ZoomIn />
+        </Button>
+        <Button onMouseDown={() => startZoom(0.15)}>
+          <ZoomOut />
+        </Button>
+      </div>
+
+      {/* Joystick */}
+      <div
+        ref={joystickRef}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        style={{ width: joystickRadius * 2, height: joystickRadius * 2 }}
+      >
+        {/* Base */}
+        <div className="absolute inset-0 rounded-full" />
+        {/* Knob */}
+        <div
+          style={{
+            left: `calc(50% - ${knobRadius}px + ${knobPosition.x}px)`,
+            top: `calc(50% - ${knobRadius}px + ${knobPosition.y}px)`,
+          }}
+        />
+      </div>
+
+      {/* Reset button */}
+      <Button onClick={onReset}>
+        <RotateCcw />
+      </Button>
+    </div>
+  );
+}
+```
+
+### 3. Custom Camera Controller
+
+Replace OrbitControls with a spherical coordinate system for camera control:
+
+```tsx
+// CameraController - supports external control
+function CameraController({ view, rotationDelta, zoomDelta }) {
+  const { camera } = useThree();
+  const spherical = useRef(new THREE.Spherical(2.5, Math.PI / 2, 0));
+  const target = useRef(new THREE.Vector3(0, 0, 0));
+
+  useFrame(() => {
+    let needsUpdate = false;
+
+    // Handle rotation
+    if (rotationDelta && (rotationDelta.x !== 0 || rotationDelta.y !== 0)) {
+      spherical.current.theta -= rotationDelta.x;
+      spherical.current.phi = Math.max(
+        Math.PI / 6,
+        Math.min(Math.PI - Math.PI / 6, spherical.current.phi + rotationDelta.y)
+      );
+      needsUpdate = true;
+    }
+
+    // Handle zoom
+    if (zoomDelta && zoomDelta !== 0) {
+      spherical.current.radius = Math.max(1, Math.min(5, spherical.current.radius + zoomDelta));
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      const pos = new THREE.Vector3().setFromSpherical(spherical.current);
+      camera.position.copy(pos);
+      camera.lookAt(target.current);
+    }
+  });
+
+  return null;
+}
+```
+
+### 4. Long-Press Zoom
+
+Zoom buttons support continuous zooming on long press:
+
+```tsx
+const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+const startZoom = (delta: number) => {
+  onZoom(delta);
+  zoomIntervalRef.current = setInterval(() => {
+    onZoom(delta);
+  }, 100);
+};
+
+const stopZoom = () => {
+  if (zoomIntervalRef.current) {
+    clearInterval(zoomIntervalRef.current);
+  }
+};
+```
+
+This solution provides smooth interaction on both PC and mobile while avoiding conflicts with page scrolling.
+
 ## Performance Optimization
 
 ### 1. Model Compression
@@ -310,7 +513,8 @@ This article covered how to implement an interactive 3D human muscle anatomy vie
 1. **Model Processing**: Export and compress GLB model from Z-Anatomy
 2. **Scene Setup**: Build 3D scene with React Three Fiber
 3. **Interaction**: Raycasting detection + material highlighting
-4. **Internationalization**: Bilingual muscle name translations
+4. **Mobile Optimization**: Virtual joystick + custom camera controller + touch event handling
+5. **Internationalization**: Bilingual muscle name translations
 
 This solution runs entirely in the browser without backend services, making it perfect for building educational 3D visualization applications.
 
