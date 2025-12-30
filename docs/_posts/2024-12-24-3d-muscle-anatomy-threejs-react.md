@@ -74,6 +74,7 @@ bpy.ops.export_scene.gltf(
 
 ### 1. 场景搭建 (React Three Fiber)
 
+{% raw %}
 ```tsx
 // muscle-scene.tsx
 import { Canvas } from '@react-three/fiber';
@@ -110,9 +111,11 @@ export function MuscleScene({ onMuscleClick, onMuscleHover, hoveredMuscle, selec
   );
 }
 ```
+{% endraw %}
 
 ### 2. 模型加载与肌肉识别
 
+{% raw %}
 ```tsx
 // muscle-model.tsx
 import { useGLTF } from '@react-three/drei';
@@ -176,9 +179,11 @@ export function MuscleModel({ onMuscleClick, onMuscleHover, hoveredMuscle, selec
   );
 }
 ```
+{% endraw %}
 
 ### 3. 交互高亮效果
 
+{% raw %}
 ```tsx
 // 高亮颜色配置
 const HIGHLIGHT_COLOR = new THREE.Color(0x5ac57a);  // 薄荷绿 - 悬停
@@ -208,11 +213,13 @@ useEffect(() => {
   });
 }, [hoveredMuscle, selectedMuscle, clonedScene]);
 ```
+{% endraw %}
 
 ### 4. 肌肉名称映射与多语言
 
 Z-Anatomy 的命名格式是 `Muscle name.l`（左侧）/ `Muscle name.r`（右侧），我们需要将其映射到标准的肌肉 ID：
 
+{% raw %}
 ```typescript
 // muscles.ts
 const muscleAliases: Record<string, string[]> = {
@@ -244,9 +251,11 @@ export function getMuscleIdFromModelName(modelName: string): string | undefined 
   return undefined;
 }
 ```
+{% endraw %}
 
 多语言翻译存储在 i18n 模块中：
 
+{% raw %}
 ```typescript
 // locales/zh/muscle-anatomy.ts
 export const muscleAnatomy = {
@@ -263,6 +272,7 @@ export const muscleAnatomy = {
   },
 };
 ```
+{% endraw %}
 
 ## 移动端交互优化
 
@@ -272,6 +282,7 @@ export const muscleAnatomy = {
 
 首先，禁用 Canvas 和容器的默认触摸行为，防止滚动穿透：
 
+{% raw %}
 ```tsx
 // muscle-scene.tsx
 <Canvas
@@ -281,9 +292,11 @@ export const muscleAnatomy = {
   onPointerMissed={() => {}}  // 禁用默认点击行为
 >
 ```
+{% endraw %}
 
 同时在容器上添加非被动事件监听器：
 
+{% raw %}
 ```tsx
 // muscle-anatomy-client.tsx
 useEffect(() => {
@@ -304,11 +317,13 @@ useEffect(() => {
   };
 }, []);
 ```
+{% endraw %}
 
 ### 2. 虚拟摇杆控制器
 
 为了在移动端提供良好的交互体验，我实现了一个虚拟摇杆组件：
 
+{% raw %}
 ```tsx
 // virtual-joystick.tsx
 export function VirtualJoystick({ onRotate, onZoom, onReset }) {
@@ -402,11 +417,13 @@ export function VirtualJoystick({ onRotate, onZoom, onReset }) {
   );
 }
 ```
+{% endraw %}
 
 ### 3. 自定义相机控制器
 
 替换 OrbitControls，使用球坐标系统实现相机控制：
 
+{% raw %}
 ```tsx
 // CameraController - 支持外部控制
 function CameraController({ view, rotationDelta, zoomDelta }) {
@@ -443,11 +460,13 @@ function CameraController({ view, rotationDelta, zoomDelta }) {
   return null;
 }
 ```
+{% endraw %}
 
 ### 4. 长按缩放
 
 缩放按钮支持长按连续缩放：
 
+{% raw %}
 ```tsx
 const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -464,6 +483,7 @@ const stopZoom = () => {
   }
 };
 ```
+{% endraw %}
 
 这套方案在 PC 和移动端都能提供流畅的交互体验，同时避免了与页面滚动的冲突。
 
@@ -476,6 +496,7 @@ const stopZoom = () => {
 
 ### 2. 动态加载
 
+{% raw %}
 ```tsx
 // 使用 Next.js 动态导入，禁用 SSR
 const MuscleScene = dynamic(
@@ -483,6 +504,7 @@ const MuscleScene = dynamic(
   { ssr: false }
 );
 ```
+{% endraw %}
 
 ### 3. 材质优化
 

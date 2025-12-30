@@ -75,6 +75,7 @@ The exported model is compressed from 300MB to about 6.8MB, perfect for web load
 
 ### 1. Scene Setup (React Three Fiber)
 
+{% raw %}
 ```tsx
 // muscle-scene.tsx
 import { Canvas } from '@react-three/fiber';
@@ -111,9 +112,11 @@ export function MuscleScene({ onMuscleClick, onMuscleHover, hoveredMuscle, selec
   );
 }
 ```
+{% endraw %}
 
 ### 2. Model Loading and Muscle Identification
 
+{% raw %}
 ```tsx
 // muscle-model.tsx
 import { useGLTF } from '@react-three/drei';
@@ -177,9 +180,11 @@ export function MuscleModel({ onMuscleClick, onMuscleHover, hoveredMuscle, selec
   );
 }
 ```
+{% endraw %}
 
 ### 3. Interactive Highlight Effects
 
+{% raw %}
 ```tsx
 // Highlight color configuration
 const HIGHLIGHT_COLOR = new THREE.Color(0x5ac57a);  // Mint green - hover
@@ -209,11 +214,13 @@ useEffect(() => {
   });
 }, [hoveredMuscle, selectedMuscle, clonedScene]);
 ```
+{% endraw %}
 
 ### 4. Muscle Name Mapping and i18n
 
 Z-Anatomy uses naming format like `Muscle name.l` (left) / `Muscle name.r` (right). We need to map these to standard muscle IDs:
 
+{% raw %}
 ```typescript
 // muscles.ts
 const muscleAliases: Record<string, string[]> = {
@@ -245,9 +252,11 @@ export function getMuscleIdFromModelName(modelName: string): string | undefined 
   return undefined;
 }
 ```
+{% endraw %}
 
 Translations are stored in i18n modules:
 
+{% raw %}
 ```typescript
 // locales/en/muscle-anatomy.ts
 export const muscleAnatomy = {
@@ -264,6 +273,7 @@ export const muscleAnatomy = {
   },
 };
 ```
+{% endraw %}
 
 ## Mobile Interaction Optimization
 
@@ -273,6 +283,7 @@ On mobile devices, traditional OrbitControls conflicts with page scrolling, resu
 
 First, disable default touch behavior on Canvas and container to prevent scroll passthrough:
 
+{% raw %}
 ```tsx
 // muscle-scene.tsx
 <Canvas
@@ -282,9 +293,11 @@ First, disable default touch behavior on Canvas and container to prevent scroll 
   onPointerMissed={() => {}}  // Disable default click behavior
 >
 ```
+{% endraw %}
 
 Also add non-passive event listeners on the container:
 
+{% raw %}
 ```tsx
 // muscle-anatomy-client.tsx
 useEffect(() => {
@@ -305,11 +318,13 @@ useEffect(() => {
   };
 }, []);
 ```
+{% endraw %}
 
 ### 2. Virtual Joystick Controller
 
 To provide a good interaction experience on mobile, I implemented a virtual joystick component:
 
+{% raw %}
 ```tsx
 // virtual-joystick.tsx
 export function VirtualJoystick({ onRotate, onZoom, onReset }) {
@@ -403,11 +418,13 @@ export function VirtualJoystick({ onRotate, onZoom, onReset }) {
   );
 }
 ```
+{% endraw %}
 
 ### 3. Custom Camera Controller
 
 Replace OrbitControls with a spherical coordinate system for camera control:
 
+{% raw %}
 ```tsx
 // CameraController - supports external control
 function CameraController({ view, rotationDelta, zoomDelta }) {
@@ -444,11 +461,13 @@ function CameraController({ view, rotationDelta, zoomDelta }) {
   return null;
 }
 ```
+{% endraw %}
 
 ### 4. Long-Press Zoom
 
 Zoom buttons support continuous zooming on long press:
 
+{% raw %}
 ```tsx
 const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -465,6 +484,7 @@ const stopZoom = () => {
   }
 };
 ```
+{% endraw %}
 
 This solution provides smooth interaction on both PC and mobile while avoiding conflicts with page scrolling.
 
@@ -477,6 +497,7 @@ This solution provides smooth interaction on both PC and mobile while avoiding c
 
 ### 2. Dynamic Loading
 
+{% raw %}
 ```tsx
 // Use Next.js dynamic import, disable SSR
 const MuscleScene = dynamic(
@@ -484,6 +505,7 @@ const MuscleScene = dynamic(
   { ssr: false }
 );
 ```
+{% endraw %}
 
 ### 3. Material Optimization
 
