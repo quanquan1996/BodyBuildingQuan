@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import { MuscleControls } from './muscle-controls';
@@ -49,9 +49,6 @@ export function MuscleAnatomyClient({ locale, dict }: MuscleAnatomyClientProps) 
   // 摇杆控制状态
   const [rotationDelta, setRotationDelta] = useState({ x: 0, y: 0 });
   const [zoomDelta, setZoomDelta] = useState(0);
-  
-  // 3D 场景容器 ref
-  const sceneContainerRef = useRef<HTMLDivElement>(null);
 
   // 检测 WebGL 支持和屏幕尺寸
   useEffect(() => {
@@ -68,25 +65,6 @@ export function MuscleAnatomyClient({ locale, dict }: MuscleAnatomyClientProps) 
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // 禁用 3D 场景容器的触摸和滚轮事件（使用 non-passive 监听器）
-  useEffect(() => {
-    const container = sceneContainerRef.current;
-    if (!container) return;
-
-    const preventScroll = (e: Event) => {
-      e.preventDefault();
-    };
-
-    // 添加 non-passive 事件监听器
-    container.addEventListener('wheel', preventScroll, { passive: false });
-    container.addEventListener('touchmove', preventScroll, { passive: false });
-
-    return () => {
-      container.removeEventListener('wheel', preventScroll);
-      container.removeEventListener('touchmove', preventScroll);
-    };
-  }, [isLoading, isWebGLSupported]);
 
   const handleMuscleClick = (muscleId: string) => {
     const newSelected = muscleId === selectedMuscle ? null : muscleId;
@@ -234,8 +212,7 @@ export function MuscleAnatomyClient({ locale, dict }: MuscleAnatomyClientProps) 
             
             {/* 3D 场景 */}
             <div 
-              ref={sceneContainerRef}
-              className="relative touch-none"
+              className="relative"
               style={{ 
                 height: '500px',
                 background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)',

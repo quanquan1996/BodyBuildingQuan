@@ -101,8 +101,7 @@ export function MuscleScene({
       camera={{ position: [1.5, 0.3, 2], fov: 50 }}
       gl={{ antialias: true, alpha: true }}
       style={{ 
-        background: 'transparent', 
-        touchAction: 'none',  // 禁用触摸手势
+        background: 'transparent',
       }}
       // 禁用默认的触摸和鼠标拖拽控制
       onPointerMissed={() => {}}
