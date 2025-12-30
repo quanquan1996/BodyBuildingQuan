@@ -306,17 +306,23 @@ export function MuscleAnatomyClient({ locale, dict }: MuscleAnatomyClientProps) 
           </div>
           
           <SheetHeader className="pb-2">
-            <SheetTitle className="text-center">
+            <SheetTitle className="text-center text-lg font-semibold text-primary">
               {selectedMuscle && dict.muscleAnatomy.muscles[selectedMuscle] 
                 ? dict.muscleAnatomy.muscles[selectedMuscle] 
                 : dict.muscleAnatomy.selectedMuscle}
             </SheetTitle>
+            {/* 英文名称副标题 */}
+            {selectedMuscle && locale === 'zh' && (
+              <p className="text-sm text-muted-foreground text-center">
+                {selectedMuscle.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </p>
+            )}
             <SheetDescription className="sr-only">
               {dict.muscleAnatomy.description}
             </SheetDescription>
           </SheetHeader>
           
-          <div className="px-4 pb-6 overflow-y-auto" style={{ maxHeight: 'calc(75vh - 80px)' }}>
+          <div className="px-4 pb-6 overflow-y-auto" style={{ maxHeight: 'calc(75vh - 100px)' }}>
             <MuscleDetailPanel
               muscleId={selectedMuscle}
               locale={locale}

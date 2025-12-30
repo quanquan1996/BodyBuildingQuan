@@ -59,12 +59,7 @@ export function MuscleDetailPanel({ muscleId, locale, dict, compact = false }: M
         </div>
       )}
 
-      {/* 英文名称 - 紧凑模式显示 */}
-      {compact && locale === 'zh' && dict.muscleAnatomy.muscles[muscleId] && (
-        <p className="text-xs text-muted-foreground text-center -mt-2">
-          {muscleId.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-        </p>
-      )}
+      {/* 英文名称 - 紧凑模式不再显示，由父组件 Sheet 处理 */}
 
       {/* 动态 Tab 数量：有补弱数据显示4个，否则3个，都是单行布局 */}
       <Tabs defaultValue="overview" className="w-full">
