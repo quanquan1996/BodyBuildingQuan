@@ -1,13 +1,26 @@
 // 3D Muscle Anatomy - English Translation
 
+// Import modular muscle details
+import { muscleDetailsUpper } from './muscle-details-upper';
+import { muscleDetailsTorso } from './muscle-details-torso';
+import { muscleDetailsLower } from './muscle-details-lower';
+
 export const muscleAnatomy = {
   title: '3D Muscle Anatomy',
   description: 'Interactive 3D human muscle anatomy viewer. Click to see muscle names.',
+  betaBadge: 'Beta',
+  betaNotice: 'This feature is in beta. Some muscles may not be clickable. Use the search box above to find muscles directly for a better experience!',
   metaDescription: 'Free online 3D human muscle anatomy viewer. Interactive display of human muscle structure, click to view muscle names, supports rotation and zoom. Perfect for fitness enthusiasts learning muscle anatomy.',
   controls: {
     frontView: 'Front',
     backView: 'Back',
     reset: 'Reset View',
+    superficialLayer: 'Superficial',
+    deepLayer: 'Deep',
+  },
+  search: {
+    placeholder: 'Search muscle name...',
+    noResults: 'No matching muscles found',
   },
   loading: 'Loading 3D model...',
   webglError: 'Your browser does not support WebGL. Please use a modern browser like Chrome, Firefox, or Edge.',
@@ -17,6 +30,22 @@ export const muscleAnatomy = {
     upper: 'Upper Body',
     torso: 'Torso',
     lower: 'Lower Body',
+  },
+  // Detail Panel
+  detailPanel: {
+    tabs: {
+      overview: 'Info',
+      functions: 'Role',
+      exercises: 'Train',
+      strengthening: 'Tips',
+    },
+    strengthening: {
+      strategyTitle: 'Strategy',
+      keyPointsTitle: 'Key Points',
+      recommendedTitle: 'High Activation Exercises',
+    },
+    placeholder: 'Content coming soon',
+    close: 'Close',
   },
   explanation: {
     title: 'About 3D Muscle Anatomy',
@@ -264,5 +293,11 @@ export const muscleAnatomy = {
     adductor_hallucis: 'Adductor Hallucis',
     abductor_digiti_minimi_foot: 'Abductor Digiti Minimi (Foot)',
     flexor_digiti_minimi_brevis_foot: 'Flexor Digiti Minimi Brevis (Foot)',
+  },
+  // Muscle Details (Overview, Functions, Exercises) - imported from modules
+  muscleDetails: {
+    ...muscleDetailsUpper,
+    ...muscleDetailsTorso,
+    ...muscleDetailsLower,
   },
 };

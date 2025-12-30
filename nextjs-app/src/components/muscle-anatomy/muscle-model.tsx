@@ -4,13 +4,14 @@ import { useRef, useEffect, useMemo } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { ThreeEvent } from '@react-three/fiber';
-import { getMuscleIdFromModelName, getMuscleById } from '@/lib/data/muscles';
+import { getMuscleIdFromModelName, getMuscleLayer, type MuscleLayer } from '@/lib/data/muscles';
 
 interface MuscleModelProps {
   onMuscleClick: (muscleId: string) => void;
   onMuscleHover: (muscleId: string | null) => void;
   hoveredMuscle: string | null;
   selectedMuscle: string | null;
+  muscleLayer: MuscleLayer;
 }
 
 // 高亮颜色
@@ -175,6 +176,7 @@ export function MuscleModel({
   onMuscleHover,
   hoveredMuscle,
   selectedMuscle,
+  muscleLayer,
 }: MuscleModelProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -303,6 +305,27 @@ export function MuscleModel({
       }
     });
   }, [hoveredMuscle, selectedMuscle, clonedScene]);
+
+  // 根据层级显示/隐藏肌肉
+  useEffect(() => {
+    if (!clonedScene) return;
+    
+    clonedScene.traverse((child) => {
+      if (child instanceof THREE.Mesh && isMuscle(child.name)) {
+        const meshMuscleId = getMuscleIdFromModelName(child.name) || child.name;
+        const layer = getMuscleLayer(meshMuscleId);
+        const shouldShow = layer === muscleLayer;
+        
+        child.visible = shouldShow;
+        
+        if (shouldShow) {
+          child.layers.enable(0);
+        } else {
+          child.layers.disable(0);
+        }
+      }
+    });
+  }, [muscleLayer, clonedScene]);
 
   const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();

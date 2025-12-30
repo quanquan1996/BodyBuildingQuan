@@ -1,9 +1,99 @@
 // 肌肉数据定义
 // 肌肉名称通过 i18n 翻译系统获取，这里只存储 ID 和分组信息
 
+export type MuscleLayer = 'superficial' | 'deep';
+
 export interface MuscleInfo {
   id: string;           // 肌肉 ID（用于翻译键）
   group: 'upper' | 'torso' | 'lower';  // 身体部位分组
+}
+
+// ============================================
+// 肌肉层级分类
+// ============================================
+
+// 表层肌肉 - 位于身体表面，可以直接看到或触摸到
+export const SUPERFICIAL_MUSCLES: string[] = [
+  // 上肢表层
+  'deltoid_anterior', 'deltoid_lateral', 'deltoid_posterior',
+  'clavicular_part_of_deltoid', 'acromial_part_of_deltoid', 'scapular_spinal_part_of_deltoid',
+  'biceps', 'biceps_brachii', 'long_head_of_biceps_brachii', 'short_head_of_biceps_brachii',
+  'triceps', 'triceps_brachii', 'long_head_of_triceps_brachii', 'lateral_head_of_triceps_brachii',
+  'forearm_flexors', 'forearm_extensors', 'flexor_carpi_radialis', 'flexor_carpi_ulnaris',
+  'palmaris_longus', 'extensor_carpi_radialis_longus', 'extensor_carpi_ulnaris',
+  'extensor_digitorum', 'brachioradialis',
+  
+  // 躯干表层 - 胸部
+  'pectoralis_major', 'sternocostal_head_of_pectoralis_major',
+  'clavicular_head_of_pectoralis_major', 'abdominal_part_of_pectoralis_major',
+  
+  // 躯干表层 - 背部（从背面可见）
+  'latissimus_dorsi', 'trapezius', 'descending_part_of_trapezius',
+  'transverse_part_of_trapezius', 'ascending_part_of_trapezius',
+  'teres_major',  // 大圆肌 - 从背部可见
+  'infraspinatus',  // 冈下肌 - 从背部可见
+  'rhomboid_major', 'rhomboid_minor', 'rhomboids',  // 菱形肌 - 斜方肌下可见
+  'erector_spinae', 'iliocostalis', 'longissimus', 'spinalis',  // 竖脊肌 - 从背部可见
+  
+  // 躯干表层 - 腹部
+  'rectus_abdominis', 'external_oblique', 'external_abdominal_oblique',
+  'serratus_anterior', 'sternocleidomastoid', 'platysma',
+  
+  // 面部表层
+  'masseter', 'temporalis', 'orbicularis_oculi', 'orbicularis_oris',
+  'zygomaticus_major', 'zygomaticus_minor', 'frontalis', 'occipitalis',
+  'nasalis', 'mentalis', 'risorius', 'procerus', 'buccinator',
+  
+  // 下肢表层
+  'gluteus_maximus', 'gluteus_medius',  // 臀中肌从侧面可见
+  'tensor_fasciae_latae',
+  'quadriceps', 'quadriceps_femoris', 'rectus_femoris', 'vastus_lateralis', 'vastus_medialis',
+  'sartorius', 'hamstrings', 'biceps_femoris', 'long_head_of_biceps_femoris',
+  'semitendinosus', 'semimembranosus', 'adductors', 'adductor_longus', 'gracilis',
+  'gastrocnemius', 'lateral_head_of_gastrocnemius', 'medial_head_of_gastrocnemius',
+  'tibialis_anterior', 'extensor_digitorum_longus', 'peroneus_longus', 'fibularis_longus',
+  'peroneus_brevis', 'fibularis_brevis',
+];
+
+// 深层肌肉 - 位于表层肌肉下方，需要移除表层才能看到
+export const DEEP_MUSCLES: string[] = [
+  // 上肢深层
+  'medial_head_of_triceps_brachii', 'brachialis', 'coracobrachialis', 'anconeus',
+  'flexor_digitorum_superficialis', 'flexor_digitorum_profundus',
+  'extensor_carpi_radialis_brevis', 'pronator_teres', 'pronator_quadratus', 'supinator',
+  
+  // 躯干深层 - 胸部
+  'pectoralis_minor', 'subclavius', 'intercostal_muscles', 'external_intercostal', 'internal_intercostal',
+  
+  // 躯干深层 - 背部/肩袖
+  'levator_scapulae',
+  'teres_minor',  // 小圆肌 - 在冈下肌下方
+  'supraspinatus',  // 冈上肌 - 在斜方肌下方
+  'subscapularis',  // 肩胛下肌 - 在肩胛骨前面
+  'multifidus', 'rotatores', 'semispinalis', 'quadratus_lumborum',
+  
+  // 躯干深层 - 腹部
+  'internal_oblique', 'internal_abdominal_oblique', 'transverse_abdominis', 'transversus_abdominis', 'pyramidalis',
+  
+  // 躯干深层 - 颈部
+  'scalene_muscles', 'scalenus_anterior', 'scalenus_medius', 'scalenus_posterior',
+  'longus_colli', 'longus_capitis',
+  
+  // 下肢深层
+  'gluteus_minimus', 'piriformis',
+  'iliopsoas', 'iliacus', 'psoas_major', 'psoas_minor',
+  'obturator_internus', 'obturator_externus', 'gemellus_superior', 'gemellus_inferior', 'quadratus_femoris',
+  'vastus_intermedius', 'short_head_of_biceps_femoris', 'adductor_magnus', 'adductor_brevis', 'pectineus',
+  'soleus', 'plantaris', 'popliteus', 'tibialis_posterior',
+  'flexor_digitorum_longus', 'flexor_hallucis_longus', 'extensor_hallucis_longus',
+];
+
+// 判断肌肉属于哪个层级
+export function getMuscleLayer(muscleId: string): MuscleLayer {
+  if (SUPERFICIAL_MUSCLES.includes(muscleId)) return 'superficial';
+  if (DEEP_MUSCLES.includes(muscleId)) return 'deep';
+  // 默认返回表层（对于未分类的肌肉）
+  return 'superficial';
 }
 
 // 所有肌肉列表（按身体部位分组）

@@ -1,13 +1,42 @@
 // 3D肌肉解剖 - 中文翻译
 
+// 导入模块化的肌肉详情
+import { muscleDetailsUpper } from './muscle-details-upper';
+import { muscleDetailsTorso } from './muscle-details-torso';
+import { muscleDetailsLower } from './muscle-details-lower';
+
 export const muscleAnatomy = {
   title: '3D肌肉解剖图',
   description: '交互式3D人体肌肉解剖展示，点击查看每块肌肉的名称',
+  betaBadge: 'Beta',
+  betaNotice: '此功能处于测试阶段，部分肌肉可能无法点击选中。推荐使用上方搜索框直接查找肌肉，获得更好的体验！',
   metaDescription: '免费在线3D人体肌肉解剖图，交互式展示人体肌肉结构，点击查看肌肉名称，支持旋转缩放，帮助健身爱好者了解肌肉解剖知识。',
   controls: {
     frontView: '正面',
     backView: '背面',
     reset: '重置视角',
+    superficialLayer: '表层',
+    deepLayer: '深层',
+  },
+  search: {
+    placeholder: '搜索肌肉名称...',
+    noResults: '未找到匹配的肌肉',
+  },
+  // 详情面板
+  detailPanel: {
+    tabs: {
+      overview: '简介',
+      functions: '功能',
+      exercises: '训练',
+      strengthening: '补弱',
+    },
+    strengthening: {
+      strategyTitle: '补弱策略',
+      keyPointsTitle: '训练要点',
+      recommendedTitle: '高激活动作推荐',
+    },
+    placeholder: '内容待补充',
+    close: '关闭',
   },
   loading: '加载3D模型中...',
   webglError: '您的浏览器不支持WebGL，无法显示3D模型。请使用Chrome、Firefox或Edge等现代浏览器。',
@@ -264,5 +293,11 @@ export const muscleAnatomy = {
     adductor_hallucis: '拇收肌',
     abductor_digiti_minimi_foot: '小趾展肌',
     flexor_digiti_minimi_brevis_foot: '小趾短屈肌',
+  },
+  // 肌肉详情（简介、功能、训练动作）- 从模块导入
+  muscleDetails: {
+    ...muscleDetailsUpper,
+    ...muscleDetailsTorso,
+    ...muscleDetailsLower,
   },
 };

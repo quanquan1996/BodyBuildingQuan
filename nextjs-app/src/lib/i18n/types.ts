@@ -1014,15 +1014,39 @@ export interface MetabolicDamageTestDict {
   reference: MetabolicDamageReferenceDict;
 }
 
+// 肌肉详情
+export interface MuscleDetailInfo {
+  description: string;
+  functions: string[];
+  exercises: string[];
+  // 补弱策略（仅健美常用肌肉有此字段）
+  strengthening?: {
+    strategy: string;
+    keyPoints: string[];
+    recommendedExercises: {
+      name: string;
+      reason: string;
+    }[];
+  };
+}
+
 // 3D肌肉解剖
 export interface MuscleAnatomyDict {
   title: string;
   description: string;
+  betaBadge: string;
+  betaNotice: string;
   metaDescription: string;
   controls: {
     frontView: string;
     backView: string;
     reset: string;
+    superficialLayer: string;
+    deepLayer: string;
+  };
+  search: {
+    placeholder: string;
+    noResults: string;
   };
   loading: string;
   webglError: string;
@@ -1032,6 +1056,22 @@ export interface MuscleAnatomyDict {
     upper: string;
     torso: string;
     lower: string;
+  };
+  // 详情面板
+  detailPanel: {
+    tabs: {
+      overview: string;
+      functions: string;
+      exercises: string;
+      strengthening: string;
+    };
+    strengthening?: {
+      strategyTitle: string;
+      keyPointsTitle: string;
+      recommendedTitle: string;
+    };
+    placeholder: string;
+    close: string;
   };
   explanation: {
     title: string;
@@ -1044,6 +1084,8 @@ export interface MuscleAnatomyDict {
   };
   // 肌肉名称翻译（动态键）
   muscles: Record<string, string>;
+  // 肌肉详情（简介、功能、训练动作）
+  muscleDetails: Record<string, MuscleDetailInfo>;
 }
 
 // 完整字典类型

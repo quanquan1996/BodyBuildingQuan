@@ -1,9 +1,10 @@
 'use client';
 
 import { Suspense, useRef, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { MuscleModel } from './muscle-model';
+import type { MuscleLayer } from '@/lib/data/muscles';
+import * as THREE from 'three';
 
 interface MuscleSceneProps {
   onMuscleClick: (muscleId: string) => void;
@@ -11,36 +12,69 @@ interface MuscleSceneProps {
   hoveredMuscle: string | null;
   selectedMuscle: string | null;
   cameraView: 'front' | 'back' | 'default';
+  muscleLayer: MuscleLayer;
+  rotationDelta?: { x: number; y: number };
+  zoomDelta?: number;
 }
 
-function CameraController({ view }: { view: 'front' | 'back' | 'default' }) {
-  const controlsRef = useRef<any>(null);
+// 相机控制器 - 支持外部控制
+function CameraController({ 
+  view, 
+  rotationDelta, 
+  zoomDelta 
+}: { 
+  view: 'front' | 'back' | 'default';
+  rotationDelta?: { x: number; y: number };
+  zoomDelta?: number;
+}) {
+  const { camera } = useThree();
+  const spherical = useRef(new THREE.Spherical(2.5, Math.PI / 2, 0));
+  const target = useRef(new THREE.Vector3(0, 0, 0));
 
+  // 视图切换
   useEffect(() => {
-    if (controlsRef.current) {
-      const positions: Record<string, [number, number, number]> = {
-        front: [0, 0.2, 2.5],
-        back: [0, 0.2, -2.5],
-        default: [1.5, 0.3, 2],
-      };
+    const positions: Record<string, { phi: number; theta: number; radius: number }> = {
+      front: { phi: Math.PI / 2, theta: 0, radius: 2.5 },
+      back: { phi: Math.PI / 2, theta: Math.PI, radius: 2.5 },
+      default: { phi: Math.PI / 2.5, theta: Math.PI / 4, radius: 2.5 },
+    };
 
-      const [x, y, z] = positions[view];
-      controlsRef.current.object.position.set(x, y, z);
-      controlsRef.current.target.set(0, 0, 0);
-      controlsRef.current.update();
+    const { phi, theta, radius } = positions[view];
+    spherical.current.set(radius, phi, theta);
+    
+    const pos = new THREE.Vector3().setFromSpherical(spherical.current);
+    camera.position.copy(pos);
+    camera.lookAt(target.current);
+  }, [view, camera]);
+
+  // 处理旋转和缩放
+  useFrame(() => {
+    let needsUpdate = false;
+
+    // 处理旋转
+    if (rotationDelta && (rotationDelta.x !== 0 || rotationDelta.y !== 0)) {
+      spherical.current.theta -= rotationDelta.x;
+      spherical.current.phi = Math.max(
+        Math.PI / 6,
+        Math.min(Math.PI - Math.PI / 6, spherical.current.phi + rotationDelta.y)
+      );
+      needsUpdate = true;
     }
-  }, [view]);
 
-  return (
-    <OrbitControls
-      ref={controlsRef}
-      enablePan={false}
-      minDistance={1}
-      maxDistance={5}
-      minPolarAngle={Math.PI / 6}
-      maxPolarAngle={Math.PI - Math.PI / 6}
-    />
-  );
+    // 处理缩放
+    if (zoomDelta && zoomDelta !== 0) {
+      spherical.current.radius = Math.max(1, Math.min(5, spherical.current.radius + zoomDelta));
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      const pos = new THREE.Vector3().setFromSpherical(spherical.current);
+      camera.position.copy(pos);
+      camera.lookAt(target.current);
+    }
+  });
+
+  return null;
 }
 
 function LoadingFallback() {
@@ -58,12 +92,20 @@ export function MuscleScene({
   hoveredMuscle,
   selectedMuscle,
   cameraView,
+  muscleLayer,
+  rotationDelta,
+  zoomDelta,
 }: MuscleSceneProps) {
   return (
     <Canvas
       camera={{ position: [1.5, 0.3, 2], fov: 50 }}
       gl={{ antialias: true, alpha: true }}
-      style={{ background: 'transparent' }}
+      style={{ 
+        background: 'transparent', 
+        touchAction: 'none',  // 禁用触摸手势
+      }}
+      // 禁用默认的触摸和鼠标拖拽控制
+      onPointerMissed={() => {}}
     >
       {/* 环境光 */}
       <ambientLight intensity={0.6} />
@@ -94,11 +136,16 @@ export function MuscleScene({
           onMuscleHover={onMuscleHover}
           hoveredMuscle={hoveredMuscle}
           selectedMuscle={selectedMuscle}
+          muscleLayer={muscleLayer}
         />
       </Suspense>
 
-      {/* 相机控制 */}
-      <CameraController view={cameraView} />
+      {/* 相机控制 - 禁用触摸，使用外部控制 */}
+      <CameraController 
+        view={cameraView} 
+        rotationDelta={rotationDelta}
+        zoomDelta={zoomDelta}
+      />
     </Canvas>
   );
 }
